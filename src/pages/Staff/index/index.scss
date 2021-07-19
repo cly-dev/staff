@@ -1,0 +1,76 @@
+header{
+    background-color: #409EFF;
+    color: white;
+    height: 4.4rem;
+    border-bottom: 1px solid #EBEEF5;
+    width: 100vw;
+    .nav-tips{
+        font-size: 1.8rem;
+        line-height: 4.4rem;
+        padding-left: 1.5rem;
+    }
+    .user-info{
+        .user-avater{
+            margin-right:0.9375rem;
+            height: 3rem;
+            width: 3rem;
+            vertical-align: middle;
+        }
+        padding-right:8rem;
+        font-size: 1.3rem;
+        line-height: 10vh;
+        height: 100%;
+        float: right;
+        cursor: pointer;
+    }
+}
+.menu-item{
+    width: 10.5rem;
+    height: 3.125rem;
+    font-size:1.125rem;
+    padding-left: 0.625rem;
+}
+.index-mainer{
+    height:90vh;
+    width: 100vw;
+    position: relative;
+    aside{
+        left: 0;
+        top: 0;
+        position: absolute;
+        width:14vw;
+        border: 1px solid #EBEEF5;
+        height: 100%;
+        .nav-menu{
+            font-size: 1.25rem;
+            color: red;
+            
+        }
+        .sub-Menu{
+            vertical-align: middle;
+            margin-top: 40px;
+            font-size: 1.2rem;
+            .sub-item {
+                height: 3.125rem;
+                line-height: 3.125rem;
+                font-size: 1.25rem;
+                text-indent: 1.25rem;
+            }
+            
+        }
+    }
+    .index-container{
+        .heander-Tab{
+            height: 40px;
+            width: 100%;
+        }
+        .route-container{
+            height: 100%;
+
+        }
+        height: 100%;
+        position: absolute;
+        left:14vw;
+        width:84vw;
+    }
+}
