@@ -6,6 +6,11 @@ import "./index.scss";
 import {NavLink} from 'react-router-dom';
 const NewNotice=lazy(()=>import("../NewNotice/NewNotice.jsx"));
 const OldNotice=lazy(()=>import("../OldNotice/OldNotice.jsx"));
+const AddOrder=lazy(()=>import("../AddOrder/addOrder.jsx"));
+const Watch=lazy(()=>import("../Watch/watch.jsx"));
+const State=lazy(()=>import("../State/state.jsx"));
+const Changepassword=lazy(()=>import("../ChangePassword/changepassword.jsx"));
+const ChangeOrder=lazy(()=>import("../ChangeOrder/ChangeOrder.jsx"));
 const { SubMenu } = Menu;
 const { TabPane } = Tabs;
 export default class index extends Component {
@@ -106,14 +111,20 @@ export default class index extends Component {
             }
 
         };
+        onEdit = (targetKey, action) => {
+            this[action](targetKey);
+          };
         //点击tab事件      
         onChange = activeKey => {
+            console.log(activeKey);
             const {panes} =this.state;
+            console.log(panes);
             this.props.history.push(panes[activeKey - 1].link);
             this.setState({activeKey});
         };
         //移除tab事件
         remove = targetKey => {
+            console.log(targetKey);
             const { panes, activeKey } = this.state;
             let newActiveKey = activeKey;
             let lastIndex;
@@ -122,7 +133,7 @@ export default class index extends Component {
                     lastIndex = i - 1;
                 }
             });
-            const newPanes = panes.filter(pane => pane.key !== targetKey);
+            const newPanes = panes.filter(pane => pane.key !== targetKey);            
             if (newPanes.length && newActiveKey === targetKey) {
                 if (lastIndex >= 0) {
                     newActiveKey = newPanes[lastIndex].key;
@@ -130,8 +141,14 @@ export default class index extends Component {
                     newActiveKey = newPanes[0].key;
                 }
             }
+            const maxPanes=newPanes.filter(item=>targetKey<item.key);
+            console.log(maxPanes);
+            const minpanes=newPanes.filter(item=>targetKey>item.key);
+            maxPanes.forEach(val=>{
+                val.key-=1;
+            })
             this.setState({
-                panes: newPanes,
+                panes:[...minpanes,...maxPanes],
                 activeKey: newActiveKey,
             });
         };
@@ -231,17 +248,20 @@ export default class index extends Component {
                                         </TabPane>
                                         ))}
                                     </Tabs>
-                                    <section className="route-container">
-                                        <Suspense fallback={<h1>加载失败</h1>}>
-                                            <Route path="/index/newNotice" component={NewNotice}></Route>
-                                            <Route path='/index/oldNotice' component={OldNotice}></Route>
-                                            <Route path='/index/addOrder'></Route>
-                                            <Route path="/index/watchOrder"></Route>
-                                            <Route path='/index/state'></Route>
-                                            <Route path='/index/modicPsd'></Route>
-                                            <Route path='/index/modicInfo'></Route>
-                                            <Route path='/index/Apply'></Route>
-                                        </Suspense>
+                                    <section className="route-mainer">
+                                        <section className="route-container">
+                                            <Suspense fallback={<h1>加载失败</h1>}>
+                                                <Route path="/index/newNotice" component={NewNotice}></Route>
+                                                <Route path='/index/oldNotice' component={OldNotice}></Route>
+                                                <Route path='/index/addOrder' component={AddOrder}></Route>
+                                                <Route path="/index/watchOrder" component={Watch}></Route>
+                                                <Route path='/index/state' component={State}></Route>
+                                                <Route path='/index/modicPsd' component={Changepassword}></Route>
+                                                <Route path="/index/changeOrder/:orderId" component={ChangeOrder}></Route>
+                                                <Route path='/index/modicInfo'></Route>
+                                                <Route path='/index/Apply'></Route>
+                                            </Suspense>
+                                        </section>
                                     </section>
                                 </section>
                             </section>

@@ -1,0 +1,13 @@
+@import "../../../public/scss/commit.scss";
+.changeOrder-container{
+    .changeOrder-header{
+        @include title;
+    }
+    .refs-container{
+        .refs-btn{
+            border-radius: 5px;
+            width:5.25rem;
+        }
+        text-align: center;
+    }
+}

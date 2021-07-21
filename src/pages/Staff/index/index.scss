@@ -60,13 +60,20 @@ header{
         }
     }
     .index-container{
+        background-color: #EBEEF5;
         .heander-Tab{
             height: 40px;
             width: 100%;
+            margin-left: 10px;
         }
-        .route-container{
+        .route-mainer{
+            margin-top: -40px;
             height: 100%;
-
+            margin-left: 10px;
+            background-color: white;
+            .route-container{
+                margin-top: 40px;
+            }
         }
         height: 100%;
         position: absolute;

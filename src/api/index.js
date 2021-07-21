@@ -1,5 +1,6 @@
-import message from "./message";
+import msg from "./message";
+import getDownload from "./pdf";
 
 
-
-export const messgae=message;
+export const message=msg;
+export const pdf=getDownload;

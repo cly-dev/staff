@@ -1,0 +1,9 @@
+@import "../../../public/scss/commit.scss";
+.state-container{
+    .state-header{
+        @include title;
+    }
+    .state-mainer{
+        margin-top: -20px;
+    }
+}

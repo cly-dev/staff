@@ -1,0 +1,15 @@
+@import "../../../public/scss/commit.scss";
+.search-container{
+    .search-header{
+        @include title;
+    }
+    .search-input{
+        margin: 0 auto;
+        width: 40%;
+        padding-left: 3.2rem;
+        margin-bottom: 1.25rem;
+    }
+    .search-data{
+    }
+    margin-top:40px;
+}

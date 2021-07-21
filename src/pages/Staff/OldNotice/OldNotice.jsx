@@ -41,6 +41,7 @@ export default function OldNotice() {
                 {item.content}
                 <section className="btn-container">
                     <Space style={{float:'right'}}>
+                        <Button >置顶</Button>
                         <Button type="primary">未读</Button>
                     </Space>
                 </section>
