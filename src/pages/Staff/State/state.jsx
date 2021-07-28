@@ -1,5 +1,5 @@
 import React, { Component} from 'react'
-import { Table} from 'antd';
+import { Table,Modal,Descriptions} from 'antd';
 import Descript from '../../../components/Descript/Descript.jsx';
 import "./state.scss";
 import {pdf} from '../../../api';
@@ -49,9 +49,11 @@ export default class State extends Component {
       },
     ]
   }
+  state={
+      visible:false,
+  }
   handleMarkReport=text=>{
-    console.log(text);
-    console.log(this.table);
+    this.setState({visible:true});
   }
     render() {
         return (
@@ -69,6 +71,46 @@ export default class State extends Component {
                         }}
                     />,
                 </section>
+                {/* 
+                pdf弹出预览框
+                */}
+                <Modal
+                    title="预览"
+                    centered
+                    cancelText="取消"
+                    okText="确定"
+                    visible={this.state.visible}
+                    onOk={() =>pdf()}
+                    onCancel={() =>this.setState({visible:false})}
+                    width={1000}
+                >
+                <section id="psf-prient">
+                  {/*描述*/}
+                    <Descriptions
+                      bordered
+                    >
+                      <Descriptions.Item label="姓名">Cloud Database</Descriptions.Item>
+                      <Descriptions.Item label="性别">Prepaid</Descriptions.Item>
+                      <Descriptions.Item label="年龄">18:00:00</Descriptions.Item>
+                      <Descriptions.Item label="年份">$80.00</Descriptions.Item>
+                      <Descriptions.Item label="月平均销量">$20.00</Descriptions.Item>
+                      <Descriptions.Item label="月最高销量">$60.00</Descriptions.Item>
+                      <Descriptions.Item label="总销量">
+                        Data disk type: MongoDB
+                        <br />
+                        Database version: 3.4
+                        <br />
+                        Package: dds.mongo.mid
+                        <br />
+                        Storage space: 10 GB
+                        <br />
+                        Replication factor: 3
+                        <br />
+                        Region: East China 1<br />
+                      </Descriptions.Item>
+                    </Descriptions>
+                    </section>
+                  </Modal>
             </section>
         )
     }

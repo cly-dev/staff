@@ -1,0 +1,56 @@
+module.exports={
+    name:'user',
+    collection:{
+                //用户id
+                userId:{
+                      type:String,
+                      requisred:true
+                },
+                //用户名
+                username:{
+                       type: String,
+                       required:true,
+                    },
+              //用户密码
+                password:{ 
+                      type: String,
+                      default:'123456'
+                    },
+                //用户年龄
+                age:{
+                      type:Number,
+                      default:0,
+                },
+                //用户地址
+                address:{
+                      type:String
+                },
+                //性别
+                sex:{
+                        type:String,
+                        enum:['男','女']
+                },
+                //用户头像
+                imgPath:{
+                        type:String,
+                        default:'/images/user.jpg'
+                },
+                //手机号码
+                phone:{
+                        type:Number,
+                },
+                //邮箱
+                email:{
+                        type:String
+                },
+                //状态
+                status:{
+                        type:Number,
+                        default:0,
+                },
+                //用户token
+                token:{
+                        type:String,
+                }
+        }
+}

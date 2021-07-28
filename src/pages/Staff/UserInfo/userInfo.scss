@@ -1,0 +1,9 @@
+@import "../../../public/scss/commit.scss";
+.userInfo-container{
+    .userInfo-header{
+        @include title;
+    }
+    .userInfo-mainer{
+        margin-top: -20px;
+    }
+}

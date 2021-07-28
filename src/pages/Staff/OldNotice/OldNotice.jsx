@@ -14,8 +14,22 @@ for (let i = 0; i < 23; i++) {
       '我我我:200minHeight:200min我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我',
   });
 }
-export default function OldNotice() {
-    const [listData,setListData]=new useState(list);
+export default class OldNotice extends React.Component {
+    constructor(props){
+        super(props);
+        this.state={
+            listData:list
+        }
+    }
+    handleTop=val=>{
+        const { listData}=this.state;
+        let obj=listData.splice(val,1);
+        listData.unshift(...obj);
+        console.log(listData);
+        this.setState(listData);
+    
+    }
+    render(){
     return (
         <>
            <List
@@ -28,8 +42,8 @@ export default function OldNotice() {
                     },
                     pageSize: 5,
                 }}
-                dataSource={listData}
-                renderItem={item => (
+                dataSource={this.state.listData}
+                renderItem={(item,index) => (
                 <List.Item
                     key={item.title}
                  >
@@ -41,7 +55,7 @@ export default function OldNotice() {
                 {item.content}
                 <section className="btn-container">
                     <Space style={{float:'right'}}>
-                        <Button >置顶</Button>
+                        <Button onClick={()=>this.handleTop(index)}>置顶</Button>
                         <Button type="primary">未读</Button>
                     </Space>
                 </section>
@@ -50,4 +64,5 @@ export default function OldNotice() {
         />, 
         </>
     )
+                }
 }

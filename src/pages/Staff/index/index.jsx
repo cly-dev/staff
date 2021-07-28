@@ -11,6 +11,8 @@ const Watch=lazy(()=>import("../Watch/watch.jsx"));
 const State=lazy(()=>import("../State/state.jsx"));
 const Changepassword=lazy(()=>import("../ChangePassword/changepassword.jsx"));
 const ChangeOrder=lazy(()=>import("../ChangeOrder/ChangeOrder.jsx"));
+const ModicInfo=lazy(()=>import("../ChangeInfo/changeInfo.jsx"));
+const UserInfo=lazy(()=>import("../UserInfo/userInfo.jsx"))
 const { SubMenu } = Menu;
 const { TabPane } = Tabs;
 export default class index extends Component {
@@ -20,7 +22,7 @@ export default class index extends Component {
                     {
                         nav:'个人信息',
                         icon:<UserOutlined style={{fontSize:'1.25rem'}}></UserOutlined>,
-                        link:''
+                        link:'/index/userInfo'
                     },{
                         nav:'注销',
                         icon:<ExportOutlined style={{fontSize:'1.25rem'}}></ExportOutlined> ,
@@ -94,12 +96,11 @@ export default class index extends Component {
         };
         //点击菜单事件
         handleClick = data => {
-            console.log('click ', data);
             const { panes } = this.state;
             let title=data.nav;
             let obj=panes.find((item=>item.title===title));
             if(obj){
-                this.onChange(obj.key);
+                this.setState({activeKey:obj.key});;
             }else{
                 const activeKey =`${panes.length  + 1}`;
                 const newPanes = [...panes];
@@ -152,6 +153,14 @@ export default class index extends Component {
                 activeKey: newActiveKey,
             });
         };
+        handleToUser=link=>{
+            let data={
+                nav:'个人信息',
+                link
+            }
+            this.handleClick(data);
+            this.props.history.push(link);
+        }
         //刷新存储事件
         handleStorage=()=>{
             sessionStorage.setItem("router",JSON.stringify(this.state.panes));
@@ -163,6 +172,7 @@ export default class index extends Component {
             window.addEventListener("beforeunload",this.handleStorage,false);
             if(route){
                 const obj=route.find(item=>item.link===this.props.location.pathname);
+               
                 if(obj){
                     this.setState({
                         activeKey:obj.key
@@ -191,8 +201,8 @@ export default class index extends Component {
                                                 {
                                                     this.menu.map((item,index)=>{
                                                         return (
-                                                            <Menu.Item key={index} icon={item.icon} className="menu-item">
-                                                                <NavLink  to={item.link}>{item.nav}</NavLink>
+                                                            <Menu.Item key={index} icon={item.icon} className="menu-item"   onClick={()=>this.handleToUser(item.link)}>
+                                                                <span >{item.nav}</span>
                                                             </Menu.Item>
                                                         )
                                                     })
@@ -258,7 +268,8 @@ export default class index extends Component {
                                                 <Route path='/index/state' component={State}></Route>
                                                 <Route path='/index/modicPsd' component={Changepassword}></Route>
                                                 <Route path="/index/changeOrder/:orderId" component={ChangeOrder}></Route>
-                                                <Route path='/index/modicInfo'></Route>
+                                                <Route path='/index/modicInfo' component={ModicInfo}></Route>
+                                                <Route path='/index/userInfo' component={UserInfo}></Route>
                                                 <Route path='/index/Apply'></Route>
                                             </Suspense>
                                         </section>

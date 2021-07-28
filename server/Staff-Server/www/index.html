@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    用户名:<input type="text" name="username" class="username"/>
+    密码:<input type="password" name="password" class="password">
+    <button class="btn">注册</button>
+    <button class="findBtn">查询</button>
+</body>
+    <script>
+        (()=>{
+            const username=document.querySelector(".username");
+            const password=document.querySelector(".password");
+            const btn=document.querySelector(".btn");
+            const FindBtn=document.querySelector(".findBtn");
+            btn.addEventListener("click",async()=>{
+                let data=await fetch("/add",{
+                    body:`username=${username.value}&password=${password.value}`,
+                    method:"POST",
+                    headers:{
+                         "Content-type": "application/x-www-form-urlencoded; charset=UTF-8"
+                    }
+                })
+                   console.log(data);
+            },false);
+            FindBtn.addEventListener("click",async ()=>{
+                let data=await fetch("/findAll");
+                console.log(await data.json())
+            })
+
+
+        })()
+    </script>
+</html>
