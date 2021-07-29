@@ -4,7 +4,8 @@ module.exports={
                 //用户id
                 userId:{
                       type:String,
-                      requisred:true
+                      requisred:true,
+                      unique:true
                 },
                 //用户名
                 username:{
@@ -23,12 +24,14 @@ module.exports={
                 },
                 //用户地址
                 address:{
-                      type:String
+                      type:String,
+                      default:'',
                 },
                 //性别
                 sex:{
                         type:String,
-                        enum:['男','女']
+                        enum:['男','女'],
+                        default:'男'
                 },
                 //用户头像
                 imgPath:{
@@ -38,10 +41,12 @@ module.exports={
                 //手机号码
                 phone:{
                         type:Number,
+                        default:'',
                 },
                 //邮箱
                 email:{
-                        type:String
+                        type:String,
+                        default:'',
                 },
                 //状态
                 status:{
@@ -51,6 +56,11 @@ module.exports={
                 //用户token
                 token:{
                         type:String,
+                        default:'',
+                },
+                lastModic:{
+                        type:Date,
+                        default:Date.now()
                 }
         }
 }

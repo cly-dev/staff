@@ -1,0 +1,45 @@
+module.exports={
+    name:'admin',
+    collection:{
+                //管理员id
+                adminId:{
+                       type: String,
+                       required:true,
+                       unique:true
+                    },
+                //姓名
+                name:{
+                    type:String,
+                    required:true,
+                },
+                //密码
+                password:{
+                    type:String,
+                    default:'123456'
+                },
+                //职位
+                position:{ 
+                      type: String,
+                      default:''
+                    },
+                //权限
+                power:{
+                    type:String,
+                    default:'0',
+                },
+                //状态
+                status:{
+                    type:String,
+                    default:'0'
+                },
+                token:{
+                    type:String,
+                    default:''
+                },
+                //修改信息
+                lastModic:{
+                        type:Date,
+                        default:Date.now()
+                }
+        }
+}
