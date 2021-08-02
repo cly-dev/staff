@@ -1,0 +1,35 @@
+module.exports={
+    name:'apply',
+    collection:{
+                //用户id
+                userId:{
+                       type: String,
+                       required:true,
+                    },
+                //标题
+                title:{
+                    type:String,
+                    required:true,
+                },
+                //时间
+                time:{
+                    type:Date,
+                    required:true,
+                },
+                //详细说明
+                desc:{ 
+                      type: String,
+                      default:''
+                    },
+                //状态
+                status:{
+                    type:String,
+                    default:'0'
+                },
+                //驳回理由
+                mark:{
+                    type:String,
+                    default:''
+                }
+        }
+}

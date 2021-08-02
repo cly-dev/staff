@@ -18,12 +18,12 @@ function UserInserts(user){
 }
 //登陆校验
 function Logins(userId,password){
-    const promise=new Promise((resolve,reject)=>{
+    return new Promise((resolve,reject)=>{
             UserDao.find({userId,password},{_id:0,__v:0,password:0}).then(res=>{
                 const [data]=res;
                 if(data){
                     if(!(TokenVerify(data.token))){
-                        const token=TokenSign({userId,username:data.username});
+                        const token=TokenSign({userId,username:res.username});
                         UserDao.updateOne({userId},{$set:{token}},(err)=>{
                            if(err){
                             reject(err);
@@ -33,18 +33,139 @@ function Logins(userId,password){
                     }
                     resolve(data);
                 }else{
-                    resolve(false);
+                    resolve('账号或密码错误');
                 }
             }).catch(err=>{
            reject(err);
         })
-       return promise;
    })
 }
-// UserDao.findByAll('张三',(err,doc)=>{
-//     console.log(doc);
-// })
+//用户修改密码
+function ModicPasswords(userId,oldPsd,newPsd){
+    const promise=new Promise((resolve,reject)=>{
+    UserDao.findOne({userId}).then(res=>{
+        if(res){
+            if(oldPsd===res.password){
+                return UserDao.updateOne({userId},{$set:{password:newPsd}})
+            }else{
+                resolve('旧密码错误');
+            }
+            if(res.password==='123456'){
+                UserDao.updateOne({userId},{$set:{status:'1'}},(err,res)=>{
+                    if(err){
+                        reject(err);
+                    }
+                })
+            }
+        }
+    }).then(res=>{
+        if(res.nModified){
+            resolve(true);
+        }else{
+            resolve('旧密码和新密码不能一致');
+        }
+    }).catch(err=>{
+        reject(err);
+    })
+    })
+    return promise;
+}
+//用户修改信息
+function ModicInfos(userId,User){
+    return new Promise((resolve, reject) => {
+        const {username,phone,email,sex,address}=User;
+        UserDao.updateOne({userId},{username,phone,email,sex,address}).then(res=>{
+            if(res.nModified){
+                return UserDao.findOne({userId},{_id:0,password:0,__v:0});
+            }else{
+                resolve('请更新信息');
+            }
+        }).then(res=>{
+            resolve(res);
+        }).catch(err=>{
+            reject(err);
+        })   
+    });
+}
+//用户修改头像
+function ModicImgs(userId,path){
+    return new Promise((resolve,reject)=>{
+    UserDao.updateOne({userId},{$set:{imgPath:path}}).then(res=>{
+            if(res.nModified){
+                resolve(path);
+            }else{
+                reject(new Error("错误"));
+            }
+        }).catch(err=>{
+            reject(err);
+        })
+    })
+}
+//删除用户
+function deleStaff(userId){
+    return new Promise((resolve,reject)=>{
+        UserDao.deleteOne({userId}).then(res=>{
+            if(res.deletedCount){
+                resolve(true);
+            }else{
+                resolve("已删除");
+            }
+        })
+    })
+}
+//查询用户Id是否合法
+function findStaffById(userId){
+    return new Promise((resolve,reject)=>{
+        UserDao.findOne({userId}).then(res=>{
+            if(res){
+                resolve('存在');
+            }else{
+                resolve(true);
+            }
+        }).catch(err=>{
+            reject(err);
+        })
+    })
+}
+//查询所有用户
+function findAllStaff(){
+    return new Promise((resolve,reject)=>{
+        UserDao.find().then(res=>{
+            if(res[0]){
+                resolve(res)
+            }else{
+                new Error("错误");
+            }
+        }).catch(err=>{
+            reject(err);
+        })
+    })
+}
+//设置用户状态
+function handleStaff(userId,status){
+    return new Promise((resolve,reject)=>{
+        UserDao.updateOne({userId},{$set:{status}},(err,res)=>{
+            if(err){
+                reject(err);
+            }else{
+                if(res.nModified){
+                    resolve(true);
+                }else{
+                    resolve("重复操作");
+                }
+            }
+        })
+
+    })
+}
 module.exports={
     UserInserts,
-    Logins
+    Logins,
+    ModicPasswords,
+    ModicInfos,
+    ModicImgs,
+    findStaffById,
+    findAllStaff,
+    handleStaff,
+    deleStaff
 }

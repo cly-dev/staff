@@ -33,12 +33,12 @@ function getNotices(userId,pageNum){
             },{
                 $project:{__v:0,'resource._id':0,'resource.adminId':0}
             }
-            ]).limit(4).sort({'status':1}).then(res=>{
+            ]).skip(4 * (pageNum - 1)).limit(4).sort({'status':1}).then(res=>{
                 if(res){
                     res[0].resource=res[0].resource[0];
                     resolve(res);
                 }else{
-                    resolve(false);
+                    resolve("获取失败");
                 }
             }).catch(err=>{
                 reject(err);
@@ -64,11 +64,17 @@ function getNoticesCount(userId){
 //点击读取公告
 function ReadNotices(Id){
     const promise=new Promise((resolve,reject)=>{
-            NoticeDao.updateOne({_id:Id},{$set:{status:'1'}}).then(res=>{
+            NoticeDao.findOne({_id:Id}).then(res=>{
+                if(res.status==='2'){
+                    resolve('不能重复读取');
+                }else{
+                    return  NoticeDao.updateOne({_id:Id},{$set:{status:'1'}})
+                }
+            }).then(res=>{
                 if(res.nModified){
                     resolve(true);
                 }else{
-                    resolve(false);
+                    resolve('已经读取');
                 }
             }).catch(err=>{
                 reject(err);
@@ -79,7 +85,19 @@ function ReadNotices(Id){
 //置顶公告
 function TopNotices(Id){
     const promise=new Promise((resolve,reject)=>{
-            NoticeDao.updateOne({_id:Id},{$set:{status:'2'}}).then(res=>{
+        NoticeDao.findOne({_id:Id}).then(res=>{
+            if(res.status==='2'){
+                resolve('不能重复置顶');
+            }else{
+                return NoticeDao.updateOne({status:'2'},{$set:{status:'1'}})
+            }
+        }).then(res=>{
+            if(res.nModified){
+                return  NoticeDao.updateOne({_id:Id},{$set:{status:'2'}})
+            }else{
+                resolve('已置顶');
+            }
+        }).then(res=>{
                 console.log(res);
                 if(res.nModified){
                     resolve(true);
@@ -92,6 +110,7 @@ function TopNotices(Id){
     })
     return promise;
 }
+
 module.exports={
     AddNotices,
     getNotices,

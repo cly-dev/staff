@@ -23,7 +23,7 @@ function findAdminByIds(adminId){
                 if(res){
                     resolve(true);
                 }else{
-                    resolve(false);
+                    resolve('该Id已存在');
                 }
             }).catch(err=>{
                 reject(err);

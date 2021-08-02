@@ -58,6 +58,11 @@ module.exports={
                         type:String,
                         default:'',
                 },
+                //加入的时间
+                joinTime:{
+                        type:String,
+                        default:''
+                },
                 lastModic:{
                         type:Date,
                         default:Date.now()

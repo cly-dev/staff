@@ -1,10 +1,28 @@
 const express=require("express");
-const {UserInsert}=require("../control/user");
-const { AddNotice,AddAdmin,findAdminById,Login}=require("../control/admin");
+const { AddNotice,AddAdmin,findAdminById,Login,addType,getAllApply,UserInsert}=require("../control/admin");
+const {TokenVerify}=require("../api/JWT/token");
+const message=require("../api/message.js");
 const Admin=express.Router();
-Admin.post("/UserInsert",UserInsert);
+Admin.post("/login",Login);
+Admin.use((req,res,next)=>{
+    const {token}=req.headers;
+    if(token){
+        const data=TokenVerify(token);
+        if(TokenVerify(token)){
+            req.headers.adminId=data.adminId;
+            req.headers.username=data.username;
+            next();
+        }else{
+            message("TError",res);
+        }
+    }else{
+        message('FError',res,'请检查是否携带token');
+    }
+})
+Admin.post("/addStaff",UserInsert);
 Admin.post("/addNotice",AddNotice)
 Admin.post("/addAdmin",AddAdmin)
-Admin.post("/login",Login);
 Admin.get('/findAdminById',findAdminById);
+Admin.post('/addType',addType);
+Admin.get("/getAllApply",getAllApply)
 module.exports=Admin;
