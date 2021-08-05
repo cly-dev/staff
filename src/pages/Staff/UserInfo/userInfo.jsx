@@ -1,7 +1,47 @@
 import React from 'react'
-import { Descriptions, Badge} from 'antd';
+import { Descriptions,Button,Space} from 'antd';
 import "./userInfo.scss";
-export default function UserInfo() {
+import Store from "../../../redux/store";
+import message from '../../../api/message';
+import axios from "axios";
+import {userSave} from '../../../redux/action/user';
+export default function UserInfo(props) {
+    const user=Store.getState();
+    function handleModicImg(){
+        document.querySelector(".file").click();
+    }
+    function handleUpload(e){
+        const File=document.querySelector(".file").files[0];
+        const FileType=File.type.split('/')[1];
+        if(FileType==='jpeg' || FileType ==='png' || FileType ==='jpg'){
+            if(File.size> 1024 * 1024 * 5){
+                message('图片大小不能超过5M');
+            }else{
+                const formData=new FormData();
+                formData.append('head',File);
+                axios({
+                    url:'/api/staff/modicImg',
+                    method:"POST",
+                    data:formData,
+                    headers:{
+                        "Content-Type":'multipart/form-data'
+                    },
+                    onUploadProgress(e){
+                        console.log(e)
+                    }
+                }).then(res=>{
+                    user.imgPath=res.data.data;
+                    console.log(user);
+                    Store.dispatch(userSave(user));
+                    message("修改成功",'success');
+                })
+            }
+        }else{
+            message("请检查文件类型");
+        }
+       
+        console.log(File);
+    }
     return (
         <section className="userInfo-container">
             <section className="userInfo-header">
@@ -9,34 +49,27 @@ export default function UserInfo() {
             </section>
             <section className="userInfo-mainer">
             <Descriptions  bordered>
-                <Descriptions.Item label="Product">Cloud Database</Descriptions.Item>
-                <Descriptions.Item label="Billing Mode">Prepaid</Descriptions.Item>
-                <Descriptions.Item label="Automatic Renewal">YES</Descriptions.Item>
-                <Descriptions.Item label="Order time">2018-04-24 18:00:00</Descriptions.Item>
-                <Descriptions.Item label="Usage Time" span={2}>
-                2019-04-24 18:00:00
+                <Descriptions.Item label="姓名">{user.username}</Descriptions.Item>
+                <Descriptions.Item label="年龄">{user.age}</Descriptions.Item>
+                <Descriptions.Item label="头像" > <img src={"localhost:3030"+user.imgPath } alt="用户头像" /></Descriptions.Item>
+                <Descriptions.Item label="性别">{user.sex}</Descriptions.Item>
+                <Descriptions.Item label="籍贯">{user.address}</Descriptions.Item>
+                <Descriptions.Item label="进入公司时间">
+                    {user.joinTime}
                 </Descriptions.Item>
-                <Descriptions.Item label="Status" span={3}>
-                <Badge status="processing" text="Running" />
+                <Descriptions.Item label="电话" span={3}>
+                    {user.phone}
                 </Descriptions.Item>
-                <Descriptions.Item label="Negotiated Amount">$80.00</Descriptions.Item>
-                <Descriptions.Item label="Discount">$20.00</Descriptions.Item>
-                <Descriptions.Item label="Official Receipts">$60.00</Descriptions.Item>
-                <Descriptions.Item label="Config Info">
-                Data disk type: MongoDB
-                <br />
-                Database version: 3.4
-                <br />
-                Package: dds.mongo.mid
-                <br />
-                Storage space: 10 GB
-                <br />
-                Replication factor: 3
-                <br />
-                Region: East China 1<br />
-                </Descriptions.Item>
+                <Descriptions.Item label="邮箱">{user.email}</Descriptions.Item>
             </Descriptions>
             </section>
+            <section className="btn-container">
+                <Space>
+                    <Button size="large" onClick={()=>props.history.push('/index/modicInfo')}>修改信息</Button>
+                    <Button size="large" type="primary" onClick={handleModicImg}>修改头像</Button>
+                </Space>
+            </section>
+            <input type="file" className="file" multiple={false} style={{display:'none'}} accept="image/*" onChange={handleUpload} ></input>
         </section>
     )
 }

@@ -151,6 +151,41 @@ function getStates(userId){
         })
     })
 }
+//按照年份进行查询
+function getStateByAges(age,userId){
+    const reg=new RegExp(age,'i');
+    return new Promise((resolve,reject)=>{
+        OrderDao.aggregate([{
+            $match:{
+                userId,
+                createTime:{
+                    $regex:reg
+                }
+            }
+            },{
+            $group:{
+                _id:'$userId',
+                orderTotal:{
+                    $sum:1
+                },
+                orderMax:{
+                    $max:'$price'
+                },
+                orderSum:{
+                    $sum:'$price'
+                },
+                orderAvg:{
+                    $avg:'$price'
+                }
+            }
+        }
+        ]).then(res=>{
+            resolve(res);
+        }).catch(err=>{
+            reject(err);
+        })
+    })
+}
 module.exports={
     addOrders,
     modicOrders,
@@ -160,5 +195,6 @@ module.exports={
     getOrderDetails,
     getStates,
     getOrderCount,
-    getSearchCount
+    getSearchCount,
+    getStateByAges
 }

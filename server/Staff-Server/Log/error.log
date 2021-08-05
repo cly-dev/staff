@@ -514,3 +514,55 @@
   keyPattern: { userId: 1 },
   keyValue: { userId: '16279140077221234' }
 }
+[2021-08-03T16:24:27.331] [ERROR] cheese - admin/adminMongoError: E11000 duplicate key error collection: staff.notice index: userId_1 dup key: { userId: "12345" }
+[2021-08-03T16:25:29.670] [ERROR] cheese - admin/adminMongoError: E11000 duplicate key error collection: staff.notice index: userId_1 dup key: { userId: "123456" }
+[2021-08-03T16:26:23.422] [ERROR] cheese - admin/adminMongoError: E11000 duplicate key error collection: staff.notice index: userId_1 dup key: { userId: "123456" }
+[2021-08-05T20:00:44.237] [ERROR] cheese - CastError: Cast to date failed for value ""2021-08-07T00:00:00.000Z"" (type string) at path "createTime"
+    at model.Query.exec (D:\个人文件\react\staff\server\Staff-Server\node_modules\mongoose\lib\query.js:4470:21)
+    at model.Query.Query.then (D:\个人文件\react\staff\server\Staff-Server\node_modules\mongoose\lib\query.js:4564:15)
+    at D:\个人文件\react\staff\server\Staff-Server\Dao\OrderDao.js:21:83
+    at new Promise (<anonymous>)
+    at modicOrders (D:\个人文件\react\staff\server\Staff-Server\Dao\OrderDao.js:19:12)
+    at modicOrder (D:\个人文件\react\staff\server\Staff-Server\control\user.js:174:39)
+    at Layer.handle [as handle_request] (D:\个人文件\react\staff\server\Staff-Server\node_modules\express\lib\router\layer.js:95:5)
+    at next (D:\个人文件\react\staff\server\Staff-Server\node_modules\express\lib\router\route.js:137:13)
+    at Route.dispatch (D:\个人文件\react\staff\server\Staff-Server\node_modules\express\lib\router\route.js:112:3)
+    at Layer.handle [as handle_request] (D:\个人文件\react\staff\server\Staff-Server\node_modules\express\lib\router\layer.js:95:5)
+    at D:\个人文件\react\staff\server\Staff-Server\node_modules\express\lib\router\index.js:281:22
+    at Function.process_params (D:\个人文件\react\staff\server\Staff-Server\node_modules\express\lib\router\index.js:335:12)
+    at next (D:\个人文件\react\staff\server\Staff-Server\node_modules\express\lib\router\index.js:275:10)
+    at D:\个人文件\react\staff\server\Staff-Server\Router\staff.js:21:21
+    at processTicksAndRejections (internal/process/task_queues.js:97:5) {
+  messageFormat: undefined,
+  stringValue: '""2021-08-07T00:00:00.000Z""',
+  kind: 'date',
+  value: '"2021-08-07T00:00:00.000Z"',
+  path: 'createTime',
+  reason: AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert.ok(false)
+  
+      at castDate (D:\个人文件\react\staff\server\Staff-Server\node_modules\mongoose\lib\cast\date.js:40:10)
+      at SchemaDate.cast (D:\个人文件\react\staff\server\Staff-Server\node_modules\mongoose\lib\schema\date.js:351:12)
+      at SchemaDate.SchemaType.applySetters (D:\个人文件\react\staff\server\Staff-Server\node_modules\mongoose\lib\schematype.js:1106:12)
+      at SchemaDate.SchemaType._castForQuery (D:\个人文件\react\staff\server\Staff-Server\node_modules\mongoose\lib\schematype.js:1584:15)
+      at SchemaDate.castForQuery (D:\个人文件\react\staff\server\Staff-Server\node_modules\mongoose\lib\schema\date.js:386:17)
+      at SchemaDate.SchemaType.castForQueryWrapper (D:\个人文件\react\staff\server\Staff-Server\node_modules\mongoose\lib\schematype.js:1551:20)
+      at castUpdateVal (D:\个人文件\react\staff\server\Staff-Server\node_modules\mongoose\lib\helpers\query\castUpdate.js:545:19)
+      at walkUpdatePath (D:\个人文件\react\staff\server\Staff-Server\node_modules\mongoose\lib\helpers\query\castUpdate.js:365:24)
+      at castUpdate (D:\个人文件\react\staff\server\Staff-Server\node_modules\mongoose\lib\helpers\query\castUpdate.js:95:7)
+      at model.Query._castUpdate (D:\个人文件\react\staff\server\Staff-Server\node_modules\mongoose\lib\query.js:4693:10)
+      at castDoc (D:\个人文件\react\staff\server\Staff-Server\node_modules\mongoose\lib\query.js:4723:18)
+      at model.Query._updateThunk (D:\个人文件\react\staff\server\Staff-Server\node_modules\mongoose\lib\query.js:3849:20)
+      at model.Query.<anonymous> (D:\个人文件\react\staff\server\Staff-Server\node_modules\mongoose\lib\query.js:3951:23)
+      at model.Query._wrappedThunk [as _updateOne] (D:\个人文件\react\staff\server\Staff-Server\node_modules\mongoose\lib\helpers\query\wrapThunk.js:16:8)
+      at D:\个人文件\react\staff\server\Staff-Server\node_modules\kareem\index.js:370:33
+      at processTicksAndRejections (internal/process/task_queues.js:79:11) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '=='
+  },
+  valueType: 'string'
+}

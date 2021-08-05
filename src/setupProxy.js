@@ -5,7 +5,7 @@ module.exports=function(app){
         //遇到api就会代理该配置
         proxy("/api",{
             //代理的地址
-            target:"http://localhost:5000",
+            target:"http://localhost:3030",
             //控制服务器收到的请求头中Host的值
             changeOrigin:true,
             //重写路径

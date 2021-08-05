@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import "./ChangeOrder.scss";
 import {message} from "../../../api";
+import { modicOrder,getOrderDetail} from '../../../axios';
+import moment from 'moment';
 import {
     Form,
     Input,
@@ -10,25 +12,40 @@ import {
     InputNumber,
   } from 'antd';
 const { TextArea } = Input;
-export default class ChangeOrder extends Component {
+class ChangeOrder extends Component {
+    // eslint-disable-next-line no-useless-constructor
+    constructor(props){
+        super(props);
+    }
     state={
         //时间
         timer:'',
         initData:{}
     }
-    handleRef=value=>{
-        message('正在提交中','loading')
-        const{name,num,price,type}=this.formRef.getFieldValue()
-        
+    handleRef=async()=>{
+        const loading=message('正在提交中','loading')
+        const{name,num,price,type,mark,_id,createTime}=this.formRef.getFieldValue();
+        const data=await modicOrder({id:_id,name,num,price,type,mark,createTime:moment(createTime).format("YYYY-MM-DD")});
+        loading.destroy();
+        if(data.code==='200'){
+           message("修改成功",'success');
+           this.props.history.push("/index/watchOrder");        
+       }else{
+           message(data.msg);
+       }
     }
+    //时间
     handleTime=(time,timer)=>{
         this.setState({
             timer
         })
     }
     //请求数据
-    componentDidMount(){
-        
+   componentDidMount(){
+       getOrderDetail(this.props.match.params.orderId).then(res=>{
+        res.data.createTime=moment(res.data.createTime);
+        this.formRef.setFieldsValue(res.data);
+        })
     }
     render() {
         return (
@@ -47,12 +64,10 @@ export default class ChangeOrder extends Component {
                             span: 13,
                         }}
                         layout="horizontal"
-                        initialValues={{
-                            name:'手机'
-                        }}
                         size='large'
                         >
-                        <Form.Item label="商品名"  
+                        <Form.Item
+                        label="商品名"  
                         name='name'
                         rules={[
                                 {
@@ -60,9 +75,10 @@ export default class ChangeOrder extends Component {
                                     message: '请输入商品名',
                                 },
                 ]}>
-                    <Input ref={name=>this.name=name} />
+                    <Input  ref={name=>this.name=name} />
                 </Form.Item>
-                <Form.Item label="类别"
+                <Form.Item
+                        label="类别"
                         name='type'
                         rules={[
                             {
@@ -72,29 +88,18 @@ export default class ChangeOrder extends Component {
                     ]}
                 >
                     <Cascader
-                          options={[
-                            {
-                              value: 'zhejiang',
-                              label: 'Zhejiang',
-                              children: [
-                                {
-                                  value: 'hangzhou',
-                                  label: 'Hangzhou',
-                                },
-                              ],
-                            },
-                          ]}
+                        value={this.state.initData.type}
                         placeholder="请输入类别"
                         ref={type=>this.type=type}
                     />
                     </Form.Item>
-                    <Form.Item label="时间"  name="time" rules={[
+                    <Form.Item label="时间"  name="createTime" rules={[
                             {
                                 required: true,
                                 message: '请选择时间',
                             },
                     ]}>
-                        <DatePicker placeholder="请输入时间" onChange={this.handleTime} />
+                        <DatePicker  placeholder="请输入时间" onChange={this.handleTime} ref={timer=>this.timer=timer} />
                     </Form.Item>
                     <Form.Item label="数量" name="num" rules={[
                             {
@@ -124,3 +129,5 @@ export default class ChangeOrder extends Component {
         )
     }
 }
+export default ChangeOrder;
+

@@ -7,22 +7,60 @@ import {
   DatePicker,
   InputNumber,
 } from 'antd';
+import {getType,getList,addOrder}from "../../../axios/index";
 import {message} from "../../../api";
 import "./addOrder.scss";
 const { TextArea } = Input;
 export default class AddOrder extends Component {
+    // constructor(props){
+    //     super(props);
+    // }
     state={
         //时间
         timer:'',
+        type:[],
+
     }
-    handleRef=value=>{
-        message('正在提交中','loading')
-        const{name,num,price,type}=this.formRef.getFieldValue()
-        
+    handleRef=async()=>{
+        const loading=message('正在提交中','loading');
+        const{name,num,price,type,mark}=this.formRef.getFieldValue()
+        const result=await addOrder({name,num,price,type,mark,createTime:this.state.timer});
+        if(result.code){
+            loading.destroy();
+            message('添加成功','success');
+            this.props.history.push('/index/watchOrder');
+        }else{
+            message(result.msg);
+        }        
     }
     handleTime=(time,timer)=>{
         this.setState({
             timer
+        })
+    }
+  
+    componentDidMount(){
+        const {type}=this.state;
+        getType().then(res=>{
+            res.data.forEach(async value=>{
+                let result=await getList(value._id);
+                let children=[];
+                result.data.list.forEach(value=>{
+                    children.push({
+                        value,
+                        label:value
+                    })
+                })
+                type.push({
+                    value:value.type,
+                    label:value.type,
+                    id:value._id,
+                    children
+                })
+            })
+            this.setState({
+                type
+            })
         })
     }
     render(){
@@ -66,18 +104,7 @@ export default class AddOrder extends Component {
                     ]}
                 >
                     <Cascader
-                          options={[
-                            {
-                              value: 'zhejiang',
-                              label: 'Zhejiang',
-                              children: [
-                                {
-                                  value: 'hangzhou',
-                                  label: 'Hangzhou',
-                                },
-                              ],
-                            },
-                          ]}
+                        options={this.state.type}
                         placeholder="请输入类别"
                         ref={type=>this.type=type}
                     />

@@ -11,5 +11,5 @@ export default(content,type="warning",className="",style="")=>{
         className,
         style,
     })
-    return '';
+    return message;
 }

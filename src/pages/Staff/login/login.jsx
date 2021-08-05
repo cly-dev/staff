@@ -1,16 +1,43 @@
 import React, { Component} from 'react';
 import {Row,Col,Button} from "antd";
-import {Login} from "../../../axios"
+import {Login,getCode} from "../../../axios";
 import "./login.scss";
+import Store from '../../../redux/store';
+import message from '../../../api/message';
+import {userSave}from "../../../redux/action/user"
 export default class login extends Component {
+    state={
+        el:''
+    }
+    //登录
     handleLogin=async()=>{
-        const {id:{value:userId},password:{value:psd},code:{value:checkCode}}=this
+        const {id:{value:userId},password:{value:password},code:{value:checkCode}}=this
         let data=await Login({
             userId,
-            psd,
+            password,
             checkCode
         })
-        console.log(data);
+        if(data.code==='200'){
+            message('登录成功','success');
+            Store.dispatch(userSave(data.data));
+            this.props.history.push("/index");
+        }else{
+            message(data.msg);
+        }
+    }
+    //请求验证码
+    handleClick= async ()=>{
+        this.setState({
+            el:await getCode()
+        })
+    }
+    //生命周期
+    componentDidMount(){
+        getCode().then((result) => {
+            this.setState({el:result})
+        }).catch((err) => {
+            
+        });  
     }
     render() {
         return (
@@ -32,11 +59,13 @@ export default class login extends Component {
                     </section>
                     <section className="form-item form-code">
                             <span className="item-tips">验证码:</span>
-                            <input type="password" ref={code=>this.code=code}  placeholder="请输入验证码" required  autoComplete="off" />
-                            <img src="/public/images/setdowm.png" alt="" className="img-code" />
+                            <input type="text" ref={code=>this.code=code}  placeholder="请输入验证码" required  autoComplete="off" />           
+                            <div dangerouslySetInnerHTML={{__html:this.state.el}} className="img-code" onClick={this.handleClick}>
+                            </div>
                     </section>
                     <section className="form-btn">
                             <Button type="primary" size="large" className="btn-lg" onClick={this.handleLogin}>登录</Button>
+                            
                     </section>	
                 </form>	
             </main>
@@ -47,3 +76,4 @@ export default class login extends Component {
         )
     }
 }
+

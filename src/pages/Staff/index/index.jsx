@@ -1,9 +1,11 @@
 import React, { Component,lazy,Suspense} from 'react';
 import {Row,Col,Menu,Dropdown,Tabs,Badge} from "antd";
 import { Route } from 'react-router'; 
+import Store from "../../../redux/store";
 import { DownOutlined,UserOutlined,ExportOutlined, AppstoreOutlined, MailOutlined, SettingOutlined} from '@ant-design/icons';
 import "./index.scss";
 import {NavLink} from 'react-router-dom';
+import store from '../../../redux/store';
 const NewNotice=lazy(()=>import("../NewNotice/NewNotice.jsx"));
 const OldNotice=lazy(()=>import("../OldNotice/OldNotice.jsx"));
 const AddOrder=lazy(()=>import("../AddOrder/addOrder.jsx"));
@@ -167,12 +169,12 @@ export default class index extends Component {
         }
         //生命周期
         componentDidMount(){
+            console.log(Store.getState());
             const route=JSON.parse(sessionStorage.getItem("router"));
             this.setState({panes:route?route:[]}); 
             window.addEventListener("beforeunload",this.handleStorage,false);
             if(route){
                 const obj=route.find(item=>item.link===this.props.location.pathname);
-               
                 if(obj){
                     this.setState({
                         activeKey:obj.key
@@ -195,7 +197,7 @@ export default class index extends Component {
                                 <span className="nav-tips">员工管理系统</span>
                                 {/* 用户信息 */}
                                 <section className="user-info">
-                                    <img src="/public/logo192.png" alt="" className="user-avater"/>
+                                    <img src={'\api'+store.getState().imgPath} alt="" className="user-avater"/>
                                         <Dropdown placement="bottomCenter" overlay={(
                                             <Menu>
                                                 {
@@ -209,8 +211,8 @@ export default class index extends Component {
                                                 }
                                             </Menu>
                                         )}>
-                                            <span className="ant-dropdown-link" onClick={e => e.preventDefault()}>
-                                                阿勇 <DownOutlined style={{fontSize:'0.6rem'}} />
+                                            <span className="ant-dropdown-link" onClick={e => e.preventDefault()}>                 
+                                                {store.getState().username} <DownOutlined style={{fontSize:'0.6rem'}} />
                                             </span>
                                     </Dropdown>
                                 </section>

@@ -2,9 +2,9 @@ const msg=require("../api/message");
 const path=require('path');
 const SvgCode=require("../api/imgCode");
 const {TokenVerify }=require("../api/JWT/token");
-const {Logins,ModicPasswords,ModicInfos,ModicImgs}=require("../Dao/UserDao");
+const {Logins,ModicPasswords,ModicInfos,ModicImgs,deleStaff}=require("../Dao/UserDao");
 const {getNotices,getNoticesCount,ReadNotices,TopNotices}=require("../Dao/NoticeDao");
-const {addOrders,modicOrders,deleteOrders,getOrderByPageNums,getSearchByPageNums,getOrderDetails,getStates,getOrderCount,getSearchCount}=require("../Dao/OrderDao");
+const {addOrders,modicOrders,deleteOrders,getOrderByPageNums,getSearchByPageNums,getOrderDetails,getStates,getOrderCount,getSearchCount,getStateByAges}=require("../Dao/OrderDao");
 const {findAllLists,findAllTypes}=require("../Dao/TypeDao.js");
 const {addApplys,getApplyByPageNums,delApplys,getApplyCount,handleApply}=require("../Dao/ApplyDao");
 const logger=require("../api/log");
@@ -44,7 +44,6 @@ const Login=async(req,res)=>{
         throw(error);
     }
 }
-
 //获取公告
 const getNotice=async(req,res)=>{
     try{
@@ -129,14 +128,14 @@ const ModicImg=async(req,res)=>{
     try{
         const {token}=req.headers;
             const data=TokenVerify(token);
-                const {userId,username}=data;
+                const {userId}=data;
                 const file=new Fs();
-                const src=path.resolve(__dirname,'../www','images',`${userId + username}`); 
+                const src=path.resolve(__dirname,'../www','images',`${userId}`); 
                 const ImgPath=await upload(req,await file.init(src),'head');
                 if(ImgPath){
                     const newName=`/${new Date().getTime()}head`+path.extname(ImgPath[0].originalFilename);
                     if(await file.handleReName(ImgPath[0].path,src+newName)){
-                        let ImgSrc=path.join('/','images',userId+username,newName);
+                        let ImgSrc=path.join('/','images',userId,newName);
                         msg('Success',res,await ModicImgs(userId,ImgSrc),{},'成功');
                     }else{
                         new Error("头像重命名失败");
@@ -170,7 +169,7 @@ const addOrder=async(req,res)=>{
 const modicOrder=async(req,res)=>{
     try{
         const {id,name,type,createTime,num,price}=req.query;
-        if( name &&type && createTime && num && price && id){
+        if( name && type && createTime && num && price && id){
             msg('DecideRes',res,await modicOrders(req.query));
         }else{
             msg('PError',res);
@@ -358,6 +357,21 @@ const handleRef=async(req,res)=>{
         throw(error);
     }
 }
+//删除用户
+const handleDel=async(req,res)=>{
+    const {userId}=req.headers;
+    msg('DecideRes',res,await deleStaff(userId));
+}
+//根据年份生成报表数据
+const getStateByage=async(req,res)=>{
+    const {userId}=req.headers;
+    const {age}=req.query;
+    if(age){
+        msg("DecideRes",res,await getStateByAges(age,userId));
+    }else{
+        msg("PError",res);
+    }
+}
 module.exports={
     Login,
     CheckCode,
@@ -380,5 +394,7 @@ module.exports={
     delApply,
     getApplyByPageNum,
     handleRepeal,
-    handleRef
+    handleRef,
+    handleDel,
+    getStateByage
 }

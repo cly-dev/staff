@@ -4,10 +4,16 @@ import Login from "./pages/Staff/login/login.jsx";
 import React, { Component } from 'react'
 import message  from "./api/message";
 import Index from"./pages/Staff/index/index.jsx";
+import Store from "./redux/store";
 export default class App extends Component {
   static getDerivedStateFromError(error){
     // eslint-disable-next-line no-unused-expressions
     error?message('网络错误,请稍后再试'):'';
+  }
+  componentDidMount(){
+    Store.subscribe(()=>{
+        this.forceUpdate();
+    })
   }
   render() {
     return (

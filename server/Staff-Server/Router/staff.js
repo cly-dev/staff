@@ -1,18 +1,28 @@
 const express=require("express");
 const Staff=express.Router();
-const {Login,getNotice,ReadNotice,TopNotice, ModicInfo,ModicPassword,ModicImg,addOrder,modicOrder,deleteOrder,getOrderByPageNum,getSearchByPageNum,getOrderDetail,getState,findAllList,findAllType,addApply,delApply,getApplyByPageNum,handleRepeal,handleRef}=require("../control/user");
+const {Login,getNotice,ReadNotice,TopNotice, ModicInfo,ModicPassword,ModicImg,addOrder,modicOrder,deleteOrder,getOrderByPageNum,getSearchByPageNum,getOrderDetail,getState,findAllList,findAllType,addApply,delApply,getApplyByPageNum,handleRepeal,handleRef,handleDel,getStateByage}=require("../control/user");
 const {TokenVerify}=require("../api/JWT/token");
+const {findStaffById}=require("../Dao/UserDao");
 const message=require("../api/message.js");
 Staff.post('/login',Login);
 //拦截
-Staff.use((req,res,next)=>{
+Staff.use(async (req,res,next)=>{
     const {token}=req.headers;
     if(token){
         const data=TokenVerify(token);
         if(TokenVerify(token)){
-            req.headers.userId=data.userId;
-            req.headers.username=data.username;
-            next();
+            if(await findStaffById(data.userId)){
+                console.log(data);
+                if(data.status<=0){
+                    message("FError",res,"该用户状态异常,无法进行操作");
+                }else{
+                    req.headers.userId=data.userId;
+                    req.headers.username=data.username;
+                    next();
+                }
+            }else{
+                message("FError",res,'该用户不存在');
+            }
         }else{
             message("TError",res);
         }
@@ -40,5 +50,6 @@ Staff.delete("/delApply",delApply);
 Staff.get('/getApplyByPageNum',getApplyByPageNum);
 Staff.get('/handleRepeal',handleRepeal);
 Staff.get('/handleRef',handleRef)
-
+Staff.delete('/handleDelete',handleDel);
+Staff.get('/getStateByage',getStateByage)
 module.exports=Staff;

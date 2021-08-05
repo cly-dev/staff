@@ -1,13 +1,17 @@
 import axios from "axios";
-// import Nprogress from "nprogress";
+import Nprogress from "nprogress";
 import BaseUrl from "./axios.config";
+import Store from "../redux/store";
 //请求拦截
 axios.interceptors.request.use(config=>{
-    // Nprogress.start();
+    Nprogress.start();
+    if(config.url!=='/api/staff/login'){
+        config.headers.token=Store.getState().token;
+    }
     return config;
 })
 axios.interceptors.response.use(config=>{
-    // Nprogress.remove();
+    Nprogress.remove();
     return config;
 });
 axios.defaults.timeout=50000;
@@ -15,7 +19,7 @@ axios.defaults.timeout=50000;
 export default (url,data,params,method="GET")=>{
     const promise=new Promise((resolve,reject)=>{
         axios({
-            url:BaseUrl+url,
+            url:'/api'+url,
             data,
             params,
             method,

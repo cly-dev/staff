@@ -21,9 +21,10 @@ function Logins(userId,password){
     return new Promise((resolve,reject)=>{
             UserDao.find({userId,password},{_id:0,__v:0,password:0}).then(res=>{
                 const [data]=res;
+                console.log(data);
                 if(data){
                     if(!(TokenVerify(data.token))){
-                        const token=TokenSign({userId,username:res.username});
+                        const token=TokenSign({userId,username:data.username,status:data.status});
                         UserDao.updateOne({userId},{$set:{token}},(err)=>{
                            if(err){
                             reject(err);
@@ -73,8 +74,8 @@ function ModicPasswords(userId,oldPsd,newPsd){
 //用户修改信息
 function ModicInfos(userId,User){
     return new Promise((resolve, reject) => {
-        const {username,phone,email,sex,address}=User;
-        UserDao.updateOne({userId},{username,phone,email,sex,address}).then(res=>{
+        const {username,phone,email,sex,address,age}=User;
+        UserDao.updateOne({userId},{username,phone,email,sex,address,age}).then(res=>{
             if(res.nModified){
                 return UserDao.findOne({userId},{_id:0,password:0,__v:0});
             }else{
@@ -118,9 +119,9 @@ function findStaffById(userId){
     return new Promise((resolve,reject)=>{
         UserDao.findOne({userId}).then(res=>{
             if(res){
-                resolve('存在');
-            }else{
                 resolve(true);
+            }else{
+                resolve(false);
             }
         }).catch(err=>{
             reject(err);
@@ -128,14 +129,24 @@ function findStaffById(userId){
     })
 }
 //查询所有用户
-function findAllStaff(){
+function findAllStaffs(pageNum){
     return new Promise((resolve,reject)=>{
-        UserDao.find().then(res=>{
+        UserDao.find({},{__v:0,password:0,token:0}).skip((pageNum -1) * 8).limit(8).then(res=>{
             if(res[0]){
-                resolve(res)
+                resolve(res);
             }else{
                 new Error("错误");
             }
+        }).catch(err=>{
+            reject(err);
+        })
+    })
+}
+//查询所有用户的条数
+function findStaffCount(){
+    return new Promise((resolve,reject)=>{
+        UserDao.find().count().then(res=>{
+            resolve(res);
         }).catch(err=>{
             reject(err);
         })
@@ -165,7 +176,8 @@ module.exports={
     ModicInfos,
     ModicImgs,
     findStaffById,
-    findAllStaff,
+    findAllStaffs,
     handleStaff,
-    deleStaff
+    deleStaff,
+    findStaffCount
 }

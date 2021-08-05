@@ -18,8 +18,7 @@ module.exports={
                 },
                 //时间
                 createTime:{
-                    type:Date,
-                    default:Date.now()
+                    type:String
                 },
                 //数量
                 num:{ 

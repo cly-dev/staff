@@ -2,12 +2,12 @@ const {AddNotices}=require("../Dao/NoticeDao");
 const {AddAdmins,findAdminByIds,Logins}=require("../Dao/AdminDao");
 const {addTypes}=require("../Dao/TypeDao");
 const {getAllApplys,getAllCount}=require("../Dao/ApplyDao");
-const {UserInserts}=require("../Dao/UserDao.js");
+const {UserInserts,findAllStaffs,findStaffCount, handleStaff}=require("../Dao/UserDao.js");
 const Time=require("../api/time");
 const msg=require("../api/message");
 const logger=require("../api/log");
 //登录
-const Login=async (req,res)=>{
+const Login=async(req,res)=>{
     try{
         const {adminId,password}=req.body;
         if(adminId && password){
@@ -39,7 +39,7 @@ const UserInsert=async(req,res)=>{
     }
 }
 //增加管理员
-const AddAdmin=async (req,res)=>{
+const AddAdmin=async(req,res)=>{
     try{
         const {adminId,name,position}=req.body;
         if(!(adminId && name && position)){
@@ -114,7 +114,39 @@ const getAllApply=async(req,res)=>{
         throw(error)
     }
 }
-
+//查询所有人的信息
+const findAllStaff=async(req,res)=>{
+    try{
+        const {pageNum}=req.query;
+        if(pageNum){
+            msg("DecideRes",res,await findAllStaffs(pageNum),{pageSize:await findStaffCount(),pageNum});
+        }else{
+            msg("PError",res);
+        }
+    }catch(error){
+        logger.error("admin/admin"+error);
+        msg('SError',res);
+        throw(error)
+    }
+}
+//停职
+const handleSuspend=async(req,res)=>{
+    const {userId}=req.query;
+    if(userId){
+        msg("DecideRes",res,await handleStaff(userId,'-1'));
+    }else{
+        msg("PError",res);
+    }
+}
+//解雇
+const handleKick=async(req,res)=>{
+    const {userId}=req.query;
+    if(userId){
+        msg("DecideRes",res,await handleStaff(userId,'-2'));
+    }else{
+        msg("PError",res);
+    }
+}
 module.exports={
     AddNotice,
     AddAdmin,
@@ -122,5 +154,8 @@ module.exports={
     Login,
     addType,
     getAllApply,
-    UserInsert
+    UserInsert,
+    findAllStaff,
+    handleSuspend,
+    handleKick
 }

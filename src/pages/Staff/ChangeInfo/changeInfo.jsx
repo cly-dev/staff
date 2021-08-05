@@ -1,13 +1,22 @@
 import React, { Component } from 'react'
-import { Form, Input,Select,Button} from 'antd';
+import { Form, Input,Select,Button,InputNumber} from 'antd';
+import Store from "../../../redux/store";
+import {modicInfo} from "../../../axios";
+import message from "../../../api/message";
+import {userSave} from "../../../redux/action/user"; 
 import "./changeInfo.scss";
 const { Option } = Select;
-
 export default class changeInfo extends Component {
-    handleRefs=value=>{
-        console.log(value);
+    handleRefs=async value=>{
+        const result=await modicInfo(value);
+        if(result.code==='200'){
+            message('修改成功','success');
+            Store.dispatch(userSave(result.data));
+            this.props.history.push('/index/userInfo');
+        }else{
+            message(result.msg);
+        }
     }
-
     render() {
         return (
             <section className="chanegeInfo-container">
@@ -16,6 +25,7 @@ export default class changeInfo extends Component {
                 </section>
                 <section className="changeInfo-mainer">
                     <Form
+                      initialValues={Store.getState()}
                       onFinish={this.handleRefs}
                       ref={changeInfo=>this.changeInfo=changeInfo}
                       size="large"
@@ -24,13 +34,28 @@ export default class changeInfo extends Component {
                     >
                         <Form.Item
                             label="姓名"
-                            name='name'
+                            name='username'
                             rules={[{
                                 required:true,
                                 message:'姓名不能为空'
                             }]}
                         >
                             <Input  placeholder="请输入姓名"></Input>
+                        </Form.Item>
+                        <Form.Item
+                            label="年龄"
+                            name='age'
+                            rules={[{
+                                    required:true,
+                                    message:'年龄不能为空'
+                                },{
+                                    type:'number',
+                                    max:150,
+                                    min:10,
+                                    message:'年龄在指定范围之内'
+                                }]}
+                        >
+                            <InputNumber type="number" min={16} max={150}  placeholder="请输入姓名"></InputNumber>
                         </Form.Item>
                         <Form.Item 
                             label="电话"
@@ -72,7 +97,7 @@ export default class changeInfo extends Component {
                                 message:"性别不能为空"
                             }]}
                         >
-                            <Select defaultValue="男"> 
+                            <Select> 
                                 <Option value="男">男</Option>
                                 <Option value="女">女</Option>
                             </Select>
