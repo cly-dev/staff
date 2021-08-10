@@ -1,0 +1,10 @@
+@import "../../../public/scss/commit.scss";
+.OldNotice-container{
+    .OldNotice-header{
+        @include title;
+    }
+    .item-content{
+        text-align: left;
+        border: 1px solid;
+    }
+}

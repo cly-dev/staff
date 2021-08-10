@@ -1,5 +1,5 @@
 const express=require("express");
-const { AddNotice,AddAdmin,findAdminById,Login,addType,getAllApply,UserInsert,findAllStaff,handleSuspend,handleKick}=require("../control/admin");
+const {getOrderCountByMonth,getOrderCount,AddNotice,AddAdmin,findAdminById,Login,addType,getAllApply,UserInsert,findAllStaff,handleSuspend,handleKick,getAllState}=require("../control/admin");
 const {TokenVerify}=require("../api/JWT/token");
 const message=require("../api/message.js");
 const Admin=express.Router();
@@ -28,4 +28,7 @@ Admin.get("/getAllApply",getAllApply);
 Admin.get('/findAllStaff',findAllStaff);
 Admin.get('/handleSuspend',handleSuspend)
 Admin.get('/handleKick',handleKick);
+Admin.get('/getAllState',getAllState);
+Admin.get('/getOrderCount',getOrderCount);
+Admin.get('/getOrderCountByMonth',getOrderCountByMonth);
 module.exports=Admin;

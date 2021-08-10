@@ -4,9 +4,14 @@ import BaseUrl from "./axios.config";
 import Store from "../redux/store";
 //请求拦截
 axios.interceptors.request.use(config=>{
+    const reg=/admin/;
     Nprogress.start();
-    if(config.url!=='/api/staff/login'){
-        config.headers.token=Store.getState().token;
+    if(reg.test(config.url)){
+        config.headers.token=Store.getState()['admin'].token
+    }else{
+        if(config.url!=='/api/staff/login'){
+            config.headers.token=Store.getState()['user'].token;
+        }
     }
     return config;
 })

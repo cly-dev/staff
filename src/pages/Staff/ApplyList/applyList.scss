@@ -1,0 +1,9 @@
+@import "../../../public/scss/commit.scss";
+.applyList-container{
+    .applyList-header{
+        @include title;
+    }
+    .applyList-mainer{
+        margin-top: -20px;
+    }
+}

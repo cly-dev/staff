@@ -1,68 +1,108 @@
-import React,{useState}from 'react'
+import React from 'react'
 import { List, Avatar, Button,Space} from 'antd';
+import {getNotice,readNotice,topNotice} from "../../../axios";
+import {message} from "../../../api";
 import "../NewNotice/NewNotice.scss";
-const list = [];
-for (let i = 0; i < 23; i++) {
-  list.push({
-    href: 'https://ant.design',
-    title: `ant design part ${i}`,
-    avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-    time:'2018年',
-    description:
-      'Ant Design, a design language for background applications, is refined by Ant UED Team.',
-    content:
-      '我我我:200minHeight:200min我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我',
-  });
-}
+import "./OldNotice.scss";
 export default class OldNotice extends React.Component {
     constructor(props){
         super(props);
         this.state={
-            listData:list
+            listData:[],
+            total:0,
         }
     }
-    handleTop=val=>{
+    //置顶
+    handleTop=async val=>{
         const { listData}=this.state;
-        let obj=listData.splice(val,1);
-        listData.unshift(...obj);
-        console.log(listData);
-        this.setState(listData);
-    
+        const result=await topNotice(listData[val]._id);
+        if(result.code==='200'){
+            message('置顶成功',);
+            // let obj=listData.splice(val,1);
+            // obj.status=2;
+            // listData.unshift(...obj);
+            // this.setState(listData);
+            window.location.reload();
+        }else{
+            message(result.msg);
+        }
+    }
+    //点击读取
+    handleRead=async (val,index)=>{
+        const {listData}=this.state;
+        console.log(val);
+        const result=await readNotice(val._id);
+        console.log(result);
+        if(result.code==='200'){
+            listData[index].status='1';
+            message("读取成功",'success');
+            this.setState({
+                listData
+            })
+        }else{
+            message(result.msg);
+        }
+    }
+    //获取通知
+    handleGetNotice=async(pageNum)=>{
+        const {listData}=this.state;
+        listData.length=0;
+        const result=await getNotice(pageNum);
+        result.data.forEach(value=>{
+            if(Array.isArray(value.resource)){
+             value.resource=value.resource[0]   
+            }
+            listData.push({...value,...value.resource});
+        })  
+        console.log(result);
+        this.setState({
+            listData,
+            total:result.pageSize
+        })
+    }
+    componentDidMount(){
+        this.handleGetNotice(1);
     }
     render(){
     return (
-        <>
-           <List
+        <section className="OldNotice-container">
+            <section className="OldNotice-header">
+                以往通知
+            </section>
+            <section className="OldNotice-mainer">
+                <List
                     locale={{emptyText:'暂无通知'}}
-                    itemLayout="horizontal"
-                    size="large"
-                    pagination={{
-                    onChange: page => {
-                        console.log(page);
-                    },
-                    pageSize: 5,
-                }}
-                dataSource={this.state.listData}
-                renderItem={(item,index) => (
-                <List.Item
-                    key={item.title}
-                 >
-                <List.Item.Meta
-                avatar={<Avatar src={item.avatar} />}
-                title={<a href={item.href}>{item.title}</a>}
-                description={<Space>{item.description}<span style={{fontWeight:'bold',color:'black'}}>{item.time}</span></Space>}
-                />
-                {item.content}
-                <section className="btn-container">
-                    <Space style={{float:'right'}}>
-                        <Button onClick={()=>this.handleTop(index)}>置顶</Button>
-                        <Button type="primary">未读</Button>
-                    </Space>
-                </section>
-            </List.Item>
-            )}
-        />, 
-        </>
+                            itemLayout="horizontal"
+                            size="large"
+                            pagination={{
+                            total:this.state.total,
+                            onChange:page => {
+                                this.handleGetNotice(page)
+                            },
+                            pageSize: 5,
+                        }}
+                    dataSource={this.state.listData}
+                    renderItem={(item,index) => (
+                        <List.Item
+                            key={item._id}
+                        >
+                        <List.Item.Meta
+                            avatar={<Avatar src={item.imgPath} />}
+                            title={item.title}
+                            description={<Space>{item.name}{item.position}<span style={{color:'black'}}>{item.createTime}</span></Space>}
+                        />
+                         {item.content}  
+                        <section className="btn-container">
+                            <Space style={{float:'right'}}>
+                                <Button disabled={item.status===2} onClick={()=>this.handleTop(index)}>{item.status===2?'已':''}置顶</Button>
+                                <Button type="primary" disabled={item.status>0} onClick={()=>this.handleRead(item,index)}>{item.status===0?'未':'已'}读</Button>
+                            </Space>
+                        </section>
+                    </List.Item>
+                    )}
+                />, 
+        </section>
+        </section>
     )
                 }
 }

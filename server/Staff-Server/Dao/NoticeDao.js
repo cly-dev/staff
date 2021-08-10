@@ -31,10 +31,21 @@ function getNotices(userId,pageNum){
                     as:'resource'
                 }
             },{
-                $project:{__v:0,'resource._id':0,'resource.adminId':0}
+                $project:{
+                    resource:{
+                        lastModic:0,
+                        password:0,
+                        power:0,
+                        token:0,
+                        status:0,
+                        _id:0,
+                        __v:0
+                    }
+                }
             }
-            ]).skip(4 * (pageNum - 1)).limit(4).sort({'status':1}).then(res=>{
-                if(res){
+            ]).sort({'status':-1}).skip(5 * (pageNum - 1)).limit(5).then(res=>{
+                console.log(res)
+                if(res[0]){
                     res[0].resource=res[0].resource[0];
                     resolve(res);
                 }else{
@@ -46,6 +57,63 @@ function getNotices(userId,pageNum){
     })
     return promise;
 }
+//按照日查看通知
+function getNoticeByDates(userId,date,pageNum){
+    return new Promise((resolve,reject)=>{
+        const reg=new RegExp(date,'i');
+        NoticeDao.aggregate([
+            {
+                $match:{
+                    userId,
+                    createTime:{
+                        $regex:reg
+                    }
+                }
+            },{
+                $lookup:{
+                    from:'admin',
+                    localField:'adminId',
+                    foreignField:'adminId',
+                    as:'resource'
+                }
+            },{
+                $project:{
+                    resource:{
+                        lastModic:0,
+                        password:0,
+                        power:0,
+                        token:0,
+                        status:0,
+                        _id:0,
+                        __v:0
+                    }
+                }
+            }
+        ]).sort({status:-1}).skip(5 * (pageNum-1)).limit(5).then(res=>{
+            console.log(res);
+            if(res[0]){
+                resolve(res)
+            }else{
+                resolve("没有记录");
+            }
+        }).catch(err=>{
+            reject(err);
+        })
+    })
+}
+//按照日期查看通知总数
+function getNoticeByDateCount(userId,date){
+    return new Promise((resolve,reject)=>{
+        const reg=new RegExp(date,'i');
+        NoticeDao.find({userId,createTime:{$regex:reg}}).count("_id").then(res=>{
+                console.log(res);
+                resolve(res)
+        }).catch(err=>{
+            reject(err);
+        })
+    })
+}
+
 //获取用户的公告总数
 function getNoticesCount(userId){
     const promise=new Promise((resolve,reject)=>{
@@ -65,10 +133,11 @@ function getNoticesCount(userId){
 function ReadNotices(Id){
     const promise=new Promise((resolve,reject)=>{
             NoticeDao.findOne({_id:Id}).then(res=>{
-                if(res.status==='2'){
+                console.log(res);
+                if(res.status>0){
                     resolve('不能重复读取');
                 }else{
-                    return  NoticeDao.updateOne({_id:Id},{$set:{status:'1'}})
+                    return  NoticeDao.updateOne({_id:Id},{$set:{status:1}})
                 }
             }).then(res=>{
                 if(res.nModified){
@@ -86,14 +155,15 @@ function ReadNotices(Id){
 function TopNotices(Id){
     const promise=new Promise((resolve,reject)=>{
         NoticeDao.findOne({_id:Id}).then(res=>{
-            if(res.status==='2'){
+            console.log(res);
+            if(res.status===2){
                 resolve('不能重复置顶');
             }else{
-                return NoticeDao.updateOne({status:'2'},{$set:{status:'1'}})
+                return NoticeDao.updateOne({status:2},{$set:{status:1}})
             }
         }).then(res=>{
             if(res.nModified){
-                return  NoticeDao.updateOne({_id:Id},{$set:{status:'2'}})
+                return  NoticeDao.updateOne({_id:Id},{$set:{status:2}})
             }else{
                 resolve('已置顶');
             }
@@ -116,6 +186,8 @@ module.exports={
     getNotices,
     getNoticesCount,
     ReadNotices,
-    TopNotices
+    TopNotices,
+    getNoticeByDates,
+    getNoticeByDateCount
 }
 

@@ -25,7 +25,7 @@ export default class changeInfo extends Component {
                 </section>
                 <section className="changeInfo-mainer">
                     <Form
-                      initialValues={Store.getState()}
+                      initialValues={Store.getState()['user']}
                       onFinish={this.handleRefs}
                       ref={changeInfo=>this.changeInfo=changeInfo}
                       size="large"

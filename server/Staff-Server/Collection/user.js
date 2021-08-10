@@ -41,7 +41,7 @@ module.exports={
                 //手机号码
                 phone:{
                         type:Number,
-                        default:'',
+                        default:0,
                 },
                 //邮箱
                 email:{

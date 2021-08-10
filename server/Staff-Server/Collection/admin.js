@@ -32,9 +32,15 @@ module.exports={
                     type:String,
                     default:'0'
                 },
+                //token
                 token:{
                     type:String,
                     default:''
+                },
+                //头像
+                imgPath:{
+                    type:String,
+                    default:'/images/user.jpg'
                 },
                 //修改信息
                 lastModic:{

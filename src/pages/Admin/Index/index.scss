@@ -1,0 +1,35 @@
+.Aindex-container{
+    height: 100vh;
+    .header{
+        position: relative;
+        .logo{
+            margin-left:-30px;
+            color: white;
+            font-size:1rem;
+            float: left;
+        }
+        .info{
+            cursor: pointer;
+            color:black;
+            float: right;
+            width: 200px;
+            height:100%;
+            .info-name{
+                display: inline-block;
+                vertical-align: middle;
+                color: white;
+                font-size: 1rem;
+                padding-left:0.3125rem;
+            }
+        }
+    }
+    .crumb-nav{
+        cursor:pointer;
+        margin-top: 0.625rem;
+        text-indent: .625rem;
+        height: 2.5rem;
+        line-height: 2.5rem;
+        background-color: white;
+        border-bottom: 1px solid rgb(226, 226, 226) ;
+    }
+}

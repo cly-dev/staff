@@ -1,10 +1,23 @@
 import React, { Component} from 'react'
 import "./changepassword.scss";
 import {Form,Input,Button} from "antd";
+import {ModicPsd} from "../../../axios";
+import {message} from "../../../api";
+import Store from '../../../redux/store';
+import {userClear} from "../../../redux/action/user";
 export default class Changepassword extends Component {
-    handleFinish=value=>{
-        console.log(value);
-        console.log("校验通过");
+    handleFinish=async value=>{
+        const result=await ModicPsd(value);
+        if(result.code==="200"){
+            message("修改成功,请重新登录","success");
+            this.props.history.push({
+                pathname:'/',
+                state:{userId:Store.getState().userId}
+            })
+            Store.dispatch(userClear());
+        }else{
+            message(result.msg);
+        }
     }
     handleRefs=()=>{
         this.passwordForm.submit();

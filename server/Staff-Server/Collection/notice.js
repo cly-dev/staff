@@ -22,12 +22,12 @@ module.exports={
                     },
                 //时间
                 createTime:{
-                      type:Date,
-                      default:Date.now(),
+                      type:String,
+                      default:`${new Date().getFullYear()}年-${new Date().getMonth() + 1 }月-${new Date().getDate()}日`,
                 },
                 //通知类型
                 status:{
-                        type:String,
+                        type:Number,
                         default:0
                 },
                 lastModic:{

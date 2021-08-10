@@ -92,7 +92,7 @@ export default class AddOrder extends Component {
                                     message: '请输入商品名',
                                 },
                 ]}>
-                    <Input ref={name=>this.name=name} />
+                    <Input />
                 </Form.Item>
                 <Form.Item label="类别"
                         name='type'
@@ -106,7 +106,6 @@ export default class AddOrder extends Component {
                     <Cascader
                         options={this.state.type}
                         placeholder="请输入类别"
-                        ref={type=>this.type=type}
                     />
                     </Form.Item>
                     <Form.Item label="时间"  name="time" rules={[
@@ -123,7 +122,7 @@ export default class AddOrder extends Component {
                                 message: '请输入数量',
                             },
                     ]} >
-                    <InputNumber min={1} ref={num=>this.num=num} />
+                    <InputNumber min={1} />
                     </Form.Item>
                     <Form.Item label="价格" name="price" rules={[
                         {
@@ -131,7 +130,7 @@ export default class AddOrder extends Component {
                             message: '请输入价格',
                         },
                     ]}>
-                        <InputNumber min={1} ref={price=>this.price=price}/>
+                        <InputNumber min={1}/>
                     </Form.Item>
                     <Form.Item label="备注" name='mark'>
                         <TextArea rows={8} showCount maxLength={100} className="textArea-input"></TextArea>

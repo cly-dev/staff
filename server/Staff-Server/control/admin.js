@@ -1,6 +1,7 @@
 const {AddNotices}=require("../Dao/NoticeDao");
 const {AddAdmins,findAdminByIds,Logins}=require("../Dao/AdminDao");
 const {addTypes}=require("../Dao/TypeDao");
+const {getAllStates,getStaffCount,getOrderCounts,getOrderCountByMonths}=require("../Dao/OrderDao");
 const {getAllApplys,getAllCount}=require("../Dao/ApplyDao");
 const {UserInserts,findAllStaffs,findStaffCount, handleStaff}=require("../Dao/UserDao.js");
 const Time=require("../api/time");
@@ -131,20 +132,77 @@ const findAllStaff=async(req,res)=>{
 }
 //停职
 const handleSuspend=async(req,res)=>{
-    const {userId}=req.query;
-    if(userId){
-        msg("DecideRes",res,await handleStaff(userId,'-1'));
-    }else{
-        msg("PError",res);
+    try{
+        const {userId}=req.query;
+        if(userId){
+            msg("DecideRes",res,await handleStaff(userId,-1));
+        }else{
+            msg("PError",res);
+        }
+    }catch(error){
+        logger.error("admin/admin"+error);
+        msg('SError',res);
+        throw(error)
     }
 }
 //解雇
 const handleKick=async(req,res)=>{
-    const {userId}=req.query;
-    if(userId){
-        msg("DecideRes",res,await handleStaff(userId,'-2'));
-    }else{
-        msg("PError",res);
+    try{
+        const {userId}=req.query;
+        if(userId){
+            msg("DecideRes",res,await handleStaff(userId,-2));
+        }else{
+            msg("PError",res);
+        }
+    }catch(error){
+        logger.error("admin/admin"+error);
+        msg('SError',res);
+        throw(error)
+    }
+}
+//获取全部的人的报表信息
+const getAllState=async(req,res)=>{
+    try{
+        const{pageNum}=req.query;
+        if(pageNum){
+            msg("DecideRes",res,await getAllStates(pageNum),{pageNum,pageSize:await getStaffCount()});  
+        }else{
+            msg("PError",res);
+        }
+    }catch(error){
+        logger.error("admin/admin"+error);
+        msg('SError',res);
+        throw(error)
+    }
+}
+//按照年份获取总销售额
+const getOrderCount=async(req,res)=>{
+    try{
+        const {year}=req.query;
+        if(year){
+            msg("DecideRes",res,await getOrderCounts(year));  
+        }else{
+            msg("PError",res);
+        }
+    }catch(error){
+        logger.error("admin/admin"+error);
+        msg('SError',res);
+        throw(error)
+    }
+}
+//按照年份月份统计销售额
+const getOrderCountByMonth=async(req,res)=>{
+    try{
+        const {year,month}=req.query;
+        if(year && month){
+            msg("DecideRes",res,await getOrderCountByMonths(year,month));
+        }else{
+            msg("PError",res);
+        }      
+    }catch(error){
+        logger.error("admin/admin"+error);
+        msg('SError',res);
+        throw(error)
     }
 }
 module.exports={
@@ -157,5 +215,8 @@ module.exports={
     UserInsert,
     findAllStaff,
     handleSuspend,
-    handleKick
+    handleKick,
+    getAllState,
+    getOrderCount,
+    getOrderCountByMonth
 }

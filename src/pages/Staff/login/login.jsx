@@ -7,7 +7,7 @@ import message from '../../../api/message';
 import {userSave}from "../../../redux/action/user"
 export default class login extends Component {
     state={
-        el:''
+        el:'',
     }
     //登录
     handleLogin=async()=>{
@@ -20,7 +20,7 @@ export default class login extends Component {
         if(data.code==='200'){
             message('登录成功','success');
             Store.dispatch(userSave(data.data));
-            this.props.history.push("/index");
+            this.props.history.push("/index/newNotice");
         }else{
             message(data.msg);
         }
@@ -33,11 +33,12 @@ export default class login extends Component {
     }
     //生命周期
     componentDidMount(){
+        // if(this.props.location.state.userId){
+        //     document.querySelector(".userId").value=this.props.location.state.userId
+        // }
         getCode().then((result) => {
             this.setState({el:result})
-        }).catch((err) => {
-            
-        });  
+        })
     }
     render() {
         return (
@@ -51,7 +52,7 @@ export default class login extends Component {
                 <form>
                     <section className="form-item">
                             <span className="item-tips">工号:</span>
-                            <input type="text" ref={id=>this.id=id}   placeholder="请输入职工号" required/>
+                            <input type="text" className="userId" ref={id=>this.id=id}   placeholder="请输入职工号" required/>
                     </section>  
                     <section className="form-item">
                             <span className="item-tips">密码:</span>

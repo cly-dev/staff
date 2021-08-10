@@ -8,7 +8,7 @@ import {pdf} from '../../../api';
 export default class State extends PureComponent {
   constructor(props){
     super(props);
-    this.userInfo=Store.getState();
+    this.userInfo=Store.getState()['user'];
     this.columns = [
       { title: '年份', dataIndex: 'year', key: 'year',align: 'center', },
       { title: '出单数', dataIndex: 'total', key: 'total',align: 'center'},

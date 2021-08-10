@@ -3,7 +3,7 @@ const path=require('path');
 const SvgCode=require("../api/imgCode");
 const {TokenVerify }=require("../api/JWT/token");
 const {Logins,ModicPasswords,ModicInfos,ModicImgs,deleStaff}=require("../Dao/UserDao");
-const {getNotices,getNoticesCount,ReadNotices,TopNotices}=require("../Dao/NoticeDao");
+const {getNotices,getNoticesCount,ReadNotices,TopNotices,getNoticeByDates,getNoticeByDateCount}=require("../Dao/NoticeDao");
 const {addOrders,modicOrders,deleteOrders,getOrderByPageNums,getSearchByPageNums,getOrderDetails,getStates,getOrderCount,getSearchCount,getStateByAges}=require("../Dao/OrderDao");
 const {findAllLists,findAllTypes}=require("../Dao/TypeDao.js");
 const {addApplys,getApplyByPageNums,delApplys,getApplyCount,handleApply}=require("../Dao/ApplyDao");
@@ -25,7 +25,7 @@ const CheckCode=(req,res)=>{
     }
 }
 //登陆
-const Login=async(req,res)=>{
+const Login=async(req,res,nuxt)=>{
     try{
         const {userId,password,checkCode}=req.body;
         if(!(userId && password && checkCode)){
@@ -43,6 +43,7 @@ const Login=async(req,res)=>{
         msg('SError',res);
         throw(error);
     }
+    nuxt();
 }
 //获取公告
 const getNotice=async(req,res)=>{
@@ -82,7 +83,7 @@ const TopNotice=async(req,res)=>{
         if(!id){
            msg('PError',res);
         }else{
-                msg('DecideRes',res,await TopNotices(id));
+            msg('DecideRes',res,await TopNotices(id));
         }
     }catch(error){
         logger.error(error)
@@ -283,10 +284,11 @@ const findAllList=async(req,res)=>{
 const addApply=async(req,res)=>{
     try{
         const {userId}=req.headers;
-        const {title,time,desc}=req.body;
-        if(title && time && desc){
-            const ApplyInfo={title,time,desc,userId};
-            msg("DecideRes",res,await addApplys(ApplyInfo));
+        const {title,time,desc,num,type}=req.body;
+        console.log(req.body);
+        if(title && time && desc && num && type){
+            req.body.userId=userId;
+            msg("DecideRes",res,await addApplys(req.body));
         }else{
             msg("PError",res);
         }
@@ -359,17 +361,49 @@ const handleRef=async(req,res)=>{
 }
 //删除用户
 const handleDel=async(req,res)=>{
-    const {userId}=req.headers;
-    msg('DecideRes',res,await deleStaff(userId));
+    const {userId}=req.query;
+    try{
+        if(userId){
+            msg('DecideRes',res,await deleStaff(userId));
+        }else{
+            msg("PError",res);
+        }
+    }catch(error){
+        logger.error(error);
+        msg("SError",res);
+        throw(error);
+    }
 }
 //根据年份生成报表数据
 const getStateByage=async(req,res)=>{
-    const {userId}=req.headers;
-    const {age}=req.query;
-    if(age){
-        msg("DecideRes",res,await getStateByAges(age,userId));
-    }else{
-        msg("PError",res);
+    try{
+        const {userId}=req.headers;
+        const {age}=req.query;
+        if(age){
+            msg("DecideRes",res,await getStateByAges(age,userId));
+        }else{
+            msg("PError",res);
+        }
+    }catch(error){
+        logger.error(error);
+        msg("SError",res);
+        throw(error);
+    }
+}
+//根据日期查看通知
+const getNoticeByDate=async(req,res)=>{
+    try{
+        const {pageNum,date}=req.query;
+        const {userId}=req.headers;
+        if(pageNum &&date){
+            msg('DecideRes',res,await getNoticeByDates(userId,date,pageNum),{pageNum,pageSize:await getNoticeByDateCount(userId,date)})
+        }else{
+            msg("PError",res)
+        }
+    }catch(error){
+        logger.error(error);
+        msg("SError",res);
+        throw(error);
     }
 }
 module.exports={
@@ -396,5 +430,6 @@ module.exports={
     handleRepeal,
     handleRef,
     handleDel,
-    getStateByage
+    getStateByage,
+    getNoticeByDate
 }

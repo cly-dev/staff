@@ -13,7 +13,7 @@ module.exports={
                 },
                 //时间
                 time:{
-                    type:Date,
+                    type:String,
                     required:true,
                 },
                 //详细说明
@@ -25,6 +25,14 @@ module.exports={
                 status:{
                     type:String,
                     default:'0'
+                },
+                //天数
+                num:{
+                    type:Number
+                },
+                //请假类型
+                type:{
+                    type:String
                 },
                 //驳回理由
                 mark:{

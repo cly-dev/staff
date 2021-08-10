@@ -1,7 +1,7 @@
 import React, { Component,createRef} from 'react'
 import { Input, Table,Space,Button} from 'antd';
 import {getAllOrder,searchOrder,deleteOrder} from "../../../axios";
-import message from '../../../api/message';
+import {message} from '../../../api';
 import './watch.scss';
 const { Search } = Input;
 export default class watch extends Component {

@@ -6,7 +6,7 @@ import message from '../../../api/message';
 import axios from "axios";
 import {userSave} from '../../../redux/action/user';
 export default function UserInfo(props) {
-    const user=Store.getState();
+    const user=Store.getState()['user'];
     function handleModicImg(){
         document.querySelector(".file").click();
     }

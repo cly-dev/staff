@@ -1,9 +1,10 @@
 const express=require("express");
 const Staff=express.Router();
-const {Login,getNotice,ReadNotice,TopNotice, ModicInfo,ModicPassword,ModicImg,addOrder,modicOrder,deleteOrder,getOrderByPageNum,getSearchByPageNum,getOrderDetail,getState,findAllList,findAllType,addApply,delApply,getApplyByPageNum,handleRepeal,handleRef,handleDel,getStateByage}=require("../control/user");
+const {getNoticeByDate,Login,getNotice,ReadNotice,TopNotice, ModicInfo,ModicPassword,ModicImg,addOrder,modicOrder,deleteOrder,getOrderByPageNum,getSearchByPageNum,getOrderDetail,getState,findAllList,findAllType,addApply,delApply,getApplyByPageNum,handleRepeal,handleRef,handleDel,getStateByage}=require("../control/user");
 const {TokenVerify}=require("../api/JWT/token");
 const {findStaffById}=require("../Dao/UserDao");
 const message=require("../api/message.js");
+Staff.use('/handleDelete',handleDel);
 Staff.post('/login',Login);
 //拦截
 Staff.use(async (req,res,next)=>{
@@ -12,7 +13,6 @@ Staff.use(async (req,res,next)=>{
         const data=TokenVerify(token);
         if(TokenVerify(token)){
             if(await findStaffById(data.userId)){
-                console.log(data);
                 if(data.status<=0){
                     message("FError",res,"该用户状态异常,无法进行操作");
                 }else{
@@ -50,6 +50,6 @@ Staff.delete("/delApply",delApply);
 Staff.get('/getApplyByPageNum',getApplyByPageNum);
 Staff.get('/handleRepeal',handleRepeal);
 Staff.get('/handleRef',handleRef)
-Staff.delete('/handleDelete',handleDel);
-Staff.get('/getStateByage',getStateByage)
+Staff.get('/getStateByage',getStateByage);
+Staff.get('/getNoticeByDate',getNoticeByDate);
 module.exports=Staff;

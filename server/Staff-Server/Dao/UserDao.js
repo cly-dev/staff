@@ -6,7 +6,7 @@ function UserInserts(user){
             const data=new UserDao(user)
             data.save().then(res=>{
                 if(res){
-                    resolve(true);
+                    resolve(res);
                 }else{
                     resolve(false);
                 }
