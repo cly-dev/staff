@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
 import { Form, Input,Select,Button,InputNumber} from 'antd';
 import Store from "../../../redux/store";
-import {modicInfo} from "../../../axios";
+import {Staff} from "../../../axios";
 import message from "../../../api/message";
 import {userSave} from "../../../redux/action/user"; 
 import "./changeInfo.scss";
 const { Option } = Select;
+const {modicInfo}=Staff
 export default class changeInfo extends Component {
     handleRefs=async value=>{
         const result=await modicInfo(value);

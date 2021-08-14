@@ -1,6 +1,7 @@
 const app=require("./express");
 const http=require('http');
 const io=require("socket.io");
+const {findAdminById}=require("../Dao/AdminDao");
 const server=http.createServer(app);
 const socket=io(server,{ cors: true });
 let onlineCount=0;
@@ -8,7 +9,7 @@ let onlineUsers={};
 let onlineAdmin={};
 socket.on("connection",client=>{
         try{ 
-            //登录事件
+            //员工登录事件
             client.on('login',data=>{
                 if(Object.keys(onlineUsers).length===0){
                     onlineUsers[data]=client.id;
@@ -25,19 +26,47 @@ socket.on("connection",client=>{
                 console.log(onlineCount);
                 console.log(onlineUsers);
             })
-            //添加申请
+            //管理员登录
+            client.on('adminLogin',data=>{
+                if(Object.keys(onlineAdmin).length===0){
+                    onlineAdmin[data]=client.id;
+                    onlineCount++;
+                }else{
+                    for(let key in onlineUsers){
+                        if(data!==key){
+                            onlineAdmin[data]=client.id;
+                        }
+                    }
+                }
+                client.emit('message',"您已上线");
+            })
+            //员工添加申请
             client.on('apply',data=>{
-                console.log(data);
-                socket.emit('message',data);
+                for(let key in onlineAdmin){
+                    client.to(onlineAdmin[key]).emit("message",'您有一条新的申请,请尽快处理');
+                    client.to(onlineAdmin[key]).emit('handleApply',data);
+                }
+            })
+            //管理员发布通知
+            client.on("notice",async data=>{
+                const result=await findAdminById(data.adminId);
+                socket.emit('handleNotice',{...data,name:result.name,position:result.position,status:0});
+                for(let key in onlineUsers){
+                    socket.to(onlineUsers[key]).emit('message','有一条新通知');
+                    socket.to(onlineUsers[key]).emit('handleNotice',{...data,name:result.name,position:result.position,status:0});
+                }
+            })
+            //管理员审核
+            client.on('audit',async data=>{
+                if(onlineUsers[data.userId]){       
+                   client.to(onlineUsers[data.userId]).emit("message",data.message);
+                   client.to(onlineUsers[data.userId]).emit("handleTurn",data);
+                }
             })
 
-            //发布通知
-            client.on("notice",data=>{
-                socket.emit('message',data);
-            })
-            //退出登录
+            //员工退出登录
             client.on('loginOut',data=>{
-                onlineUsers.delete('data');
+                delete('data');
                 onlineCount--;
             })
         }catch(err){

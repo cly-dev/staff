@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
 import { List, Avatar, Button,Space} from 'antd';
 import "./NewNotice.scss"
-import {getNoticeByDate,readNotice} from "../../../axios";
+import {Staff} from "../../../axios";
 import { message } from '../../../api';
+import {receptionNotice} from "../../../socket";
+const {getNoticeByDate,readNotice}=Staff;
 export default class NewNotice extends Component {
     state={
         listData:[],
@@ -17,7 +19,7 @@ export default class NewNotice extends Component {
         console.log(result);
         if(result.data){
             result.data.forEach(value=>{
-                listData.push({...value,...value.resource[0]});
+                listData.push({...value,...value.admin,...value.notice});
             })
             this.setState({
                 listData,
@@ -40,8 +42,18 @@ export default class NewNotice extends Component {
             message(result.msg);
         }
     }
+    //生命周期
     componentDidMount(){
         this.handleGetNotice(1);
+        const {listData}=this.state;
+        receptionNotice(data=>{
+            if(data){
+                listData.pop();
+                data.createTime='刚刚';
+                listData.unshift(data);
+                this.setState({listData})
+            }
+        })
     }
     render() {
         return (

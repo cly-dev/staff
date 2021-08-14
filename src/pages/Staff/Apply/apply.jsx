@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import "./apply.scss";
 import {message} from "../../../api";
-import {addApply} from "../../../axios";
+import {Staff} from "../../../axios";
 import {Apply as handleApply} from "../../../socket";
 import moment from 'moment';
 import {
@@ -13,7 +13,7 @@ import {
     InputNumber,
   } from 'antd';
 const { TextArea } = Input;
-
+const {addApply}=Staff;
 export default class Apply extends Component {
   
     handleRef=async()=>{

@@ -1,51 +1,89 @@
 import React, { Component } from 'react';
 import "./search.scss";
-import { Input, Space } from 'antd';
-import { AudioOutlined } from '@ant-design/icons';
+import { Input} from 'antd';
 import List from "../../../components/List/list";
-const data = [
-    {
-      key: 1,
-      name: 'John Brown',
-      age: 32,
-      status:1,
-      address: 'New York No. 1 Lake Park',
-      description: 'My name is John Brown, I am 32 years old, living in New York No. 1 Lake Park.',
-    },
-    {
-      key: 2,
-      name: 'Jim Green',
-      age: 42,
-      status:1,
-      address: 'London No. 1 Lake Park',
-      description: 'My name is Jim Green, I am 42 years old, living in London No. 1 Lake Park.',
-    },
-    {
-      key: 3,
-      name: 'Not Expandable',
-      age: 29,
-      status:-1,
-      address: 'Jiangsu No. 1 Lake Park',
-      description: 'This not expandable',
-    },
-    {
-      key: 4,
-      name: 'Joe Black',
-      age: 32,
-      status:-2,
-      address: 'Sidney No. 1 Lake Park',
-      description: 'My name is Joe Black, I am 32 years old, living in Sidney No. 1 Lake Park.',
-    },
-  ];
+import {Admin}from "../../../axios";
+import { message } from '../../../api';
+const {findStaffBySearch,handleSuspend,handleKick,handleRecover}=Admin;
 class Search extends Component {
+    constructor(props){
+      super(props);
+      this.state={
+        listData:[],
+        content:'',
+        total:0,
+      }
+    }
+    //解雇事件
+    handleDismissal=async val=>{
+      const data=await handleKick(val.userId);
+      if(data.code==='200'){
+        message('已解雇','success');
+        this.handleLocalChange(val.userId,-2);
+      }else{
+        message(data.msg);
+      }
+    }
+    //停职
+    handleSuspension=async val=>{
+      const data=await handleSuspend(val.userId);
+      if(data.code==='200'){
+        message('已停职','success');
+        this.handleLocalChange(val.userId,-1);
+      }else{
+        message(data.msg);
+      }
+    };
+    //恢复
+    handleRecover=async val=>{
+      const data=await handleRecover(val.userId);
+      if(data.code==='200'){
+        message('已恢复','success');
+        this.handleLocalChange(val.userId,1);
+      }else{
+        message(data.msg);
+      }
+    }
+    handleLocalChange=(userId,status)=>{
+      const {listData}=this.state;
+      const obj=listData.find(value=>value.userId===userId);
+      obj.status=status;
+      this.setState({
+        listData
+      })
+    }
     //搜索事件
-    onSearch=val=>{
-        console.log(val);
+    onSearch=async val=>{
+       this.setState({
+         content:val
+       })
+       this.handleSearch(1,val);
     }
     //页码改变事件
     handlePageNum=val=>{
-        console.log(val);
+        this.handleSearch(val,this.state.content)
       }
+    //搜索结果事件
+    handleSearch=async (data,pageNum)=>{
+      const result=await findStaffBySearch(pageNum,data);
+      if(result.data){
+        result.data.forEach(value=>{
+          value.key=value._id;
+        })
+        message(`找到${result.pageSize}条结果`,'success');
+        this.setState({
+          listData:result.data,
+          total:result.pageSize
+        })
+    }else{
+      message('没有找到相关的用户');
+      this.setState({
+        listData:[]
+      })
+    }
+     
+    }
+    //页码
     render() {
         return (
             <section className="search-container">
@@ -55,7 +93,7 @@ class Search extends Component {
                         </section>
                     </section>
                     <section className="search-mainer">
-                        <List data={data} page={this.handlePageNum} total={4} pageSize={2}></List>
+                        <List handleDismissal={this.handleDismissal} handleRecover={this.handleRecover} handleSuspension={this.handleSuspension} data={this.state.listData} page={this.handlePageNum} total={this.state.total} pageSize={7}></List>
                     </section>
             </section>
         );

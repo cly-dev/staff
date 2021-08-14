@@ -3,9 +3,10 @@ const path=require('path');
 const SvgCode=require("../api/imgCode");
 const {TokenVerify }=require("../api/JWT/token");
 const {Logins,ModicPasswords,ModicInfos,ModicImgs,deleStaff}=require("../Dao/UserDao");
-const {getNotices,getNoticesCount,ReadNotices,TopNotices,getNoticeByDates,getNoticeByDateCount}=require("../Dao/NoticeDao");
+const {getNoticesCount,getNoticeByDateCount}=require("../Dao/NoticeDao");
 const {addOrders,modicOrders,deleteOrders,getOrderByPageNums,getSearchByPageNums,getOrderDetails,getStates,getOrderCount,getSearchCount,getStateByAges}=require("../Dao/OrderDao");
 const {findAllLists,findAllTypes}=require("../Dao/TypeDao.js");
+const {findNoiceById,getNoticeByDays,changeStatus,TopStatus}=require("../Dao/NoticeUserDao");
 const {addApplys,getApplyByPageNums,delApplys,getApplyCount,handleApply}=require("../Dao/ApplyDao");
 const logger=require("../api/log");
 const upload=require("../api/upload");
@@ -51,7 +52,8 @@ const getNotice=async(req,res)=>{
         const {userId}=req.headers;
         const {pageNum}=req.query;
         if(pageNum){
-            msg('DecideRes',res,await getNotices(userId,pageNum),{pageNum,pageSize:await getNoticesCount(userId)});
+            // msg('DecideRes',res,await getNotices(userId,pageNum),{pageNum,pageSize:await getNoticesCount(userId)});
+            msg('DecideRes',res,await findNoiceById(userId,pageNum),{pageNum,pageSize:await getNoticesCount(userId)});
         }else{
            msg('PError',res);
         }
@@ -68,7 +70,7 @@ const ReadNotice=async(req,res)=>{
         if(!id){
            msg('PError',res);
         }else{
-            msg('DecideRes',res,await ReadNotices(id));
+            msg('DecideRes',res,await changeStatus(id));
         }
     }catch(error){
         logger.error(error)
@@ -83,7 +85,7 @@ const TopNotice=async(req,res)=>{
         if(!id){
            msg('PError',res);
         }else{
-            msg('DecideRes',res,await TopNotices(id));
+            msg('DecideRes',res,await TopStatus(id));
         }
     }catch(error){
         logger.error(error)
@@ -396,7 +398,7 @@ const getNoticeByDate=async(req,res)=>{
         const {pageNum,date}=req.query;
         const {userId}=req.headers;
         if(pageNum &&date){
-            msg('DecideRes',res,await getNoticeByDates(userId,date,pageNum),{pageNum,pageSize:await getNoticeByDateCount(userId,date)})
+            msg('DecideRes',res,await getNoticeByDays(userId,date,pageNum),{pageNum,pageSize:await getNoticeByDateCount(date)})
         }else{
             msg("PError",res)
         }

@@ -1,10 +1,21 @@
 import React, { Component } from 'react';
-import { Form, Input, Button, Checkbox } from 'antd';
+import { Form, Input, Button} from 'antd';
+import {Admin} from "../../../axios";
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import "./login.scss";
+import {adminSave} from "../../../redux/action/admin";
+import Store from "../../../redux/store";
+import {message as msg} from "../../../api"; 
+const {login}=Admin;
 class Login extends Component {
-     onFinish = (values) => {
-        console.log('Received values of form: ', values);
+     onFinish = async(values) => {
+        const data=await login(values);
+        if(data.code==='200'){
+            msg("登陆成功",'success');
+            Store.dispatch(adminSave(data.data));
+            this.props.history.push('/admin-index');
+        }
+        console.log(data);
       };
     render() {
         return (
@@ -19,7 +30,7 @@ class Login extends Component {
                             onFinish={this.onFinish}
                             >
                             <Form.Item
-                                name="username"
+                                name="adminId"
                                 rules={[{ required: true, message: '请输入账号' }]}
                             >
                                 <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="账号" />

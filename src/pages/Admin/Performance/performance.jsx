@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Statistic, Row, Col,Card,Table, Tag, Space } from 'antd';
+import { Statistic,Card,Table} from 'antd';
 import { ArrowUpOutlined, ArrowDownOutlined } from '@ant-design/icons';
 import * as echarts from 'echarts/core';
 import {
@@ -16,17 +16,20 @@ import {
     CanvasRenderer
 } from 'echarts/renderers';
 import "./performance.scss";
+import {Admin} from "../../../axios";
+import { option } from '../../../api';
+const {getOrderCountByMonth, getOrderCount,getOrderByEvery}=Admin;
 let month=[];
-for(let i =1;i<=12;i++){
-    month.push(i+'月');
-}
+const newYear =new Date().getFullYear();
+const newMonth = new Date().getMonth()+1;
+
 const columns = [
     {
       title: '姓名',
-      dataIndex: 'name',
-      key: 'name',
+      dataIndex: 'username',
+      key: 'username',
       align:'center',
-      render: text => <a>{text}</a>,
+ 
     },
     {
       title: '年龄',
@@ -36,125 +39,96 @@ const columns = [
     },
     {
       title: '年度总销售额',
-      dataIndex: 'address',
-      key: 'address',
+      dataIndex: 'orderSum',
+      key: 'orderSum',
       align:'center',
     },
   ];
-  
-  const data = [
-    {
-        key: '8',
-        name: 'John Brown',
-        age: 32,
-        address: 'New York No. 1 Lake Park',
-        tags: ['nice', 'developer'],
-      },
-    {
-        key: '5',
-        name: 'John Brown',
-        age: 32,
-        address: 'New York No. 1 Lake Park',
-        tags: ['nice', 'developer'],
-      },
-      {
-        key: '6',
-        name: 'John Brown',
-        age: 32,
-        address: 'New York No. 1 Lake Park',
-        tags: ['nice', 'developer'],
-      },
-    {
-      key: '1',
-      name: 'John Brown',
-      age: 32,
-      address: 'New York No. 1 Lake Park',
-      tags: ['nice', 'developer'],
-    },
-    {
-      key: '2',
-      name: 'Jim Green',
-      age: 42,
-      address: 'London No. 1 Lake Park',
-      tags: ['loser'],
-    },
-    {
-      key: '3',
-      name: 'Joe Black',
-      age: 32,
-      address: 'Sidney No. 1 Lake Park',
-      tags: ['cool', 'teacher'],
-    },
-  ];
+
 class performance extends Component {
-    componentDidMount(){
+    constructor(props){
+        super(props);
+        this.state={
+            series:[],
+            lastYear:0,
+            newYear:0,
+            listData:[]
+        }
+    }
+    //echarts加载图数据
+    handlegetOrderByMonth=async()=>{
+        let dataList=[];
+        for(let i =1;i<=12;i++){
+            month.push(i+'月');
+        }
+        option.xAxis.data=month
+        for(let i=2018;i<newYear;i++){
+                for(let j=1;j<=12;j++){
+                    let data=await getOrderCountByMonth({year:i,month:j});
+                    dataList.push(data.data?data.data.Count:0);
+                }
+        }
+        for(let k=1;k<=newMonth;k++){
+            let data=await getOrderCountByMonth({year:newYear,month:k});
+            dataList.push(data.data?data.data.Count:0)
+        }
+        let n=0;
+        for(let i=2018;i<=newYear;i++){
+            option.legend.data.push(''+i);
+            option.series.push({
+                name:''+i,
+                type:'line',
+                stack:'总量',
+                data:dataList.slice(n * 12, 12*(n+1))
+            })
+            n++;
+        }
         echarts.use(
             [TitleComponent, ToolboxComponent, TooltipComponent, GridComponent, LegendComponent, LineChart, CanvasRenderer]
         );
         const chartDom = document.querySelector('.echarts-container');
         const myChart = echarts.init(chartDom);
-        let option;
-        option = {
-        title: {
-            text: '企业历年销售额'
-        },
-        tooltip: {
-            trigger: 'axis'
-        },
-        legend: {
-            data: ['2018', '2019', '2020', '2021']
-        },
-        grid: {
-            left: '3%',
-            right: '4%',
-            bottom: '3%',
-            containLabel: true
-        },
-        toolbox: {
-            feature: {
-                saveAsImage: {}
-            }
-        },
-        xAxis: {
-            type: 'category',
-            boundaryGap: false,
-            data: month
-        },
-        yAxis: {
-            type: 'value'
-        },
-        series: [
-            {
-                name: '2018',
-                type: 'line',
-                stack: '总量',
-                data: [120, 132, 101, 134, 90, 230, 210]
-            },
-            {
-                name: '2019',
-                type: 'line',
-                stack: '总量',
-                data: [220, 182, 191, 234, 290, 330, 310]
-            },
-            {
-                name: '2020',
-                type: 'line',
-                stack: '总量',
-                data: [150, 232, 201, 154, 190, 330, 410]
-            },
-            {
-                name: '2021',
-                type: 'line',
-                stack: '总量',
-                data: [320, 332, 301, 334, 390, 330, 320]
-            },
+        option && myChart.setOption(option);
+        console.log(option.series);
+        this.forceUpdate();
+        }
+
+    //按照排名获取每个员工的年度销售额
+    handlegetOrderList=async pageNum=>{
+        const listData=[...this.state.listData];
+        const data=await getOrderByEvery(newYear,pageNum);
+        if(data.data){
+            data.data.forEach(value=>{
+                listData.push({...value.user,...value,key:value._id});
+            })
+            console.log(listData);
+            this.setState({
+                listData
+            })
             
-        ]
-    };
-    option && myChart.setOption(option);
-  
+        }
+    }
+    //获取年度销售额
+    handlegetCount=async ()=>{
+        const data=await Promise.all([getOrderCount(newYear),getOrderCount(newYear - 1)]);
+        if(data){
+            this.setState({
+                newYear:data[0].data.Count,
+                lastYear:data[1].data.Count,
+            })
+        }
+    }
+    //生命周期
+    componentDidMount(){
+        this.handlegetOrderByMonth();
+        this.handlegetCount();
+        this.handlegetOrderList(1);
+    }
+    componentWillUnmount(){
+        option.series.length=0;
     }
     render() {
+        console.log("加载完成");
         return (
             <section className="performance-container">
                 <section className="echarts-container">
@@ -163,17 +137,17 @@ class performance extends Component {
                 <section className="info-container">
                     <section className="data-info">
                             <section className="data-box">
-                                <Statistic style={{height:'300',fontSize:20}} title="2021年总销售额" value={112893} />
-                                <Statistic style={{height:'300',}} title="2020年总销售额" value={112893}  />
+                                <Statistic style={{height:'300',fontSize:20,textAlign:'center'}} title="2021年总销售额" value={this.state.newYear} />
+                                <Statistic style={{height:'300',textAlign:'center'}} title="2020年总销售额" value={this.state.lastYear}  />
                             </section>
                             <section className="statistic-box">
                                     <Card style={{height:'100%'}}>
                                     <Statistic
                                         title="同比"
-                                        value={11.28}
+                                        value={((this.state.newYear -this.state.lastYear)/this.state.newYear) * 100}
                                         precision={2}
-                                        valueStyle={{ color: '#3f8600' }}
-                                        prefix={<ArrowUpOutlined />}
+                                        valueStyle={{color:this.state.newYear -this.state.lastYear>0?'#cf1322':'#3f8600'}}
+                                        prefix={this.state.newYear -this.state.lastYear>0?<ArrowUpOutlined />:<ArrowDownOutlined/>}
                                         suffix="%"
                                     />
                                     </Card>
@@ -183,10 +157,13 @@ class performance extends Component {
                     <Table
                     style={{maxHeight:50}}
                      pagination={{
-                         pageSize:6
+                         pageSize:6,
+                         onChange:page=>{
+                             this.handlegetOrderList(page)
+                         }
                      }}
                      columns={columns} 
-                     dataSource={data} />   
+                     dataSource={this.state.listData} />   
                     </section>
                 </section>
             </section>

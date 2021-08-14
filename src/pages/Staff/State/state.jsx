@@ -1,10 +1,11 @@
 import React, { PureComponent} from 'react'
 import { Table,Modal,Descriptions} from 'antd';
-import {getStateByage} from "../../../axios";
+import {Staff} from "../../../axios";
 import Store from "../../../redux/store";
 import Descript from '../../../components/Descript/Descript.jsx';
 import "./state.scss";
 import {pdf} from '../../../api';
+const {getStateByage}=Staff;
 export default class State extends PureComponent {
   constructor(props){
     super(props);

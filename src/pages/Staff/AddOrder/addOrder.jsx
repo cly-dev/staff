@@ -7,9 +7,10 @@ import {
   DatePicker,
   InputNumber,
 } from 'antd';
-import {getType,getList,addOrder}from "../../../axios/index";
+import {Staff} from '../../../axios'; 
 import {message} from "../../../api";
 import "./addOrder.scss";
+const {getType,getList,addOrder}=Staff;
 const { TextArea } = Input;
 export default class AddOrder extends Component {
     // constructor(props){
@@ -25,13 +26,11 @@ export default class AddOrder extends Component {
         const loading=message('正在提交中','loading');
         const{name,num,price,type,mark}=this.formRef.getFieldValue()
         const result=await addOrder({name,num,price,type,mark,createTime:this.state.timer});
-        if(result.code){
+        if(result.code==='200'){
             loading.destroy();
             message('添加成功','success');
             this.props.history.push('/index/watchOrder');
-        }else{
-            message(result.msg);
-        }        
+        }       
     }
     handleTime=(time,timer)=>{
         this.setState({
@@ -42,6 +41,7 @@ export default class AddOrder extends Component {
     componentDidMount(){
         const {type}=this.state;
         getType().then(res=>{
+            console.log(res);
             res.data.forEach(async value=>{
                 let result=await getList(value._id);
                 let children=[];

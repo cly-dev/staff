@@ -1,9 +1,10 @@
 import React from 'react'
 import { List, Avatar, Button,Space} from 'antd';
-import {getNotice,readNotice,topNotice} from "../../../axios";
+import {Staff} from "../../../axios";
 import {message} from "../../../api";
 import "../NewNotice/NewNotice.scss";
 import "./OldNotice.scss";
+const {getNotice,readNotice,topNotice}=Staff;
 export default class OldNotice extends React.Component {
     constructor(props){
         super(props);
@@ -16,12 +17,10 @@ export default class OldNotice extends React.Component {
     handleTop=async val=>{
         const { listData}=this.state;
         const result=await topNotice(listData[val]._id);
+        console.log(listData[val]._id);
         if(result.code==='200'){
             message('置顶成功',);
-            // let obj=listData.splice(val,1);
-            // obj.status=2;
-            // listData.unshift(...obj);
-            // this.setState(listData);
+          
             window.location.reload();
         }else{
             message(result.msg);
@@ -48,17 +47,19 @@ export default class OldNotice extends React.Component {
         const {listData}=this.state;
         listData.length=0;
         const result=await getNotice(pageNum);
-        result.data.forEach(value=>{
-            if(Array.isArray(value.resource)){
-             value.resource=value.resource[0]   
-            }
-            listData.push({...value,...value.resource});
-        })  
         console.log(result);
-        this.setState({
-            listData,
-            total:result.pageSize
-        })
+        if(result.data){
+            result.data.forEach(value=>{
+                if(Array.isArray(value.resource)){
+                value.resource=value.resource[0]   
+                }
+                listData.push({...value,...value.admin,...value.notice});
+            })  
+            this.setState({
+                listData,
+                total:result.pageSize
+            })
+        }
     }
     componentDidMount(){
         this.handleGetNotice(1);
@@ -66,9 +67,7 @@ export default class OldNotice extends React.Component {
     render(){
     return (
         <section className="OldNotice-container">
-            <section className="OldNotice-header">
-                以往通知
-            </section>
+            
             <section className="OldNotice-mainer">
                 <List
                     locale={{emptyText:'暂无通知'}}

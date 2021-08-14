@@ -13,7 +13,7 @@ Staff.use(async (req,res,next)=>{
         const data=TokenVerify(token);
         if(TokenVerify(token)){
             if(await findStaffById(data.userId)){
-                if(data.status<=0){
+                if(data.status<0){
                     message("FError",res,"该用户状态异常,无法进行操作");
                 }else{
                     req.headers.userId=data.userId;

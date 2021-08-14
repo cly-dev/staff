@@ -1,9 +1,10 @@
 import React, { Component,createRef} from 'react'
 import { Input, Table,Space,Button} from 'antd';
-import {getAllOrder,searchOrder,deleteOrder} from "../../../axios";
+import {Staff} from "../../../axios";
 import {message} from '../../../api';
 import './watch.scss';
 const { Search } = Input;
+const {getAllOrder,searchOrder,deleteOrder}=Staff;
 export default class watch extends Component {
     constructor(props){
       super(props);

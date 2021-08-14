@@ -90,33 +90,27 @@ function getAllApplys(pageNum){
     return new Promise((resolve,reject)=>{
         ApplyDao.aggregate([
             {
-                $match:{
-                    status:'1',
-                }
-            }
-            ,{
-                $group:{
-                    _id:'$userId',
-                    Total:{
-                        $sum:1
-                    }
-                }
-            },
-            {
                 $lookup:{
                     from:'user',
-                    localField:'_id',
+                    localField:'userId',
                     foreignField:'userId',
                     as:'staff'
                 }
-            },{
+            },
+            {
                 $project:{
                     staff:{
-                        'username':1,
-                        'joinTime':1,
+                        'password':0,
+                        'lastModic':0,
+                        'token':0,
+                        '_id':0,
+                        'status':0
                     }
                    
                 }
+            },
+            {
+                $unwind:'$staff'
             }
         ]).sort({time:1}).skip(8 * (pageNum - 1)).limit(8).then(res=>{
             if(res){
@@ -139,7 +133,48 @@ function getAllCount(){
         })
     })
 }
-
+//申请通过
+function handlePass(id){
+    return new Promise((resolve,reject)=>{
+        ApplyDao.updateOne({_id:id},{$set:{status:'1'}}).then(res=>{
+            if(res.nModified){
+                resolve(true);
+            }else{
+                resolve("已通过");
+            }
+        }).catch(err=>{
+            reject(err);
+        })
+    })
+}
+//撤销申请
+function handkeRevoca(id){
+    return new Promise((resolve,reject)=>{
+        ApplyDao.updateOne({_id:id},{$set:{status:'-1'}}).then(res=>{
+            if(res.nModified){
+                resolve(true);
+            }else{
+                resolve("已撤销");
+            }
+        }).catch(err=>{
+            reject(err);
+        })
+    })
+}
+//驳回通知
+function handleTurn(id,mark){
+    return new Promise((resolve,reject)=>{
+        ApplyDao.updateOne({_id:id},{$set:{status:'-2',mark}}).then(res=>{
+            if(res.nModified){
+                resolve(true);
+            }else{
+                resolve("已驳回");
+            }
+        }).catch(err=>{
+            reject(err);
+        })
+    })
+}
 module.exports={
     addApplys,
     getApplyByPageNums,
@@ -148,5 +183,8 @@ module.exports={
     handleApply,
     getApplyDetails,
     getAllApplys,
-    getAllCount
+    getAllCount,
+    handlePass,
+    handkeRevoca,
+    handleTurn
 }

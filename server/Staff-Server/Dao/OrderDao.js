@@ -221,6 +221,8 @@ function getAllStates(pageNum){
                         lastModic:0
                     }
                 }
+            },{
+                $unwind:'$user'
             }
         ]).skip(8* (pageNum-1)).limit(8).then(res=>{
             resolve(res);
@@ -232,8 +234,17 @@ function getAllStates(pageNum){
 //获取所有人的条数
 function getStaffCount(){
     return new Promise((resolve,reject)=>{
-    OrderDao.distinct("userId").then(res=>{
-        resolve(res[0] * 1);
+    OrderDao.aggregate([
+        {
+            $group:{
+                _id:'$userId',
+                count:{
+                    $sum:1
+                }
+            }
+        }
+    ]).then(res=>{
+        resolve(res.length);
     }).catch(err=>{
         reject(err);
     })
@@ -304,6 +315,83 @@ function getOrderCountByMonths(year,month){
         })
     })
 }
+//统计每个人的年度销售额
+function getOrderCountEvery(year,pageNum){
+    return new Promise((resolve,reject)=>{
+        const reg=new RegExp(year,'i');
+        OrderDao.aggregate([
+            {
+            $match:{
+                    createTime:{
+                        $regex:reg
+                    }
+                }
+            },{
+                $group:{
+                    _id:"$userId",
+                    orderSum:{
+                        $sum:'$price'
+                    }
+                }
+            },{
+                $lookup:{
+                    from:'user',
+                    localField:'_id',
+                    foreignField:'userId',
+                    as:'user'
+                }
+            },{
+                $project:{
+                    user:{
+                        username:1,
+                        age:1
+                    },
+                    orderSum:1
+                }
+            },{
+                $unwind:'$user'
+            }
+        ]).sort({'orderSum':-1}).skip(6 * (pageNum-1)).limit(6).then(res=>{
+            resolve(res);
+        }).catch(err=>{
+            reject(err);
+        })
+    })
+}
+//根据用户Id查找报表
+function getOrderById(userId){
+    return new Promise((resolve,reject)=>{
+        OrderDao.aggregate([
+            {
+                $match:{
+                    userId
+                }
+            },
+            {
+                $group:{
+                    _id:'$userId',
+                    orderTotal:{
+                        $sum:1
+                    },
+                    orderMax:{
+                        $max:'$price'
+                    },
+                    orderSum:{
+                        $sum:'$price'
+                    },
+                    orderAvg:{
+                        $avg:'$price'
+                    }
+                }
+            },
+        ]).then(res=>{
+            resolve(res);
+        }).catch(err=>{
+            reject(err);
+        })
+    })
+}
+
 module.exports={
     addOrders,
     modicOrders,
@@ -318,5 +406,7 @@ module.exports={
     getAllStates,
     getStaffCount,
     getOrderCounts,
-    getOrderCountByMonths
+    getOrderCountByMonths,
+    getOrderCountEvery,
+    getOrderById
 }

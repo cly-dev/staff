@@ -1,10 +1,11 @@
 import React, { Component} from 'react';
 import {Row,Col,Button} from "antd";
-import {Login,getCode} from "../../../axios";
+import {Staff} from "../../../axios";
 import "./login.scss";
 import Store from '../../../redux/store';
 import message from '../../../api/message';
-import {userSave}from "../../../redux/action/user"
+import {userSave}from "../../../redux/action/user";
+const {Login,getCode}=Staff;
 export default class login extends Component {
     state={
         el:'',
@@ -21,8 +22,6 @@ export default class login extends Component {
             message('登录成功','success');
             Store.dispatch(userSave(data.data));
             this.props.history.push("/index/newNotice");
-        }else{
-            message(data.msg);
         }
     }
     //请求验证码
@@ -36,9 +35,18 @@ export default class login extends Component {
         // if(this.props.location.state.userId){
         //     document.querySelector(".userId").value=this.props.location.state.userId
         // }
+        console.log(typeof Store.getState()['user']);
         getCode().then((result) => {
             this.setState({el:result})
         })
+        
+        if(Store.getState()['user']!=='' && JSON.stringify(Store.getState()['user'])!=='{}'){
+            message('请先退出登录');
+            setTimeout(()=>{
+                this.props.history.goBack();
+            },1000)
+        }
+        
     }
     render() {
         return (

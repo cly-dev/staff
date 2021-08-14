@@ -31,10 +31,12 @@ header{
     padding-left: 0.625rem;
 }
 .index-mainer{
+    background-color: #ededf3;
     height:90vh;
     width: 100vw;
     position: relative;
     aside{
+        background-color: rgb(255, 255, 255);
         left: 0;
         top: 0;
         position: absolute;
@@ -60,24 +62,24 @@ header{
         }
     }
     .index-container{
-        background-color: #EBEEF5;
+        background-color: rgb(255, 255, 255);
+        margin:10px 1rem;
+        border: 1px solid rgb(238, 234, 234);
         .heander-Tab{
             height: 40px;
             width: 100%;
-            margin-left: 10px;
         }
         .route-mainer{
             margin-top: -40px;
             height: 100%;
-            margin-left: 10px;
             background-color: white;
             .route-container{
                 margin-top: 40px;
             }
         }
-        height: 100%;
+        height: 92%;
         position: absolute;
         left:14vw;
-        width:84vw;
+        width:83%;
     }
 }

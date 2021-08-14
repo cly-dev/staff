@@ -1,10 +1,11 @@
 import React, { Component} from 'react'
 import "./changepassword.scss";
 import {Form,Input,Button} from "antd";
-import {ModicPsd} from "../../../axios";
+import {Staff} from "../../../axios";
 import {message} from "../../../api";
 import Store from '../../../redux/store';
 import {userClear} from "../../../redux/action/user";
+const {ModicPsd}=Staff
 export default class Changepassword extends Component {
     handleFinish=async value=>{
         const result=await ModicPsd(value);

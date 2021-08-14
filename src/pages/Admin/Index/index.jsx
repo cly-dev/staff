@@ -3,6 +3,9 @@ import {Route,Link} from "react-router-dom"
 import { Layout, Menu, Breadcrumb,Avatar,Dropdown} from 'antd';
 import { UserOutlined, LaptopOutlined, NotificationOutlined,DownOutlined,LogoutOutlined} from '@ant-design/icons';
 import "./index.scss";
+import store from '../../../redux/store';
+import {AdminLogin,handleMsg}  from "../../../socket";
+import { message } from '../../../api';
 const { SubMenu } = Menu;
 const { Header, Content, Sider } = Layout;
 const AddStaff=lazy(()=>import("../AddStaff/addStaff.jsx"));
@@ -22,21 +25,33 @@ class index extends Component {
         this.state={
             route:[],
         }
+        this.info=store.getState()['admin'];
     }
     onClick = ({ key }) => {
         // message.info(`Click on item ${key}`);
         console.log(key);
     };
+    //点击路由事件
     handleClick=(e)=>{
         this.setState({
             route:e.keyPath.reverse()
         })
     }
     componentDidMount(){
-        const path= this.props.location.pathname.replace('/admin-index','');
-        this.setState({
-            route:path.slice(1,path.length).split('/')
-        })
+        if(this.info){
+            const path= this.props.location.pathname.replace('/admin-index','');
+            this.setState({
+                route:path.slice(1,path.length).split('/')
+            })
+            //管理员登录事件
+            AdminLogin(this.info.adminId);
+            handleMsg((data)=>{
+                message(data,'info');
+            })
+        }else{
+            message("还未登录,请先登录");
+            this.props.history.push('/admin');
+        }
     }
     render() {
         return (
@@ -47,9 +62,8 @@ class index extends Component {
                             员工管理系统-管理员
                         </section>
                         <section className="info">
-                            <Avatar size={44} icon={<UserOutlined />} />
                             <Dropdown overlay={this.menu}>
-                                <span className="info-name">我是阿勇<DownOutlined style={{paddingLeft:5}} /></span>
+                                <span className="info-name">{this.info.name}-{this.info.position}<DownOutlined style={{paddingLeft:5}} /></span>
                             </Dropdown>
                         </section>
                     </Header>

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import "./ChangeOrder.scss";
 import {message} from "../../../api";
-import { modicOrder,getOrderDetail} from '../../../axios';
+import {Staff} from '../../../axios';
 import moment from 'moment';
 import {
     Form,
@@ -11,6 +11,7 @@ import {
     DatePicker,
     InputNumber,
   } from 'antd';
+const {modicOrder,getOrderDetail} =Staff;
 const { TextArea } = Input;
 class ChangeOrder extends Component {
     // eslint-disable-next-line no-useless-constructor

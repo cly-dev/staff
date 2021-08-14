@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { Form, Input,Button } from 'antd';
 import "./addStaff.scss";
+import {Admin} from "../../../axios";
+import {message} from "../../../api";
+const {addStaff}=Admin;
 const layout = {
     labelCol: {
       span: 8,
@@ -9,10 +12,14 @@ const layout = {
       span: 9,
     },
   };
-class addStaff extends Component {
-
-    onFinish = (values) => {
-        console.log(values);
+class AddStaff extends Component {
+    onFinish =async (values) => {
+        values.userId=new Date().getTime()+values.userId;
+        const data=await addStaff(values);
+        if(data.code==='200'){
+            message("添加成功",'success');
+            this.props.history.push('/admin-index/员工管理/查看员工');
+        }
       };
     render() {
         return (
@@ -68,4 +75,4 @@ class addStaff extends Component {
     }
 }
 
-export default addStaff;
+export default AddStaff;

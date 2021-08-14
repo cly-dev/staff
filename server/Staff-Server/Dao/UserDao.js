@@ -153,7 +153,7 @@ function findStaffCount(){
     })
 }
 //设置用户状态
-function handleStaff(userId,status){
+function handleStaff(userId,status,mark=null){
     return new Promise((resolve,reject)=>{
         UserDao.updateOne({userId},{$set:{status}},(err,res)=>{
             if(err){
@@ -169,6 +169,89 @@ function handleStaff(userId,status){
 
     })
 }
+//搜索用户
+function findStaffSearch(data,pageNum){
+    return new Promise((resolve,reject)=>{
+        const reg=new RegExp(data,'i');
+        UserDao.find(
+            {
+                    $or:[
+                        {
+                            userId:data
+                        },{
+                            userId:{
+                                $regex:reg
+                            }
+                        },{
+                            username:{
+                                $regex:reg
+                            }
+                        }
+                    ]
+            },{token:0,password:0,lastModic:0}).skip(7 * (pageNum-1)).limit(7).then(res=>{
+            resolve(res);
+        }).catch(err=>{
+            reject(err);
+        }) 
+    })
+}
+//搜索用户的条数
+function findStaffSearchCount(data){
+    return new Promise((resolve,reject)=>{
+        const reg=new RegExp(data,'i');
+        UserDao.find(
+            {
+                    $or:[
+                        {
+                            userId:data
+                        },{
+                            userId:{
+                                $regex:reg
+                            }
+                        },{
+                            username:{
+                                $regex:reg
+                            }
+                        }
+                    ]
+            },{token:0,password:0,lastModic:0}).count().then(res=>{
+            resolve(res);
+        }).catch(err=>{
+            reject(err);
+        }) 
+    })
+}
+//查找所有用户
+function findAll(){
+    return new Promise((resolve,reject)=>{
+        UserDao.find({},{userId:1}).then(res=>{
+            resolve(res);
+        }).catch(err=>{
+            reject(err);
+        })
+    })
+}
+//统计所有用户
+function getStaffCount(){
+    return new Promise((resolve,reject)=>{
+        UserDao.find().count().then(res=>{
+            resolve(res);
+        }).catch(err=>{
+            reject(err);
+        })
+    })
+}
+//查询用户的密码
+function getStaffPsd(userId){
+    return new Promise((resolve,reject)=>{
+        UserDao.find({userId},{password:1}).then(res=>{
+            resolve(res);
+        }).catch(err=>{
+            reject(err);
+        })
+    })
+}
+
 module.exports={
     UserInserts,
     Logins,
@@ -179,5 +262,10 @@ module.exports={
     findAllStaffs,
     handleStaff,
     deleStaff,
-    findStaffCount
+    findStaffCount,
+    findStaffSearch,
+    findAll,
+    getStaffCount,
+    getStaffPsd,
+    findStaffSearchCount
 }

@@ -47,7 +47,7 @@ function Logins(adminId,password){
                 }
                 resolve(res);
             }else{
-                resolve(false);
+                resolve('账号或密码错误');
             }
         }).catch(err=>{
             reject(err);
@@ -55,8 +55,19 @@ function Logins(adminId,password){
     })
     return promise;
 }
+//根据管理员Id查找信息系
+function findAdminById(adminId){
+    return new Promise((resolve,reject)=>{
+        AdminDao.findOne({adminId},{name:1,position:1}).then(res=>{
+            resolve(res);
+        }).catch(err=>{
+            reject(err);
+        })
+    })
+}
 module.exports={
     AddAdmins,
     findAdminByIds,
-    Logins
+    Logins,
+    findAdminById
 }

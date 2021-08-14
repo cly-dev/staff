@@ -1,8 +1,16 @@
-import handleMsg,{Login,LoginOut,Apply} from "./socket";
+import handleMsg,{Audit,Login,LoginOut,Apply,AdminLogin,Notice,receptionNotice,receptionTurn, receptionApply} from "./socket";
 
 export {
         handleMsg,
         Login,
         LoginOut,
-        Apply
+        Apply,
+        AdminLogin,
+        Notice,
+        Audit,
+        receptionApply,
+        receptionNotice,
+        receptionTurn
+
+        
 };
