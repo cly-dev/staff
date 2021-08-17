@@ -18,7 +18,6 @@ axios.interceptors.request.use(config=>{
 })
 axios.interceptors.response.use(config=>{
     Nprogress.remove();
-    console.log(config.data);
         if(config.data.code!=="200" && config.data.msg){
             console.log("我执行了");
             message(config.data.msg);

@@ -47,4 +47,8 @@ export default {
  ModicPsd:data=>request("/staff/modicPassword",'',data,"PUT"),
 //删除用户
  handleDelete:userId=>request("/staff/handleDelete",'',{userId},"DELETE"),
+//获取邮箱验证码
+getEmailCode:email=>request('/staff/getEmailCode','',{email}),
+//根据邮箱和Id查找密码
+getStaffIdByEmail:data=>request('/staff/getStaffIdByEmail','',data),
 }

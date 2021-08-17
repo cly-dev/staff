@@ -1,11 +1,13 @@
 import React, { Component,lazy, Suspense} from 'react';
 import {Route,Link} from "react-router-dom"
-import { Layout, Menu, Breadcrumb,Avatar,Dropdown} from 'antd';
+import { Layout, Menu,Dropdown,notification} from 'antd';
 import { UserOutlined, LaptopOutlined, NotificationOutlined,DownOutlined,LogoutOutlined} from '@ant-design/icons';
 import "./index.scss";
 import store from '../../../redux/store';
-import {AdminLogin,handleMsg}  from "../../../socket";
+import {adminClear} from "../../../redux/action/admin";
+import {AdminLogin,handleMsg, AdminLogOut}  from "../../../socket";
 import { message } from '../../../api';
+import UsePageViews from "../../../hook/usePageViews";
 const { SubMenu } = Menu;
 const { Header, Content, Sider } = Layout;
 const AddStaff=lazy(()=>import("../AddStaff/addStaff.jsx"));
@@ -15,43 +17,66 @@ const Search=lazy(()=>import("../Search/search.jsx"));
 const AddNotice=lazy(()=>import("../AddNotice/addNotice.jsx"));
 const NoticeList=lazy(()=>import("../NoticeList/noticeList.jsx"));
 const ApplyList=lazy(()=>import("../ApplyList/applyList.jsx"));
+const AdminInfo=lazy(()=>import("../AdminInfo/adminInfo.jsx"));
+const changeInfo=lazy(()=>import("../ChangeInfo/changeInfo.jsx"));
+const changePassword=lazy(()=>import("../ChangePassword/changePassword.jsx"));
+const AddAdmin=lazy(()=>import("../AddAdmin/addAdmin.jsx"));
+const AdminTer=lazy(()=>import("../AdminTer/adminTer.jsx"));
+const openNotificationWithIcon = (desc, duration = null) => {
+    notification.warn({
+        message: '提示',
+        description: desc,
+        duration,
+        top: 200,
+    });
+};
 class index extends Component {
     constructor(props){
         super(props);
         this.menu=<Menu onClick={this.onClick}>
-                    <Menu.Item key="1" icon={<UserOutlined />}>个人信息</Menu.Item>
+                    <Menu.Item key="1" icon={<UserOutlined />}><Link to='/admin-index/个人信息'>个人信息</Link></Menu.Item>
                     <Menu.Item key="2" icon={<LogoutOutlined />}>退出登录</Menu.Item>
                 </Menu>
-        this.state={
-            route:[],
-        }
         this.info=store.getState()['admin'];
     }
     onClick = ({ key }) => {
         // message.info(`Click on item ${key}`);
-        console.log(key);
+        if(key==='2'){
+            this.handleLoginOut();
+        }
     };
-    //点击路由事件
-    handleClick=(e)=>{
-        this.setState({
-            route:e.keyPath.reverse()
-        })
+    //退出登陆
+    handleLoginOut=()=>{
+        store.dispatch(adminClear());
+        this.props.history.push("/admin");
+        AdminLogOut(this.info.adminId);
     }
+
+    //生命周期-挂载时
     componentDidMount(){
         if(this.info){
-            const path= this.props.location.pathname.replace('/admin-index','');
-            this.setState({
-                route:path.slice(1,path.length).split('/')
-            })
             //管理员登录事件
             AdminLogin(this.info.adminId);
             handleMsg((data)=>{
                 message(data,'info');
             })
+            //判断账号状态
+            if (this.info.status ==='-1') {
+                openNotificationWithIcon("你已被停职,无法操作", 2);
+                setTimeout(() => {
+                    this.props.history.push('/');
+                }, 2000);
+            } else if (this.info.status === '0') {
+                openNotificationWithIcon(`检查到您还未修改初始密码`, null);
+            } 
         }else{
             message("还未登录,请先登录");
             this.props.history.push('/admin');
         }
+    }
+    //生命周期-卸载时
+    componentWillUnmount(){
+        AdminLogOut(this.info.adminId);
     }
     render() {
         return (
@@ -88,26 +113,16 @@ class index extends Component {
                             <Menu.Item key="审核"><Link to='/admin-index/通知/审核'>审核</Link></Menu.Item>
                         </SubMenu>
                         <SubMenu key="工作台" icon={<LaptopOutlined />} title="工作台">
-                            <Menu.Item key="修改信息">修改信息</Menu.Item>
-                            <Menu.Item key="修改密码">修改密码</Menu.Item>
-                            <Menu.Item key="添加管理">添加管理</Menu.Item>
-                            <Menu.Item key="注销">注销</Menu.Item>
+                            <Menu.Item key="修改信息"><Link to='/admin-index/工作台/修改信息'>修改信息</Link></Menu.Item>
+                            <Menu.Item key="修改密码"><Link to='/admin-index/工作台/修改密码'>修改密码</Link></Menu.Item>
+                            <Menu.Item key="添加管理"><Link to='/admin-index/工作台/添加管理'>添加管理</Link></Menu.Item>
+                            <Menu.Item key="注销"><Link to='/admin-index/工作台/管理'>管理</Link></Menu.Item>
                         </SubMenu>
                         </Menu>
                     </Sider>
                     <Layout style={{ padding: '0 20px 20px' }}>
-                        <Breadcrumb className="crumb-nav" >
-                            <Breadcrumb.Item><Link to='/admin-index'>首页</Link></Breadcrumb.Item>
-                            {
-                                this.state.route.length?(
-                                    <>
-                                        <Breadcrumb.Item>{this.state.route[0]}</Breadcrumb.Item>
-                                        <Breadcrumb.Item>{this.state.route[1]}</Breadcrumb.Item>
-                                    </>
-                                ):''
-                            }
-                            
-                        </Breadcrumb>
+                        <UsePageViews>
+                        </UsePageViews>
                         <Content
                         className="site-layout-background"
                         style={{
@@ -123,6 +138,11 @@ class index extends Component {
                             <Route path="/admin-index/通知/发布通知" component={AddNotice}></Route>
                             <Route path="/admin-index/通知/查看通知" component={NoticeList}></Route>
                             <Route path='/admin-index/通知/审核' component={ApplyList}></Route>
+                            <Route path='/admin-index/个人信息' component={AdminInfo}></Route>
+                            <Route path='/admin-index/工作台/修改信息' component={changeInfo}></Route>
+                            <Route path='/admin-index/工作台/修改密码' component={changePassword}></Route>
+                            <Route path='/admin-index/工作台/添加管理' component={AddAdmin}></Route>
+                            <Route path='/admin-index/工作台/管理' component={AdminTer}></Route>
                         </Suspense>
                 </Content>
                 </Layout>

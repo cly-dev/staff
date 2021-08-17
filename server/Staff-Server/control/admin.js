@@ -1,8 +1,8 @@
 const {AddNotices,getAllNotices,deleteNotices,getAllNoticeCount}=require("../Dao/NoticeDao");
-const {AddAdmins,findAdminByIds,Logins}=require("../Dao/AdminDao");
+const {findAllCount,AddAdmins,findAdminByIds,Logins,modicAdminInfo,modicAdminPassword,findAllAdmin,modicPower,modicStatus}=require("../Dao/AdminDao");
 const {addTypes}=require("../Dao/TypeDao");
 const {getAllStates,getStaffCount,getOrderCounts,getOrderCountByMonths,getOrderCountEvery,getOrderById}=require("../Dao/OrderDao");
-const {getAllApplys,getAllCount,handlePass,handkeRevoca,handleTurn}=require("../Dao/ApplyDao");
+const {getAllApplys,getAllCount,handlePass,handleTurn}=require("../Dao/ApplyDao");
 const {UserInserts,findAllStaffs,findStaffCount, handleStaff, findStaffSearch,getStaffPsd,findStaffSearchCount}=require("../Dao/UserDao.js");
 const {HasReader}=require('../Dao/NoticeUserDao');
 const Time=require("../api/time");
@@ -346,6 +346,53 @@ const ApplyTurn=async(req,res)=>{
         throw(error)  
     }
 }
+//修改信息
+const handleChangeInfo=async(req,res)=>{
+    try{
+        const {adminId}=req.headers;
+        const {name,age,phone,email,sex}=req.query;
+        if(name && age && phone && email && sex){
+            msg("DecideRes",res,await modicAdminInfo(adminId,req.query));
+        }else{
+            msg("PError",res);
+        }
+    }catch(error){
+        logger.error("admin/admin"+error);
+        msg('SError',res);
+        throw(error) 
+    }
+}
+//修改密码
+const handleChangePassword=async(req,res)=>{
+    try{
+        const {adminId}=req.headers;
+        const {newPsd,oldPsd}=req.query;
+        if(newPsd && oldPsd){
+            msg("DecideRes",res,await modicAdminPassword(adminId,oldPsd,newPsd));
+        }else{
+            msg("PError",res);
+        }
+    }catch(error){
+        logger.error("admin/admin"+error);
+        msg('SError',res);
+        throw(error) 
+    }
+}
+//获取全部管理员的信息
+const findAllAminInfo=async(req,res)=>{
+    try{
+        const {pageNum}=req.query;
+        if(pageNum){
+            msg("DecideRes",res,await findAllAdmin(pageNum),{pageNum,pageSize:await findAllCount()});
+        }else{
+            msg("PError",res);
+        }
+    }catch(error){
+        logger.error("admin/admin"+error);
+        msg('SError',res);
+        throw(error)  
+    }
+}
 module.exports={
     AddNotice,
     AddAdmin,
@@ -368,5 +415,8 @@ module.exports={
     handleRecover,
     hasReader,
     ApplyPass,
-    ApplyTurn
+    ApplyTurn,
+    handleChangeInfo,
+    handleChangePassword,
+    findAllAminInfo,
 }

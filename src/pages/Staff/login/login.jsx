@@ -1,5 +1,6 @@
 import React, { Component} from 'react';
 import {Row,Col,Button} from "antd";
+import { Link } from 'react-router-dom';
 import {Staff} from "../../../axios";
 import "./login.scss";
 import Store from '../../../redux/store';
@@ -32,9 +33,8 @@ export default class login extends Component {
     }
     //生命周期
     componentDidMount(){
-        // if(this.props.location.state.userId){
-        //     document.querySelector(".userId").value=this.props.location.state.userId
-        // }
+        console.log(Store.getState()['user']);
+
         console.log(typeof Store.getState()['user']);
         getCode().then((result) => {
             this.setState({el:result})
@@ -42,9 +42,9 @@ export default class login extends Component {
         
         if(Store.getState()['user']!=='' && JSON.stringify(Store.getState()['user'])!=='{}'){
             message('请先退出登录');
-            setTimeout(()=>{
-                this.props.history.goBack();
-            },1000)
+            // setTimeout(()=>{
+            //     this.props.history.goBack();
+            // },1000)
         }
         
     }
@@ -52,12 +52,12 @@ export default class login extends Component {
         return (
             <section className="login-container">
             <Row gutter={{ xs:8, sm: 16, md: 24, lg: 32 }} >
-            <Col className="gutter-row" span={6} offset={9}>
+            <Col className="gutter-row" span={6} offset={8}>
             <main>
                 <section className="form-tips">
                     员工登陆
                 </section>
-                <form>
+                <section className="form-container">
                     <section className="form-item">
                             <span className="item-tips">工号:</span>
                             <input type="text" className="userId" ref={id=>this.id=id}   placeholder="请输入职工号" required/>
@@ -73,10 +73,12 @@ export default class login extends Component {
                             </div>
                     </section>
                     <section className="form-btn">
-                            <Button type="primary" size="large" className="btn-lg" onClick={this.handleLogin}>登录</Button>
-                            
+                            <Button type="primary" size="large" className="btn-lg" onClick={this.handleLogin} shape="round">登录</Button>
                     </section>	
-                </form>	
+                </section>
+                <section className="ForgetPassword-Link">
+                    <Link to='/ForgetPassword'>找回密码 </Link>    
+                </section>	
             </main>
 
                 </Col>

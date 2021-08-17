@@ -14,8 +14,6 @@ export default class changeInfo extends Component {
             message('修改成功','success');
             Store.dispatch(userSave(result.data));
             this.props.history.push('/index/userInfo');
-        }else{
-            message(result.msg);
         }
     }
     render() {

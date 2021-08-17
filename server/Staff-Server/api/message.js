@@ -25,8 +25,8 @@ const Strategies={
             res.status('200').send(message('500',msg));
     },
     //成功
-    'Success':function(res,data,obj={},msg="成功"){
-            res.status('200').send(message('200',msg,data,obj));
+    'Success':function(res,data=null,obj={},msg){
+            res.status('200').send(message('200',msg='成功',data,obj));
     },
     //判断结果
     'DecideRes':function(res,result,obj={}){

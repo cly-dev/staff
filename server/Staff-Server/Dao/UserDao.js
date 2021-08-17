@@ -88,6 +88,35 @@ function ModicInfos(userId,User){
         })   
     });
 }
+//查看邮箱是否唯一
+function uniqueEamil(userId,email){
+    return new Promise((resolve,reject)=>{
+        UserDao.findOne({email,userId:{$ne:userId}}).then(res=>{
+            if(!res){
+                resolve(true);
+            }else{
+                resolve(false);
+            }
+        }).catch(err=>{
+            reject(err);
+        })
+    })
+}
+//根据邮箱查看用户Id
+function getStaffByEmail(userId,email){
+    return new Promise((resolve,reject)=>{
+        UserDao.findOne({email,userId},{password:1}).then(res=>{
+            if(res){
+                resolve(res);
+            }else{
+                resolve("没有账号信息");
+            }
+        }).catch(err=>{
+            reject(err);
+        })
+    })
+}
+
 //用户修改头像
 function ModicImgs(userId,path){
     return new Promise((resolve,reject)=>{
@@ -267,5 +296,7 @@ module.exports={
     findAll,
     getStaffCount,
     getStaffPsd,
-    findStaffSearchCount
+    findStaffSearchCount,
+    uniqueEamil,
+    getStaffByEmail
 }

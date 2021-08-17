@@ -39,7 +39,7 @@ export default class index extends Component {
             {
                 nav: '个人信息',
                 icon: <UserOutlined style={{ fontSize: '1.25rem' }}></UserOutlined>,
-                link: '/index/this.userInfo'
+                link: '/index/userInfo'
             }, {
                 nav: '注销',
                 icon: <ExportOutlined style={{ fontSize: '1.25rem' }}></ExportOutlined>,
@@ -334,7 +334,7 @@ export default class index extends Component {
                                             <Route path='/index/modicPsd' component={Changepassword}></Route>
                                             <Route path="/index/changeOrder/:orderId" component={ChangeOrder}></Route>
                                             <Route path='/index/modicInfo' component={ModicInfo}></Route>
-                                            <Route path='/index/this.userInfo' component={UserInfo}></Route>
+                                            <Route path='/index/userInfo' component={UserInfo}></Route>
                                             <Route path='/index/Apply' component={Apply}></Route>
                                             <Route path="/index/applyList" component={ApplyList}></Route>
                                         </Suspense>

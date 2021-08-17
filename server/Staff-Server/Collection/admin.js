@@ -46,6 +46,29 @@ module.exports={
                 lastModic:{
                         type:Date,
                         default:Date.now()
+                },
+                //联系方式
+                phone:{
+                        type:Number,
+                        default:0
+                },
+                //邮箱
+                email:{
+                    type:String,
+                    default:''
+                },
+                //入职时间
+                joinTime:{
+                    type:String,
+                    default:''
+                },
+                sex:{
+                    type:String,
+                    default:'男'
+                },
+                age:{
+                    type:Number,
+                    default:18
                 }
         }
 }

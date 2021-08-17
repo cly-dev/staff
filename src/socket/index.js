@@ -1,4 +1,4 @@
-import handleMsg,{Audit,Login,LoginOut,Apply,AdminLogin,Notice,receptionNotice,receptionTurn, receptionApply} from "./socket";
+import handleMsg,{ AdminLogOut,Audit,Login,LoginOut,Apply,AdminLogin,Notice,receptionNotice,receptionTurn, receptionApply} from "./socket";
 
 export {
         handleMsg,
@@ -10,7 +10,8 @@ export {
         Audit,
         receptionApply,
         receptionNotice,
-        receptionTurn
+        receptionTurn,
+        AdminLogOut
 
         
 };

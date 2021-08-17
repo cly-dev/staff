@@ -1,10 +1,12 @@
 const express=require("express");
 const Staff=express.Router();
-const {getNoticeByDate,Login,getNotice,ReadNotice,TopNotice, ModicInfo,ModicPassword,ModicImg,addOrder,modicOrder,deleteOrder,getOrderByPageNum,getSearchByPageNum,getOrderDetail,getState,findAllList,findAllType,addApply,delApply,getApplyByPageNum,handleRepeal,handleRef,handleDel,getStateByage}=require("../control/user");
+const {getEmailCode,getStaffIdByEmail,getNoticeByDate,Login,getNotice,ReadNotice,TopNotice, ModicInfo,ModicPassword,ModicImg,addOrder,modicOrder,deleteOrder,getOrderByPageNum,getSearchByPageNum,getOrderDetail,getState,findAllList,findAllType,addApply,delApply,getApplyByPageNum,handleRepeal,handleRef,handleDel,getStateByage}=require("../control/user");
 const {TokenVerify}=require("../api/JWT/token");
 const {findStaffById}=require("../Dao/UserDao");
 const message=require("../api/message.js");
 Staff.use('/handleDelete',handleDel);
+Staff.use('/getEmailCode',getEmailCode);
+Staff.use('/getStaffIdByEmail',getStaffIdByEmail)
 Staff.post('/login',Login);
 //拦截
 Staff.use(async (req,res,next)=>{

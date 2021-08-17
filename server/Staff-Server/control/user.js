@@ -2,7 +2,7 @@ const msg=require("../api/message");
 const path=require('path');
 const SvgCode=require("../api/imgCode");
 const {TokenVerify }=require("../api/JWT/token");
-const {Logins,ModicPasswords,ModicInfos,ModicImgs,deleStaff}=require("../Dao/UserDao");
+const {Logins,ModicPasswords,ModicInfos,ModicImgs,deleStaff,uniqueEamil,getStaffByEmail}=require("../Dao/UserDao");
 const {getNoticesCount,getNoticeByDateCount}=require("../Dao/NoticeDao");
 const {addOrders,modicOrders,deleteOrders,getOrderByPageNums,getSearchByPageNums,getOrderDetails,getStates,getOrderCount,getSearchCount,getStateByAges}=require("../Dao/OrderDao");
 const {findAllLists,findAllTypes}=require("../Dao/TypeDao.js");
@@ -11,6 +11,8 @@ const {addApplys,getApplyByPageNums,delApplys,getApplyCount,handleApply}=require
 const logger=require("../api/log");
 const upload=require("../api/upload");
 const Fs=require("../api/fs");
+const {SendEmail}=require("../api");
+let EmailCode=null;
 let code='';
 //登录验证码
 const CheckCode=(req,res)=>{
@@ -99,7 +101,11 @@ const ModicInfo=async(req,res)=>{
         const {userId}=req.headers;
         const {username,phone,email,sex,address}=req.query;
         if(username && phone && email && sex && address){
-            msg('DecideRes',res,await ModicInfos(userId,req.query));
+            if(await uniqueEamil(userId,email)){
+                msg('DecideRes',res,await ModicInfos(userId,req.query));
+            }else{
+                msg('FError',res,'该邮箱已被绑定');
+            }
         }else{
                msg('PError',res);
         }
@@ -408,6 +414,55 @@ const getNoticeByDate=async(req,res)=>{
         throw(error);
     }
 }
+//生成随机验证码
+function CreateCode(){
+       if(EmailCode===null){
+        EmailCode=(Math.floor(Math.random(1) * 10000));
+        setTimeout(()=>{
+                EmailCode=null;
+            },1000 * 60 * 10);
+        }
+    return EmailCode;
+}
+//获取邮箱验证码
+const getEmailCode=async(req,res)=>{
+    try{
+        const {email}=req.query;
+        if(email){
+            if(await SendEmail(email,CreateCode())){
+                msg("Success",res,null);
+            }else{
+                new Error("邮箱验证码发送为null");
+            }
+        }else{
+            msg("PError",res);
+        }
+    }catch(error){
+        logger.error(error);
+        msg("SError",res);
+        throw(error);
+    }
+}
+//根据邮箱查找用户Id
+const getStaffIdByEmail=async(req,res)=>{
+    try{
+        const {email,userId,checkCode}=req.query;
+        if(email && userId && checkCode) {
+            if(checkCode * 1===EmailCode){
+                EmailCode=null;
+                msg("DecideRes",res,await getStaffByEmail(userId,email));
+            }else{
+                msg("FError",res,'邮箱验证码错误');
+            }
+        }else{
+            msg("PError",res);
+        }
+    }catch(error){
+        logger.error(error);
+        msg("SError",res);
+        throw(error);
+    }
+}
 module.exports={
     Login,
     CheckCode,
@@ -433,5 +488,7 @@ module.exports={
     handleRef,
     handleDel,
     getStateByage,
-    getNoticeByDate
+    getNoticeByDate,
+    getStaffIdByEmail,
+    getEmailCode
 }

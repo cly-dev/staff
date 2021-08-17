@@ -1,5 +1,5 @@
 const express=require("express");
-const {handleRecover,getOrder,deleteNotice,getAllNotice,findStaffBySearch,getOrderCountByMonth,getOrderCount,AddNotice,AddAdmin,findAdminById,Login,addType,getAllApply,UserInsert,findAllStaff,handleSuspend,handleKick,getAllState,getOrderByEvery,hasReader,ApplyPass, ApplyTurn}=require("../control/admin");
+const {handleChangeInfo,handleChangePassword,findAllAminInfo,handleRecover,getOrder,deleteNotice,getAllNotice,findStaffBySearch,getOrderCountByMonth,getOrderCount,AddNotice,AddAdmin,findAdminById,Login,addType,getAllApply,UserInsert,findAllStaff,handleSuspend,handleKick,getAllState,getOrderByEvery,hasReader,ApplyPass, ApplyTurn}=require("../control/admin");
 const {TokenVerify}=require("../api/JWT/token");
 const message=require("../api/message.js");
 const Admin=express.Router();
@@ -40,4 +40,7 @@ Admin.get('/handleRecover',handleRecover);
 Admin.get('/hasReader',hasReader);
 Admin.put('/applyPass',ApplyPass);
 Admin.put('/applyTurn',ApplyTurn);
+Admin.put('/handleChangeInfo',handleChangeInfo);
+Admin.put('/handleChangePassword',handleChangePassword);
+Admin.get('/findAllAminInfo',findAllAminInfo);
 module.exports=Admin;

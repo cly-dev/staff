@@ -36,5 +36,12 @@ export default{
     //通过申请
     applyPass:noticeId=>request('/admin/applyPass','',{noticeId},"PUT"),
     //驳回申请
-    applyTurn:(noticeId,mark)=>request("/admin/applyTurn",'',{noticeId,mark},"PUT")
+    applyTurn:(noticeId,mark)=>request("/admin/applyTurn",'',{noticeId,mark},"PUT"),
+    //修改信息
+    handleChangeInfo:data=>request("/admin/handleChangeInfo",'',data,"PUT"),
+    //修改密码
+    handleChangePassword:data=>request('/admin/handleChangePassword','',data,"PUT"),
+    //获取全部管理员信息
+    findAllAminInfo:pageNum=>request('/admin/findAllAminInfo','',{pageNum})
+    
 }

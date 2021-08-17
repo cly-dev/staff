@@ -38,6 +38,7 @@ socket.on("connection",client=>{
                         }
                     }
                 }
+                console.log(onlineAdmin);
                 client.emit('message',"您已上线");
             })
             //员工添加申请
@@ -63,11 +64,21 @@ socket.on("connection",client=>{
                    client.to(onlineUsers[data.userId]).emit("handleTurn",data);
                 }
             })
-
             //员工退出登录
             client.on('loginOut',data=>{
-                delete('data');
-                onlineCount--;
+                if(onlineUsers[data]){
+                    delete(onlineUsers[data]);
+                    onlineCount--;
+                }
+            })
+            //管理员退出登陆
+            client.on('adminLogOut',data=>{
+                if(onlineAdmin[data]){
+                    delete(onlineAdmin[data]);
+                    onlineCount--;
+                }
+                console.log(onlineAdmin);
+
             })
         }catch(err){
             throw(err);

@@ -1235,3 +1235,195 @@
 [2021-08-14T10:40:38.184] [ERROR] cheese - admin/adminMongoError: Invalid $project :: caused by :: projection specification must have at least one field
 [2021-08-14T10:42:33.592] [ERROR] cheese - admin/adminMongoError: The field 'title' must be an accumulator object
 [2021-08-14T21:20:29.730] [ERROR] cheese - admin/adminValidationError: adminId: Path `adminId` is required.
+[2021-08-15T15:21:15.122] [ERROR] cheese - MongoError: unknown top level operator: $not. If you have a field name that starts with a '$' symbol, consider using $getField or $setField.
+    at MessageStream.messageHandler (D:\个人文件\react\staff\server\Staff-Server\node_modules\mongoose\node_modules\mongodb\lib\cmap\connection.js:272:20)
+    at MessageStream.emit (events.js:314:20)
+    at processIncomingData (D:\个人文件\react\staff\server\Staff-Server\node_modules\mongoose\node_modules\mongodb\lib\cmap\message_stream.js:144:12)
+    at MessageStream._write (D:\个人文件\react\staff\server\Staff-Server\node_modules\mongoose\node_modules\mongodb\lib\cmap\message_stream.js:42:5)
+    at doWrite (_stream_writable.js:403:12)
+    at writeOrBuffer (_stream_writable.js:387:5)
+    at MessageStream.Writable.write (_stream_writable.js:318:11)
+    at Socket.ondata (_stream_readable.js:718:22)
+    at Socket.emit (events.js:314:20)
+    at addChunk (_stream_readable.js:297:12)
+    at readableAddChunk (_stream_readable.js:272:9)
+    at Socket.Readable.push (_stream_readable.js:213:10)
+    at TCP.onStreamRead (internal/stream_base_commons.js:188:23) {
+  ok: 0,
+  code: 2,
+  codeName: 'BadValue'
+}
+[2021-08-15T15:22:47.266] [ERROR] cheese - MongoError: $not needs a regex or a document
+    at MessageStream.messageHandler (D:\个人文件\react\staff\server\Staff-Server\node_modules\mongoose\node_modules\mongodb\lib\cmap\connection.js:272:20)
+    at MessageStream.emit (events.js:314:20)
+    at processIncomingData (D:\个人文件\react\staff\server\Staff-Server\node_modules\mongoose\node_modules\mongodb\lib\cmap\message_stream.js:144:12)
+    at MessageStream._write (D:\个人文件\react\staff\server\Staff-Server\node_modules\mongoose\node_modules\mongodb\lib\cmap\message_stream.js:42:5)
+    at doWrite (_stream_writable.js:403:12)
+    at writeOrBuffer (_stream_writable.js:387:5)
+    at MessageStream.Writable.write (_stream_writable.js:318:11)
+    at Socket.ondata (_stream_readable.js:718:22)
+    at Socket.emit (events.js:314:20)
+    at addChunk (_stream_readable.js:297:12)
+    at readableAddChunk (_stream_readable.js:272:9)
+    at Socket.Readable.push (_stream_readable.js:213:10)
+    at TCP.onStreamRead (internal/stream_base_commons.js:188:23) {
+  ok: 0,
+  code: 2,
+  codeName: 'BadValue'
+}
+[2021-08-15T15:23:08.947] [ERROR] cheese - Error: Can't use $nor with String.
+    at SchemaString.castForQuery (D:\个人文件\react\staff\server\Staff-Server\node_modules\mongoose\lib\schema\string.js:656:13)
+    at SchemaString.SchemaType.castForQueryWrapper (D:\个人文件\react\staff\server\Staff-Server\node_modules\mongoose\lib\schematype.js:1541:22)
+    at cast (D:\个人文件\react\staff\server\Staff-Server\node_modules\mongoose\lib\cast.js:310:39)
+    at model.Query.Query.cast (D:\个人文件\react\staff\server\Staff-Server\node_modules\mongoose\lib\query.js:4909:12)
+    at model.Query.Query._castConditions (D:\个人文件\react\staff\server\Staff-Server\node_modules\mongoose\lib\query.js:1954:10)
+    at model.Query.<anonymous> (D:\个人文件\react\staff\server\Staff-Server\node_modules\mongoose\lib\query.js:2211:8)
+    at model.Query._wrappedThunk [as _findOne] (D:\个人文件\react\staff\server\Staff-Server\node_modules\mongoose\lib\helpers\query\wrapThunk.js:16:8)
+    at D:\个人文件\react\staff\server\Staff-Server\node_modules\kareem\index.js:370:33
+    at processTicksAndRejections (internal/process/task_queues.js:79:11)
+[2021-08-15T16:18:13.747] [ERROR] cheese - TypeError: SendEmail is not a function
+    at getEmailCode (D:\个人文件\react\staff\server\Staff-Server\control\user.js:436:39)
+    at Layer.handle [as handle_request] (D:\个人文件\react\staff\server\Staff-Server\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (D:\个人文件\react\staff\server\Staff-Server\node_modules\express\lib\router\index.js:317:13)
+    at D:\个人文件\react\staff\server\Staff-Server\node_modules\express\lib\router\index.js:284:7
+    at Function.process_params (D:\个人文件\react\staff\server\Staff-Server\node_modules\express\lib\router\index.js:335:12)
+    at next (D:\个人文件\react\staff\server\Staff-Server\node_modules\express\lib\router\index.js:275:10)
+    at Function.handle (D:\个人文件\react\staff\server\Staff-Server\node_modules\express\lib\router\index.js:174:3)
+    at router (D:\个人文件\react\staff\server\Staff-Server\node_modules\express\lib\router\index.js:47:12)
+    at Layer.handle [as handle_request] (D:\个人文件\react\staff\server\Staff-Server\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (D:\个人文件\react\staff\server\Staff-Server\node_modules\express\lib\router\index.js:317:13)
+    at D:\个人文件\react\staff\server\Staff-Server\node_modules\express\lib\router\index.js:284:7
+    at Function.process_params (D:\个人文件\react\staff\server\Staff-Server\node_modules\express\lib\router\index.js:335:12)
+    at next (D:\个人文件\react\staff\server\Staff-Server\node_modules\express\lib\router\index.js:275:10)
+    at SendStream.error (D:\个人文件\react\staff\server\Staff-Server\node_modules\serve-static\index.js:121:7)
+    at SendStream.emit (events.js:314:20)
+    at SendStream.error (D:\个人文件\react\staff\server\Staff-Server\node_modules\send\index.js:270:17)
+[2021-08-15T16:27:57.004] [ERROR] cheese - Error: Invalid login: 535 Login Fail. Please enter your authorization code to login. More information in http://service.mail.qq.com/cgi-bin/help?subtype=1&&id=28&&no=1001256
+    at SMTPConnection._formatError (D:\个人文件\react\staff\server\Staff-Server\node_modules\nodemailer\lib\smtp-connection\index.js:784:19)
+    at SMTPConnection._actionAUTHComplete (D:\个人文件\react\staff\server\Staff-Server\node_modules\nodemailer\lib\smtp-connection\index.js:1536:34)
+    at SMTPConnection.<anonymous> (D:\个人文件\react\staff\server\Staff-Server\node_modules\nodemailer\lib\smtp-connection\index.js:540:26)
+    at SMTPConnection._processResponse (D:\个人文件\react\staff\server\Staff-Server\node_modules\nodemailer\lib\smtp-connection\index.js:947:20)
+    at SMTPConnection._onData (D:\个人文件\react\staff\server\Staff-Server\node_modules\nodemailer\lib\smtp-connection\index.js:749:14)
+    at TLSSocket.SMTPConnection._onSocketData (D:\个人文件\react\staff\server\Staff-Server\node_modules\nodemailer\lib\smtp-connection\index.js:189:44)
+    at TLSSocket.emit (events.js:314:20)
+    at addChunk (_stream_readable.js:297:12)
+    at readableAddChunk (_stream_readable.js:272:9)
+    at TLSSocket.Readable.push (_stream_readable.js:213:10)
+    at TLSWrap.onStreamRead (internal/stream_base_commons.js:188:23) {
+  code: 'EAUTH',
+  response: '535 Login Fail. Please enter your authorization code to login. More information in http://service.mail.qq.com/cgi-bin/help?subtype=1&&id=28&&no=1001256',
+  responseCode: 535,
+  command: 'AUTH PLAIN'
+}
+[2021-08-15T16:28:17.599] [ERROR] cheese - Error: Invalid login: 535 Login Fail. Please enter your authorization code to login. More information in http://service.mail.qq.com/cgi-bin/help?subtype=1&&id=28&&no=1001256
+    at SMTPConnection._formatError (D:\个人文件\react\staff\server\Staff-Server\node_modules\nodemailer\lib\smtp-connection\index.js:784:19)
+    at SMTPConnection._actionAUTHComplete (D:\个人文件\react\staff\server\Staff-Server\node_modules\nodemailer\lib\smtp-connection\index.js:1536:34)
+    at SMTPConnection.<anonymous> (D:\个人文件\react\staff\server\Staff-Server\node_modules\nodemailer\lib\smtp-connection\index.js:540:26)
+    at SMTPConnection._processResponse (D:\个人文件\react\staff\server\Staff-Server\node_modules\nodemailer\lib\smtp-connection\index.js:947:20)
+    at SMTPConnection._onData (D:\个人文件\react\staff\server\Staff-Server\node_modules\nodemailer\lib\smtp-connection\index.js:749:14)
+    at TLSSocket.SMTPConnection._onSocketData (D:\个人文件\react\staff\server\Staff-Server\node_modules\nodemailer\lib\smtp-connection\index.js:189:44)
+    at TLSSocket.emit (events.js:314:20)
+    at addChunk (_stream_readable.js:297:12)
+    at readableAddChunk (_stream_readable.js:272:9)
+    at TLSSocket.Readable.push (_stream_readable.js:213:10)
+    at TLSWrap.onStreamRead (internal/stream_base_commons.js:188:23) {
+  code: 'EAUTH',
+  response: '535 Login Fail. Please enter your authorization code to login. More information in http://service.mail.qq.com/cgi-bin/help?subtype=1&&id=28&&no=1001256',
+  responseCode: 535,
+  command: 'AUTH PLAIN'
+}
+[2021-08-15T16:28:25.588] [ERROR] cheese - Error: Invalid login: 535 Login Fail. Please enter your authorization code to login. More information in http://service.mail.qq.com/cgi-bin/help?subtype=1&&id=28&&no=1001256
+    at SMTPConnection._formatError (D:\个人文件\react\staff\server\Staff-Server\node_modules\nodemailer\lib\smtp-connection\index.js:784:19)
+    at SMTPConnection._actionAUTHComplete (D:\个人文件\react\staff\server\Staff-Server\node_modules\nodemailer\lib\smtp-connection\index.js:1536:34)
+    at SMTPConnection.<anonymous> (D:\个人文件\react\staff\server\Staff-Server\node_modules\nodemailer\lib\smtp-connection\index.js:540:26)
+    at SMTPConnection._processResponse (D:\个人文件\react\staff\server\Staff-Server\node_modules\nodemailer\lib\smtp-connection\index.js:947:20)
+    at SMTPConnection._onData (D:\个人文件\react\staff\server\Staff-Server\node_modules\nodemailer\lib\smtp-connection\index.js:749:14)
+    at TLSSocket.SMTPConnection._onSocketData (D:\个人文件\react\staff\server\Staff-Server\node_modules\nodemailer\lib\smtp-connection\index.js:189:44)
+    at TLSSocket.emit (events.js:314:20)
+    at addChunk (_stream_readable.js:297:12)
+    at readableAddChunk (_stream_readable.js:272:9)
+    at TLSSocket.Readable.push (_stream_readable.js:213:10)
+    at TLSWrap.onStreamRead (internal/stream_base_commons.js:188:23) {
+  code: 'EAUTH',
+  response: '535 Login Fail. Please enter your authorization code to login. More information in http://service.mail.qq.com/cgi-bin/help?subtype=1&&id=28&&no=1001256',
+  responseCode: 535,
+  command: 'AUTH PLAIN'
+}
+[2021-08-15T16:29:29.717] [ERROR] cheese - Error: Invalid login: 535 Login Fail. Please enter your authorization code to login. More information in http://service.mail.qq.com/cgi-bin/help?subtype=1&&id=28&&no=1001256
+    at SMTPConnection._formatError (D:\个人文件\react\staff\server\Staff-Server\node_modules\nodemailer\lib\smtp-connection\index.js:784:19)
+    at SMTPConnection._actionAUTHComplete (D:\个人文件\react\staff\server\Staff-Server\node_modules\nodemailer\lib\smtp-connection\index.js:1536:34)
+    at SMTPConnection.<anonymous> (D:\个人文件\react\staff\server\Staff-Server\node_modules\nodemailer\lib\smtp-connection\index.js:540:26)
+    at SMTPConnection._processResponse (D:\个人文件\react\staff\server\Staff-Server\node_modules\nodemailer\lib\smtp-connection\index.js:947:20)
+    at SMTPConnection._onData (D:\个人文件\react\staff\server\Staff-Server\node_modules\nodemailer\lib\smtp-connection\index.js:749:14)
+    at TLSSocket.SMTPConnection._onSocketData (D:\个人文件\react\staff\server\Staff-Server\node_modules\nodemailer\lib\smtp-connection\index.js:189:44)
+    at TLSSocket.emit (events.js:314:20)
+    at addChunk (_stream_readable.js:297:12)
+    at readableAddChunk (_stream_readable.js:272:9)
+    at TLSSocket.Readable.push (_stream_readable.js:213:10)
+    at TLSWrap.onStreamRead (internal/stream_base_commons.js:188:23) {
+  code: 'EAUTH',
+  response: '535 Login Fail. Please enter your authorization code to login. More information in http://service.mail.qq.com/cgi-bin/help?subtype=1&&id=28&&no=1001256',
+  responseCode: 535,
+  command: 'AUTH PLAIN'
+}
+[2021-08-16T23:27:32.940] [ERROR] cheese - Error: No recipients defined
+    at SMTPConnection._formatError (D:\个人文件\react\staff\server\Staff-Server\node_modules\nodemailer\lib\smtp-connection\index.js:784:19)
+    at SMTPConnection._setEnvelope (D:\个人文件\react\staff\server\Staff-Server\node_modules\nodemailer\lib\smtp-connection\index.js:1001:34)
+    at SMTPConnection.send (D:\个人文件\react\staff\server\Staff-Server\node_modules\nodemailer\lib\smtp-connection\index.js:615:14)
+    at sendMessage (D:\个人文件\react\staff\server\Staff-Server\node_modules\nodemailer\lib\smtp-transport\index.js:227:28)
+    at D:\个人文件\react\staff\server\Staff-Server\node_modules\nodemailer\lib\smtp-transport\index.js:285:25
+    at SMTPConnection._actionAUTHComplete (D:\个人文件\react\staff\server\Staff-Server\node_modules\nodemailer\lib\smtp-connection\index.js:1550:9)
+    at SMTPConnection.<anonymous> (D:\个人文件\react\staff\server\Staff-Server\node_modules\nodemailer\lib\smtp-connection\index.js:540:26)
+    at SMTPConnection._processResponse (D:\个人文件\react\staff\server\Staff-Server\node_modules\nodemailer\lib\smtp-connection\index.js:947:20)
+    at SMTPConnection._onData (D:\个人文件\react\staff\server\Staff-Server\node_modules\nodemailer\lib\smtp-connection\index.js:749:14)
+    at TLSSocket.SMTPConnection._onSocketData (D:\个人文件\react\staff\server\Staff-Server\node_modules\nodemailer\lib\smtp-connection\index.js:189:44)
+    at TLSSocket.emit (events.js:314:20)
+    at addChunk (_stream_readable.js:297:12)
+    at readableAddChunk (_stream_readable.js:272:9)
+    at TLSSocket.Readable.push (_stream_readable.js:213:10)
+    at TLSWrap.onStreamRead (internal/stream_base_commons.js:188:23) {
+  code: 'EENVELOPE',
+  command: 'API'
+}
+[2021-08-16T23:34:27.432] [ERROR] cheese - TypeError: Cannot read property 'status' of null
+    at Object.Success (D:\个人文件\react\staff\server\Staff-Server\api\message.js:29:17)
+    at calculateBonus (D:\个人文件\react\staff\server\Staff-Server\api\message.js:45:22)
+    at getEmailCode (D:\个人文件\react\staff\server\Staff-Server\control\user.js:433:17)
+    at processTicksAndRejections (internal/process/task_queues.js:97:5)
+[2021-08-16T23:34:59.848] [ERROR] cheese - TypeError: Cannot read property 'status' of null
+    at Object.Success (D:\个人文件\react\staff\server\Staff-Server\api\message.js:29:17)
+    at calculateBonus (D:\个人文件\react\staff\server\Staff-Server\api\message.js:45:22)
+    at getEmailCode (D:\个人文件\react\staff\server\Staff-Server\control\user.js:433:17)
+    at processTicksAndRejections (internal/process/task_queues.js:97:5)
+[2021-08-16T23:35:10.270] [ERROR] cheese - TypeError: Cannot read property 'status' of null
+    at Object.Success (D:\个人文件\react\staff\server\Staff-Server\api\message.js:29:17)
+    at calculateBonus (D:\个人文件\react\staff\server\Staff-Server\api\message.js:45:22)
+    at getEmailCode (D:\个人文件\react\staff\server\Staff-Server\control\user.js:433:17)
+    at processTicksAndRejections (internal/process/task_queues.js:97:5)
+[2021-08-16T23:35:56.538] [ERROR] cheese - TypeError: Cannot read property 'status' of null
+    at Object.Success (D:\个人文件\react\staff\server\Staff-Server\api\message.js:29:17)
+    at calculateBonus (D:\个人文件\react\staff\server\Staff-Server\api\message.js:45:22)
+    at getEmailCode (D:\个人文件\react\staff\server\Staff-Server\control\user.js:433:17)
+    at processTicksAndRejections (internal/process/task_queues.js:97:5)
+[2021-08-16T23:44:35.589] [ERROR] cheese - Error: No recipients defined
+    at SMTPConnection._formatError (D:\个人文件\react\staff\server\Staff-Server\node_modules\nodemailer\lib\smtp-connection\index.js:784:19)
+    at SMTPConnection._setEnvelope (D:\个人文件\react\staff\server\Staff-Server\node_modules\nodemailer\lib\smtp-connection\index.js:1001:34)
+    at SMTPConnection.send (D:\个人文件\react\staff\server\Staff-Server\node_modules\nodemailer\lib\smtp-connection\index.js:615:14)
+    at sendMessage (D:\个人文件\react\staff\server\Staff-Server\node_modules\nodemailer\lib\smtp-transport\index.js:227:28)
+    at D:\个人文件\react\staff\server\Staff-Server\node_modules\nodemailer\lib\smtp-transport\index.js:285:25
+    at SMTPConnection._actionAUTHComplete (D:\个人文件\react\staff\server\Staff-Server\node_modules\nodemailer\lib\smtp-connection\index.js:1550:9)
+    at SMTPConnection.<anonymous> (D:\个人文件\react\staff\server\Staff-Server\node_modules\nodemailer\lib\smtp-connection\index.js:540:26)
+    at SMTPConnection._processResponse (D:\个人文件\react\staff\server\Staff-Server\node_modules\nodemailer\lib\smtp-connection\index.js:947:20)
+    at SMTPConnection._onData (D:\个人文件\react\staff\server\Staff-Server\node_modules\nodemailer\lib\smtp-connection\index.js:749:14)
+    at TLSSocket.SMTPConnection._onSocketData (D:\个人文件\react\staff\server\Staff-Server\node_modules\nodemailer\lib\smtp-connection\index.js:189:44)
+    at TLSSocket.emit (events.js:314:20)
+    at addChunk (_stream_readable.js:297:12)
+    at readableAddChunk (_stream_readable.js:272:9)
+    at TLSSocket.Readable.push (_stream_readable.js:213:10)
+    at TLSWrap.onStreamRead (internal/stream_base_commons.js:188:23) {
+  code: 'EENVELOPE',
+  command: 'API'
+}
+[2021-08-17T16:58:12.890] [ERROR] cheese - admin/adminMongoError: FieldPath field names may not start with '$'. Consider using $getField or $setField.
+[2021-08-17T17:17:20.082] [ERROR] cheese - admin/adminMongoError: BSON field 'skip' value must be >= 0, actual value '-8'
+[2021-08-17T17:17:23.414] [ERROR] cheese - admin/adminTypeError: Strategies[level] is not a function

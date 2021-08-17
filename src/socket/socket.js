@@ -14,8 +14,12 @@ export const Apply=data=>{
     socket.emit('apply',data);
 }
 //管理员登录
-export const AdminLogin=(data,admin=true)=>{
+export const AdminLogin=(data)=>{
     socket.emit('adminLogin',data);
+}
+//管理员退出登陆
+export const AdminLogOut=data=>{
+    socket.emit('adminLogOut',data);
 }
 //用户收到通知
 export const receptionNotice=ReceptionNotice=>{
