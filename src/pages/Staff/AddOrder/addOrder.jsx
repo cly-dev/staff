@@ -92,7 +92,7 @@ export default class AddOrder extends Component {
                                     message: '请输入商品名',
                                 },
                 ]}>
-                    <Input />
+                    <Input placeholder="请输入商品名"/>
                 </Form.Item>
                 <Form.Item label="类别"
                         name='type'
@@ -122,7 +122,7 @@ export default class AddOrder extends Component {
                                 message: '请输入数量',
                             },
                     ]} >
-                    <InputNumber min={1} />
+                    <InputNumber min={1} placeholder="请输入数量" />
                     </Form.Item>
                     <Form.Item label="价格" name="price" rules={[
                         {
@@ -130,7 +130,7 @@ export default class AddOrder extends Component {
                             message: '请输入价格',
                         },
                     ]}>
-                        <InputNumber min={1}/>
+                        <InputNumber min={1} placeholder="请输入价格"/>
                     </Form.Item>
                     <Form.Item label="备注" name='mark'>
                         <TextArea rows={8} showCount maxLength={100} className="textArea-input"></TextArea>

@@ -1,5 +1,5 @@
 const {AddNotices,getAllNotices,deleteNotices,getAllNoticeCount}=require("../Dao/NoticeDao");
-const {findAllCount,AddAdmins,findAdminByIds,Logins,modicAdminInfo,modicAdminPassword,findAllAdmin,modicPower,modicStatus}=require("../Dao/AdminDao");
+const {findAllCount,AddAdmins,findAdminByIds,Logins,modicAdminInfo,modicAdminPassword,findAllAdmin,modicPower,modicStatus,findStatusById,handleResetAdmin,handleDeletAdmin}=require("../Dao/AdminDao");
 const {addTypes}=require("../Dao/TypeDao");
 const {getAllStates,getStaffCount,getOrderCounts,getOrderCountByMonths,getOrderCountEvery,getOrderById}=require("../Dao/OrderDao");
 const {getAllApplys,getAllCount,handlePass,handleTurn}=require("../Dao/ApplyDao");
@@ -43,11 +43,14 @@ const UserInsert=async(req,res)=>{
 //增加管理员
 const AddAdmin=async(req,res)=>{
     try{
-        const {adminId,name,position}=req.body;
-        if(!(adminId && name && position)){
+        console.log(req.body);
+        const {adminId,name,position,power}=req.body;
+        const timer=adminId.slice(0,adminId.length - 4) * 1;
+        const joinTime=Time(timer);
+        if(!(adminId && name && position && power)){
             msg('PError',res);
         }else{
-            msg('DecideRes',res,await AddAdmins({adminId,name,position}));
+            msg('DecideRes',res,await AddAdmins({adminId,name,position,joinTime,power}));
         }
     }catch(error){
         logger.error("admin/admin"+error);
@@ -389,10 +392,82 @@ const findAllAminInfo=async(req,res)=>{
         }
     }catch(error){
         logger.error("admin/admin"+error);
+    
+    }
+}
+//冻结管理员账号
+const handleFreezeStatus=async(req,res)=>{
+    try{
+        const {adminId}=req.query;
+        if(adminId){
+            msg('DecideRes',res,await modicStatus(adminId,'-1'));
+        }else{
+            msg("PError",res);
+        }
+    }catch(error){
         msg('SError',res);
         throw(error)  
     }
 }
+//改变用户的状态
+const handleDeleteStatus=async(req,res)=>{
+    try{
+            const {adminId}=req.query;
+            if(adminId){
+                msg('DecideRes',res,await modicStatus(adminId,'-2'));
+            }else{
+                msg("PError",res);
+            }
+        }catch(error){
+        msg('SError',res);
+        throw(error)  
+    }
+}
+//恢复账号
+const handleRecoverStatus=async(req,res)=>{
+    try{
+        const {adminId}=req.query;
+        if(adminId){
+            const password=await findStatusById(adminId);
+            let status='1';
+            if(password==='123456'){
+                status='0';
+            }
+            msg('DecideRes',res,await modicStatus(adminId,status));
+        }else{
+            msg("PError",res);
+        }
+       
+    }catch(error){
+        msg('SError',res);
+        throw(error)  
+    }
+}
+//重置账号
+const handleReset=async(req,res)=>{
+    try{
+        const {adminId}=req.query;
+        if(adminId){
+            msg('DecideRes',res,await handleResetAdmin(adminId));
+        }else{
+            msg("PError",res);
+        }
+    }catch(error){
+        msg('SError',res);
+        throw(error)  
+    }
+}
+//删除账号
+const handleDelet=async(req,res)=>{
+    try{
+        const {adminId}=req.headers;
+        msg('DecideRes',res,await handleDeletAdmin(adminId));
+    }catch(error){
+        msg('SError',res);
+        throw(error)  
+    }
+}
+
 module.exports={
     AddNotice,
     AddAdmin,
@@ -419,4 +494,9 @@ module.exports={
     handleChangeInfo,
     handleChangePassword,
     findAllAminInfo,
+    handleFreezeStatus,
+    handleDeleteStatus,
+    handleRecoverStatus,
+    handleReset,
+    handleDelet
 }

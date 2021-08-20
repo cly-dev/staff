@@ -16,15 +16,14 @@ socket.on("connection",client=>{
                     onlineCount++;
                 }else{
                     for(let key in onlineUsers){
-                        if(data!==key){
-                            console.log("执行啦");
+                        if(data!==key || onlineUsers[data]!==client.id){
                             onlineUsers[data]=client.id;
+                        }
+                        if(data!==key){
+                            client.to(onlineUsers[data]).emit('message',"您已上线");
                         }
                     }
                 }
-                client.emit('message',"登陆啦");
-                console.log(onlineCount);
-                console.log(onlineUsers);
             })
             //管理员登录
             client.on('adminLogin',data=>{
@@ -33,13 +32,15 @@ socket.on("connection",client=>{
                     onlineCount++;
                 }else{
                     for(let key in onlineUsers){
-                        if(data!==key){
+                        if(data!==key  || onlineAdmin[data]!==client.id){
                             onlineAdmin[data]=client.id;
+                        }
+                        if(data!==key){
+                            client.to(onlineAdmin[data]).emit('message',"您已上线");
                         }
                     }
                 }
-                console.log(onlineAdmin);
-                client.emit('message',"您已上线");
+                
             })
             //员工添加申请
             client.on('apply',data=>{
@@ -59,6 +60,7 @@ socket.on("connection",client=>{
             })
             //管理员审核
             client.on('audit',async data=>{
+                console.log(data);
                 if(onlineUsers[data.userId]){       
                    client.to(onlineUsers[data.userId]).emit("message",data.message);
                    client.to(onlineUsers[data.userId]).emit("handleTurn",data);

@@ -1,5 +1,5 @@
 const express=require("express");
-const {handleChangeInfo,handleChangePassword,findAllAminInfo,handleRecover,getOrder,deleteNotice,getAllNotice,findStaffBySearch,getOrderCountByMonth,getOrderCount,AddNotice,AddAdmin,findAdminById,Login,addType,getAllApply,UserInsert,findAllStaff,handleSuspend,handleKick,getAllState,getOrderByEvery,hasReader,ApplyPass, ApplyTurn}=require("../control/admin");
+const {handleChangeInfo,handleChangePassword,findAllAminInfo,handleRecover,getOrder,deleteNotice,getAllNotice,findStaffBySearch,getOrderCountByMonth,getOrderCount,AddNotice,AddAdmin,findAdminById,Login,addType,getAllApply,UserInsert,findAllStaff,handleSuspend,handleKick,getAllState,getOrderByEvery,hasReader,ApplyPass, ApplyTurn,handleFreezeStatus,handleDeleteStatus,handleRecoverStatus,handleReset,handleDelet}=require("../control/admin");
 const {TokenVerify}=require("../api/JWT/token");
 const message=require("../api/message.js");
 const Admin=express.Router();
@@ -43,4 +43,9 @@ Admin.put('/applyTurn',ApplyTurn);
 Admin.put('/handleChangeInfo',handleChangeInfo);
 Admin.put('/handleChangePassword',handleChangePassword);
 Admin.get('/findAllAminInfo',findAllAminInfo);
+Admin.put('/handleFreezeStatus',handleFreezeStatus);
+Admin.put('/handleDeleteStatus',handleDeleteStatus);
+Admin.put('/handleRecoverStatus',handleRecoverStatus);
+Admin.put('/handleReset',handleReset);
+Admin.delete('/handleDelet',handleDelet);
 module.exports=Admin;

@@ -1,24 +1,43 @@
-import React from 'react'
+import React,{useEffect} from 'react'
 import { Form, Input,Button,Select } from 'antd';
 import "./addAdmin.scss";
+import {Admin} from "../../../axios";
+import { message } from '../../../api';
+import Store from '../../../redux/store';
+const {addAdmin}=Admin;
 const { Option } = Select;
-
-export default function addAdmin() {
-    function onFinish(value){
-        console.log(value);
+export default function AddAdmin(props) {
+   async function onFinish(value){
+       value.adminId= new Date().getTime()+value.adminId;
+       const data=await addAdmin(value);
+       if(data.code==='200'){
+           message("添加成功");
+           props.history.push("/admin-index/工作台/管理");
+        }    
     }
+    useEffect(()=>{
+        if(Store.getState()['admin'].power!=='2'){
+            message("没有权限");
+            setTimeout(()=>{
+                props.history.goBack();
+            },2000);
+        }
+    })
     return (
         <section className="addAdmin-container">
-             <Form name="nest-messages" onFinish={onFinish} >
+             <Form name="nest-messages" onFinish={onFinish} initialValues={{power:'0'}} >
                         <Form.Item
-                            name='AdminId'
+                            name='adminId'
                             label="职工号"
                             rules={[
                             {
                                 required: true,
                                 message:'用户Id不能为空'
                             },{
-
+                                type:'string',
+                                max:4,
+                                min:4,
+                                message:'只能输入4个字符'
                             }
                             ]}
                         >
@@ -26,7 +45,7 @@ export default function addAdmin() {
                         </Form.Item>
                         <Form.Item
                             style={{marginLeft:14}}
-                            name='username'
+                            name='name'
                             label="姓名"
                             rules={[
                             {
@@ -39,7 +58,7 @@ export default function addAdmin() {
                         </Form.Item>
                         <Form.Item
                             style={{marginLeft:14}}
-                            name='posoition'
+                            name='position'
                             label="职位"
                             rules={[
                             {
@@ -48,22 +67,21 @@ export default function addAdmin() {
                             },
                             ]}
                         >
-                            <Input placeholder="请输入姓名"/>
+                            <Input placeholder="请输入职位"/>
                         </Form.Item>
                         <Form.Item
                             style={{marginLeft:14}}
-                            name='posoition'
+                            name='power'
                             label="管理"
                             rules={[
                             {
                                 required:true,
-                                message:'职位不能为空'
+                                message:'管理不能为空'
                             },
                             ]}
                         >
-                            <Select defaultValue="0"> 
+                            <Select > 
                                 <Option value="0">普通管理员</Option>
-                                <Option value="1">高级管理员</Option>
                             </Select>
                         </Form.Item>
                         <Form.Item

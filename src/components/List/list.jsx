@@ -15,7 +15,7 @@ class stafflist extends Component {
         title:'入职时间',dataIndex:'joinTime',key:'joinTime'
       },
       {
-        title: 'Action',
+        title: '操作',
         dataIndex: '',
         key: 'x',
         render: text =>{

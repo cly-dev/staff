@@ -7,7 +7,7 @@ import { DownOutlined, UserOutlined, ExportOutlined, AppstoreOutlined, MailOutli
 import "./index.scss";
 import { Staff } from "../../../axios";
 import { NavLink } from 'react-router-dom';
-import { Login, handleMsg } from '../../../socket';
+import { Login, handleMsg,LoginOut } from '../../../socket';
 import { message } from '../../../api';
 const NewNotice = lazy(() => import("../NewNotice/NewNotice.jsx"));
 const OldNotice = lazy(() => import("../OldNotice/OldNotice.jsx"));
@@ -25,7 +25,7 @@ const { TabPane } = Tabs;
 const { handleDelete } = Staff;
 const openNotificationWithIcon = (desc, duration = null) => {
     notification.warn({
-        message: 'Notification Title',
+        message: '温馨提示',
         description: desc,
         duration,
         top: 200,
@@ -34,6 +34,7 @@ const openNotificationWithIcon = (desc, duration = null) => {
 export default class index extends Component {
     constructor(props) {
         super(props);
+        this.client='';
         this.userInfo = Store.getState()['user'];
         this.menu = [
             {
@@ -164,7 +165,6 @@ export default class index extends Component {
             }
         }
         const maxPanes = newPanes.filter(item => targetKey < item.key);
-        console.log(maxPanes);
         const minpanes = newPanes.filter(item => targetKey > item.key);
         maxPanes.forEach(val => {
             val.key -= 1;
@@ -183,10 +183,11 @@ export default class index extends Component {
             }
             this.handleClick(data);
         }else{
+            //退出登录
             Store.dispatch(userClear());
             localStorage.clear();
             sessionStorage.clear();
-            
+            LoginOut(this.userInfo.userId);
         }
         this.props.history.push(link);
     }
@@ -222,6 +223,9 @@ export default class index extends Component {
             } else if (this.userInfo.status === -2) {
                 openNotificationWithIcon("你已被解雇,稍后自动删除账号", 2);
                 handleDelete(this.userInfo.userId);
+                Store.dispatch(userClear());
+                localStorage.clear();
+                sessionStorage.clear();
                 setTimeout(() => {
                     this.props.history.push('/');
                 }, 2000);
@@ -233,7 +237,7 @@ export default class index extends Component {
 
             }
             //登录连接事件
-            handleMsg(data => {
+           this.client=handleMsg(data => {
                 if (data) {
                     message(data);
                 }
@@ -245,7 +249,10 @@ export default class index extends Component {
 
     }
     componentWillUnmount() {
+        LoginOut(this.userInfo.userId);
         window.removeEventListener("beforeunload", this.handleStorage, false);
+        this.client.off();
+        notification.destroy();
     }
     render() {
         const { panes, activeKey } = this.state;
@@ -258,7 +265,7 @@ export default class index extends Component {
                             <span className="nav-tips">员工管理系统</span>
                             {/* 用户信息 */}
                             <section className="user-info">
-                                <img src={'\api' + this.userInfo.imgPath} alt="" className="user-avater" />
+                                <img src={this.userInfo.imgPath} alt="" className="user-avater" />
                                 <Dropdown placement="bottomCenter" overlay={(
                                     <Menu>
                                         {

@@ -4,7 +4,7 @@ const DEVELOP_ENV={
     part:'3030'
 }
 const PRODUCT_ENV={
-    BaseUrl:'',
+    BaseUrl:'http://47.103.11.90',
     part:'',
 }
 // eslint-disable-next-line import/no-anonymous-default-export

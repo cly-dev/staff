@@ -1,6 +1,6 @@
 const express=require("express");
 const Staff=express.Router();
-const {getEmailCode,getStaffIdByEmail,getNoticeByDate,Login,getNotice,ReadNotice,TopNotice, ModicInfo,ModicPassword,ModicImg,addOrder,modicOrder,deleteOrder,getOrderByPageNum,getSearchByPageNum,getOrderDetail,getState,findAllList,findAllType,addApply,delApply,getApplyByPageNum,handleRepeal,handleRef,handleDel,getStateByage}=require("../control/user");
+const {getMarkById,getEmailCode,getStaffIdByEmail,getNoticeByDate,Login,getNotice,ReadNotice,TopNotice, ModicInfo,ModicPassword,ModicImg,addOrder,modicOrder,deleteOrder,getOrderByPageNum,getSearchByPageNum,getOrderDetail,getState,findAllList,findAllType,addApply,delApply,getApplyByPageNum,handleRepeal,handleRef,handleDel,getStateByage}=require("../control/user");
 const {TokenVerify}=require("../api/JWT/token");
 const {findStaffById}=require("../Dao/UserDao");
 const message=require("../api/message.js");
@@ -54,4 +54,5 @@ Staff.get('/handleRepeal',handleRepeal);
 Staff.get('/handleRef',handleRef)
 Staff.get('/getStateByage',getStateByage);
 Staff.get('/getNoticeByDate',getNoticeByDate);
+Staff.get('/getMarkById',getMarkById);
 module.exports=Staff;

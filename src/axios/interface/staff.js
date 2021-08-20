@@ -51,4 +51,6 @@ export default {
 getEmailCode:email=>request('/staff/getEmailCode','',{email}),
 //根据邮箱和Id查找密码
 getStaffIdByEmail:data=>request('/staff/getStaffIdByEmail','',data),
+//获取申请驳回信息
+getMarkById:applyId=>request('/staff/getMarkById','',{applyId})
 }

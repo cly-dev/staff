@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
-import {Table,Space,Button} from 'antd';
+import {Table,Space,Button,Modal} from 'antd';
 import {message} from '../../../api';
 import {Apply,receptionTurn} from "../../../socket";
 import {Staff} from "../../../axios";
 import "./applyList.scss";
-const {getApplyByPageNum,Repeal,RefMore,DeleteApply}=Staff;
+const {getApplyByPageNum,Repeal,RefMore,DeleteApply,getMarkById}=Staff;
 class applyList extends Component {
     constructor(props){
         super(props)
+        this.client='';
         this.action=(text)=>{
             let El='';
             switch(text.status){
@@ -26,7 +27,7 @@ class applyList extends Component {
                             );break;
                 case '1':El=<Button  type="danger" onClick={()=>this.handleReal(text)}>撤销</Button>;break;
                 default: El=(<Space> 
-                                <Button>查看理由</Button>
+                                <Button onClick={()=>this.handleWatchMark(text)}>查看理由</Button>
                                 <Button onClick={()=>this.handleDelete(text)} type="danger">删除</Button>
                             </Space>)
             }
@@ -67,6 +68,15 @@ class applyList extends Component {
             total:0
         }
     }
+    //点击查看理由
+    handleWatchMark=async val=>{
+        const result=await getMarkById(val._id);
+        Modal.info({
+            title:'查看理由',
+            content:result.data['mark']
+        })
+    }
+
     //修改申请
     handleModic=async val=>{
        console.log(await DeleteApply(val._id));
@@ -74,7 +84,6 @@ class applyList extends Component {
             pathname:'/index/Apply',
             state:{info:val}
         })
-        
     }
     //删除申请
     handleDelete=async val=>{
@@ -112,6 +121,7 @@ class applyList extends Component {
                 listData
             })
             message("提交成功",'success');
+            Apply(val);
         }else{
             message(result.msg);
 
@@ -136,21 +146,21 @@ class applyList extends Component {
             this.setState({listData:result.data,total:result.pageSize});
         }
     }
+    //生命周期-挂载时
     componentDidMount(){
         this.handleGetList(1);
         //webSocket即时消息
-        receptionTurn(data=>{
-            const listData=[...this.state.listData];
-            const obj=listData.find(value=>value===data.applyId);
-            if(data.type!=='pass'){
-                obj.status='-2';
-            }else{
-                obj.staus='1';
-            };
-            this.setState({
-                listData
-            });
+      this.client= receptionTurn(data=>{
+          if(data){
+            setTimeout(()=>{
+                window.location.reload();
+            },2000)
+          }
         })
+    }
+    //生命周期-卸载时
+    componentWillUnmount(){
+        this.client.off();
     }
     render() {
         return (
@@ -176,6 +186,7 @@ class applyList extends Component {
                      dataSource={this.state.listData}
                      columns={this.columns}  />
                 </section>
+               
             </section>
 
         );

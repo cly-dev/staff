@@ -7,7 +7,7 @@ const {getNoticesCount,getNoticeByDateCount}=require("../Dao/NoticeDao");
 const {addOrders,modicOrders,deleteOrders,getOrderByPageNums,getSearchByPageNums,getOrderDetails,getStates,getOrderCount,getSearchCount,getStateByAges}=require("../Dao/OrderDao");
 const {findAllLists,findAllTypes}=require("../Dao/TypeDao.js");
 const {findNoiceById,getNoticeByDays,changeStatus,TopStatus}=require("../Dao/NoticeUserDao");
-const {addApplys,getApplyByPageNums,delApplys,getApplyCount,handleApply}=require("../Dao/ApplyDao");
+const {addApplys,getApplyByPageNums,delApplys,getApplyCount,handleApply,findMarkById}=require("../Dao/ApplyDao");
 const logger=require("../api/log");
 const upload=require("../api/upload");
 const Fs=require("../api/fs");
@@ -463,6 +463,21 @@ const getStaffIdByEmail=async(req,res)=>{
         throw(error);
     }
 }
+//查看申请的驳回理由
+const getMarkById=async(req,res)=>{
+    try{
+        const {applyId}=req.query;
+        if(applyId){
+            msg("DecideRes",res,await findMarkById(applyId));
+        }else{
+            msg('PError',res);
+        }
+    }catch(error){
+        logger.error(error);
+        msg("SError",res);
+        throw(error);
+    }
+}
 module.exports={
     Login,
     CheckCode,
@@ -490,5 +505,6 @@ module.exports={
     getStateByage,
     getNoticeByDate,
     getStaffIdByEmail,
-    getEmailCode
+    getEmailCode,
+    getMarkById
 }

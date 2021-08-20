@@ -10,9 +10,7 @@ axios.interceptors.request.use(config=>{
     if(reg.test(config.url)){
         config.headers.token=Store.getState()['admin'].token
     }else{
-        if(config.url!=='/api/staff/login'){
-            config.headers.token=Store.getState()['user'].token;
-        }
+        config.headers.token=Store.getState()['user'].token;
     }
     return config;
 })
@@ -30,7 +28,7 @@ axios.defaults.timeout=50000;
 export default (url,data,params,method="GET")=>{
     const promise=new Promise((resolve,reject)=>{
         axios({
-            url:'/api'+url,
+            url:BaseUrl+url,
             data,
             params,
             method,
@@ -39,8 +37,8 @@ export default (url,data,params,method="GET")=>{
         }).catch(err=>{
             resolve(
                 {
-                    msg:"网络错误",
-                    code:'400',
+                    msg:"网络繁忙,请稍后再试",
+                    code:'500',
                     data:null
                 }
             )

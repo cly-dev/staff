@@ -36,7 +36,6 @@ export default class Apply extends Component {
             info.status='0';
             this.formRef.setFieldsValue(info)
         }
-        console.log(this.props.location);
     }
     render() {
         return (

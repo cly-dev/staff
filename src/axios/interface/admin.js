@@ -42,6 +42,18 @@ export default{
     //修改密码
     handleChangePassword:data=>request('/admin/handleChangePassword','',data,"PUT"),
     //获取全部管理员信息
-    findAllAminInfo:pageNum=>request('/admin/findAllAminInfo','',{pageNum})
-    
+    findAllAminInfo:pageNum=>request('/admin/findAllAminInfo','',{pageNum}),
+    //添加管理员
+    addAdmin:data=>request('/admin/addAdmin',data,'',"POST"),
+    //冻结账号
+    handleFreezeStatus:adminId=>request('/admin/handleFreezeStatus','',{adminId},"PUT"),
+    //恢复账号
+    handleRecoverStatus:adminId=>request('/admin/handleRecoverStatus','',{adminId},"PUT"),
+    //改变用户为删除状态
+    handleDeleteStatus:adminId=>request('/admin//handleDeleteStatus','',{adminId},"PUT"),
+    //重置账号
+    handleReset:adminId=>request('/admin/handleDeleteStatus','',{adminId},"PUT"),
+    //删除账号
+    handleDeletAdmin:()=>request('/admin/handleDeletAdmin',"","","DELETE"),
+
 }

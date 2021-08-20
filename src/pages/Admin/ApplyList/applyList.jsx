@@ -10,8 +10,10 @@ export default function ApplyList() {
   const [total,setTotal]=new useState(0);
   const [applyId,setApplyId]=new useState('');
   const [userId,setUserId]=new useState('');
-  const dataRef=new useRef();
-  const input=new useRef();
+  const dataRef=useRef();
+  const userIdRef=useRef();
+  userIdRef.current=userId;
+  const input=useRef();
   dataRef.current=dataList;
     const columns = [
         {title:'姓名',dataIndex:'username',key:'username'},
@@ -67,6 +69,7 @@ export default function ApplyList() {
   
     //点击驳回事件
     function handleDelete(val){
+      console.log(val);
         setUserId(val.userId);
         setApplyId(val._id);
         setIsModalVisible(true);
@@ -80,7 +83,7 @@ export default function ApplyList() {
         handleLocalChange(applyId,'-2');
         setIsModalVisible(false);
         input.current.state.value="";
-        Audit({type:'turn',message:'您的一条申请消息被驳回',userId,applyId});
+        Audit({type:'turn',message:'您的一条申请消息被驳回',userId:userIdRef.current,applyId});
       }
      }else{
         message("请输入驳回理由")
@@ -89,21 +92,18 @@ export default function ApplyList() {
     //通过申请
     const handlePass=async text=>{
         const data=await applyPass(text._id);
-        console.log(data);
         if(data.code==='200'){
           message("申请通过",'success');
           handleLocalChange(text._id,'1');
-          Audit({type:'pass',message:'您的一条申请消息通过',userId,applyId});
+          Audit({type:'pass',message:'您的一条申请消息通过',userId:text.userId,applyId});
         }else{
           message(data.msg);
         }
     }
-    
-
+  
     //改变本地数据的状态
     const handleLocalChange=(id,status)=>{
       let obj=dataList.find(value=>value._id===id);
-      console.log(obj);
       obj.status=status;
       let index=0;
       for(let i=0;i<dataList.length;i++){
@@ -120,15 +120,18 @@ export default function ApplyList() {
     new useEffect(()=>{
       handleGetDataByPage(1);
       //websocket即时获取申请信息
-      receptionApply(data=>{
+     const clint=receptionApply(data=>{
         if(data){
-          let arr=[...dataList];
-          arr.pop();
-          arr.shift(data);
-          setData(arr);
+          setTimeout(()=>{
+            window.location.reload();
+          },2000)
         }
       })
-    },[dataRef])
+      return ()=>{
+        clint.off();
+      }
+    },[dataRef]
+    )
     //根据页码获取数据
    const handleGetDataByPage=async page=>{
      let arr=[];

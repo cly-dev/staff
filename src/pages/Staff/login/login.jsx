@@ -77,7 +77,9 @@ export default class login extends Component {
                     </section>	
                 </section>
                 <section className="ForgetPassword-Link">
-                    <Link to='/ForgetPassword'>找回密码 </Link>    
+                    <Link to='/ForgetPassword'>找回密码 </Link>
+                    <Link to='/admin'>管理员登录</Link>  
+
                 </section>	
             </main>
 

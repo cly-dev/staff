@@ -117,7 +117,7 @@ function findAllAdmin(pageNum){
     })
 }
 //获取全部管理员条数
-function findAllCount(adminId){
+function findAllCount(){
     return new Promise((resolve,reject)=>{
         AdminDao.find({$or:[{power:'0'},{power:'1'}]}).count().then(res=>{
             resolve(res)    
@@ -150,10 +150,49 @@ function modicStatus(adminId,status){
                 resolve("未修改");
             }
         }).catch(err=>{
-                reject(false);
+                reject(err);
         })
     })
 }
+//根据adminId查找用户状态
+function findStatusById(adminId){
+    return new Promise((resolve,reject)=>{
+        AdminDao.findOne({adminId},{password:1}).then(res=>{
+            resolve(res);
+        }).catch(err=>{
+            reject(err);
+        })
+    })
+}
+//重置账号
+function handleResetAdmin(adminId){
+    return new Promise((resolve,reject)=>{
+        AdminDao.updateOne({adminId},{$set:{status:0,password:'123456'}}).then(res=>{
+            if(res.nModified){
+                resolve(true);
+            }else{
+                resolve("已为初识状态");
+            }
+        }).catch(err=>{
+            reject(err);
+        })
+    })
+}
+//删除账号
+function handleDeletAdmin(adminId){
+    return new Promise((resolve,reject)=>{
+        AdminDao.deleteOne({adminId}).then(res=>{
+            if(res.deletedCount){
+                resolve(true);
+            }else{
+                resolve("已删除");
+            }
+        }).catch(err=>{
+            reject(err);
+        })
+    })
+}
+
 module.exports={
     AddAdmins,
     findAdminByIds,
@@ -164,5 +203,8 @@ module.exports={
     findAllAdmin,
     modicPower,
     modicStatus,
-    findAllCount
+    findAllCount,
+    findStatusById,
+    handleResetAdmin,
+    handleDeletAdmin
 }

@@ -24,10 +24,14 @@ export const AdminLogOut=data=>{
 //用户收到通知
 export const receptionNotice=ReceptionNotice=>{
     socket.on('handleNotice',ReceptionNotice);
+    return {off:()=>socket.off('handleNotice',ReceptionNotice)}
+
 }
 //用户收到申请回执
 export const receptionTurn=ReceptionTurn=>{
     socket.on('handleTurn',ReceptionTurn);
+    return {off:()=>socket.off('handleTurn',ReceptionTurn)}
+
 }
 //管理员发布通知
 export const Notice=data=>{
@@ -40,13 +44,14 @@ export const Audit=data=>{
 //管理员接收到申请信息
 export const receptionApply=ReceptionApply=>{
     socket.on('handleApply',ReceptionApply);
+    return {off:()=>socket.off('handleApply',ReceptionApply)}
 }
 
 //处理全局消息
 // eslint-disable-next-line import/no-anonymous-default-export
 export default handlemsg=>{
     socket.on('message',handlemsg);
-    return socket;
+    return {off:()=>socket.off('message',handlemsg)};
 }
 
 

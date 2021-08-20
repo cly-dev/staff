@@ -86,11 +86,11 @@ class performance extends Component {
         echarts.use(
             [TitleComponent, ToolboxComponent, TooltipComponent, GridComponent, LegendComponent, LineChart, CanvasRenderer]
         );
-        const chartDom = document.querySelector('.echarts-container');
-        const myChart = echarts.init(chartDom);
-        option && myChart.setOption(option);
-        console.log(option.series);
-        this.forceUpdate();
+        const chartDom = document?.querySelector('.echarts-container');
+        if(chartDom){
+            const myChart = echarts.init(chartDom);
+            option && myChart.setOption(option);
+        }
         }
 
     //按照排名获取每个员工的年度销售额
@@ -113,8 +113,8 @@ class performance extends Component {
         const data=await Promise.all([getOrderCount(newYear),getOrderCount(newYear - 1)]);
         if(data){
             this.setState({
-                newYear:data[0].data.Count,
-                lastYear:data[1].data.Count,
+                newYear:data[0].data.Count?data[0].data.Count:0,
+                lastYear:data[1].data.Count?data[1].data.Count:0,
             })
         }
     }

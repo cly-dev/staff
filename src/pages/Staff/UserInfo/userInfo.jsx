@@ -20,7 +20,7 @@ export default function UserInfo(props) {
                 const formData=new FormData();
                 formData.append('head',File);
                 axios({
-                    url:'/api/staff/modicImg',
+                    url:'/staff/modicImg',
                     method:"POST",
                     data:formData,
                     headers:{
@@ -51,7 +51,7 @@ export default function UserInfo(props) {
             <Descriptions  bordered>
                 <Descriptions.Item label="姓名">{user.username}</Descriptions.Item>
                 <Descriptions.Item label="年龄">{user.age}</Descriptions.Item>
-                <Descriptions.Item label="头像" > <img src={"localhost:3030"+user.imgPath } alt="用户头像" /></Descriptions.Item>
+                <Descriptions.Item label="头像" > <img src={user.imgPath } alt="用户头像" /></Descriptions.Item>
                 <Descriptions.Item label="性别">{user.sex}</Descriptions.Item>
                 <Descriptions.Item label="籍贯">{user.address}</Descriptions.Item>
                 <Descriptions.Item label="进入公司时间">

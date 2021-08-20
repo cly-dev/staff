@@ -1427,3 +1427,6 @@
 [2021-08-17T16:58:12.890] [ERROR] cheese - admin/adminMongoError: FieldPath field names may not start with '$'. Consider using $getField or $setField.
 [2021-08-17T17:17:20.082] [ERROR] cheese - admin/adminMongoError: BSON field 'skip' value must be >= 0, actual value '-8'
 [2021-08-17T17:17:23.414] [ERROR] cheese - admin/adminTypeError: Strategies[level] is not a function
+[2021-08-18T14:16:11.316] [ERROR] cheese - admin/adminTypeError: Cannot read property 'slice' of undefined
+[2021-08-18T14:16:56.298] [ERROR] cheese - admin/adminTypeError: Cannot read property 'slice' of null
+[2021-08-18T14:17:07.511] [ERROR] cheese - admin/adminTypeError: Cannot read property 'slice' of null

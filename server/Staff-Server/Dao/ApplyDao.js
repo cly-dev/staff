@@ -175,6 +175,16 @@ function handleTurn(id,mark){
         })
     })
 }
+//查看对应申请的驳回理由
+function findMarkById(_id){
+    return new Promise((resolve,reject)=>{
+        ApplyDao.findOne({_id},{mark:1}).then(res=>{
+            resolve(res);
+        }).catch(err=>{
+            reject(err);
+        })
+    })
+}
 module.exports={
     addApplys,
     getApplyByPageNums,
@@ -186,5 +196,6 @@ module.exports={
     getAllCount,
     handlePass,
     handkeRevoca,
-    handleTurn
+    handleTurn,
+    findMarkById
 }

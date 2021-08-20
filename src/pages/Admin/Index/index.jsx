@@ -8,6 +8,8 @@ import {adminClear} from "../../../redux/action/admin";
 import {AdminLogin,handleMsg, AdminLogOut}  from "../../../socket";
 import { message } from '../../../api';
 import UsePageViews from "../../../hook/usePageViews";
+import { Admin } from '../../../axios';
+const {handleDeletAdmin}=Admin;
 const { SubMenu } = Menu;
 const { Header, Content, Sider } = Layout;
 const AddStaff=lazy(()=>import("../AddStaff/addStaff.jsx"));
@@ -33,6 +35,7 @@ const openNotificationWithIcon = (desc, duration = null) => {
 class index extends Component {
     constructor(props){
         super(props);
+        this.client='';
         this.menu=<Menu onClick={this.onClick}>
                     <Menu.Item key="1" icon={<UserOutlined />}><Link to='/admin-index/个人信息'>个人信息</Link></Menu.Item>
                     <Menu.Item key="2" icon={<LogoutOutlined />}>退出登录</Menu.Item>
@@ -51,23 +54,37 @@ class index extends Component {
         this.props.history.push("/admin");
         AdminLogOut(this.info.adminId);
     }
-
+    //接收消息事件
+    handleGetMsg=data=>{
+        message(data,'info');
+    }
     //生命周期-挂载时
     componentDidMount(){
         if(this.info){
             //管理员登录事件
             AdminLogin(this.info.adminId);
-            handleMsg((data)=>{
-                message(data,'info');
-            })
+           this.client=handleMsg(this.handleGetMsg);
             //判断账号状态
             if (this.info.status ==='-1') {
-                openNotificationWithIcon("你已被停职,无法操作", 2);
+                openNotificationWithIcon("该账号已被冻结,无法操作", 2);
                 setTimeout(() => {
-                    this.props.history.push('/');
+                    this.props.history.push('/admin');
                 }, 2000);
             } else if (this.info.status === '0') {
                 openNotificationWithIcon(`检查到您还未修改初始密码`, null);
+            }else if(this.info.status==='2'){
+                openNotificationWithIcon(`该账号已被停用,过会自动删除`,2);
+                handleDeletAdmin().then(res=>{
+                    if(res.code==='200'){
+                        store.dispatch(adminClear());
+                        AdminLogOut(this.info.adminId);
+                        setTimeout(() => {
+                            this.props.history.push('/admin');
+                        }, 2000);
+                    }
+                }).catch(err=>{
+                    new Error(err);
+                })
             } 
         }else{
             message("还未登录,请先登录");
@@ -76,6 +93,8 @@ class index extends Component {
     }
     //生命周期-卸载时
     componentWillUnmount(){
+        this.client.off();
+        notification.destroy();
         AdminLogOut(this.info.adminId);
     }
     render() {

@@ -45,13 +45,11 @@ export default class NewNotice extends Component {
     //生命周期
     componentDidMount(){
         this.handleGetNotice(1);
-        const {listData}=this.state;
         receptionNotice(data=>{
             if(data){
-                listData.pop();
-                data.createTime='刚刚';
-                listData.unshift(data);
-                this.setState({listData})
+                setTimeout(()=>{
+                    window.location.reload();
+                  },2000)
             }
         })
     }

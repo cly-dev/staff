@@ -47,7 +47,7 @@ export default function changeInfo(props) {
                                     message:'年龄在指定范围之内'
                                 }]}
                         >
-                            <InputNumber type="number" min={16} max={150}  placeholder="请输入姓名"></InputNumber>
+                            <InputNumber type="number" min={16} max={150}  placeholder="请输入年龄"></InputNumber>
                         </Form.Item>
                         <Form.Item 
                             label="电话"
