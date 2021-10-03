@@ -1,19 +1,33 @@
-@mixin clearFloat(){
-    &::after{
-        clear:both;
-        display:block;
-        content:'';
-    }
+//清除浮动
+@mixin clearFloat() {
+  &::after {
+    clear: both;
+    display: block;
+    content: "";
+  }
 }
+//自定义标题
 @mixin title {
-    text-indent: 3.225rem;
-    border-bottom: 1px solid #EBEEF5;
-    height: 4rem;
-    line-height: 4rem;
-    font-size:1.6rem;
-    font-weight:500;
-    margin-bottom: 20px;
+  text-indent: 3.225rem;
+  border-bottom: 1px solid #ebeef5;
+  height: 4rem;
+  line-height: 4rem;
+  font-size: 1.6rem;
+  font-weight: 500;
+  margin-bottom: 1.25rem;
 }
-@mixin admin-title{
-    
+//省略文本
+@mixin ellipsis {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+//多行文本省略号
+@mixin moreEllipsis($num) {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: $num;
+}
+@mixin admin-title {
 }

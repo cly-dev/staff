@@ -1,0 +1,52 @@
+@import "../../public/scss/commit.scss";
+.upload-file {
+  position: relative;
+  height: 2rem;
+  .btn,
+  .upload-file {
+    position: absolute;
+    height: 2rem;
+    width: 7rem;
+    top: 0px;
+  }
+  .upload-file {
+    opacity: 0;
+    cursor: pointer;
+  }
+}
+.progress-content {
+  position: relative;
+  height: 2rem;
+  line-height: 1rem;
+  progress {
+    position: absolute;
+    width: calc(100% - 16.5rem);
+    top: 50%;
+    transform: translate(0, -50%);
+    background-color: "#67C23A";
+    border-radius: 0.625rem;
+  }
+  .path-name {
+    display: inline-block;
+    width: 9rem;
+    text-align: center;
+    @include ellipsis;
+    padding: 0 0.9375rem;
+    height: 100%;
+    line-height: 2rem;
+  }
+  .progress-succeed,
+  .progress-loading,
+  .progress-delete {
+    position: absolute;
+    top: 50%;
+    transform: translate(0, -50%);
+  }
+  .progress-delete {
+    right: 0.625rem !important;
+    cursor: pointer;
+    &:hover {
+      color: red;
+    }
+  }
+}

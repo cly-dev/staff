@@ -1,0 +1,19 @@
+.staff-category {
+  .catrgory-main {
+    margin-top: -1.25rem;
+    display: flex;
+    padding: 1.4rem;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    .main-card {
+      margin-bottom: 1.25rem;
+      cursor: pointer;
+    }
+    .card-item {
+      height: 1.5rem;
+      line-height: 1.5rem;
+      border-radius: 0.3125rem;
+      transition: all 0.8s ease;
+    }
+  }
+}

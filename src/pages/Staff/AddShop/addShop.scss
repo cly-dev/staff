@@ -1,0 +1,17 @@
+.staff-addShop {
+  width: 100%;
+  height: 100%;
+}
+.addShop-main {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  .ref-btn {
+    left: 50%;
+
+    position: absolute;
+    height: 40px;
+    width: 6.25rem;
+    border-radius: 5px;
+  }
+}

@@ -1,0 +1,23 @@
+.footer {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%, 0);
+  text-align: center;
+  height: 2.5rem;
+  line-height: 2.5rem;
+  color: white;
+  ul {
+    li {
+      float: left;
+      text-align: center;
+      margin-right: 0.625rem;
+    }
+  }
+  a {
+    color: white;
+  }
+}
+.primary {
+  color: black;
+}

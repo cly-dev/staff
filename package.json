@@ -11,6 +11,7 @@
     "echarts": "^5.1.2",
     "html2canvas": "^1.1.4",
     "jspdf": "^2.3.1",
+    "mitt": "^3.0.0",
     "node-sass": "5.0.0",
     "nprogress": "^0.2.0",
     "prop-types": "^15.7.2",

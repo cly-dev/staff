@@ -1,133 +1,145 @@
 @import "../../../public/scss/commit.scss";
-.login-container{
-    width: 100vw;
-    height: 100vh;
-    background: url(../../../public/images/bg.jpg) center no-repeat;
-    background-size: 100% 100%;
-    main{
-        margin:20vh auto;
-        color: rgb(255, 255, 255);
-        width: 700px;
-        background:rgba($color:white, $alpha:0.7);
-        border-radius: .5rem;
-        height: 400px;
-        .form-tips{
-            width: 100%;
-            height: 4rem;
-            line-height:4rem;
-            text-align: center;
-            font-size: 1.6rem;
-            color: black;
-        }
-        .form-container{
-            width: 500px;
-            margin: 0 auto;
-        }
-        //输入框
-        .form-item{
-            color: black;
-            .item-tips,input{
-                float: left;
-                height: 2.3rem;
-            }
-            input{
-                padding-left: 0.5rem;
-                width:80%;
-                color:black;
-                border-radius:5px;
-                outline-color:rgba(26, 197, 240, 0.788);
-                border: 0;
-            }
-            .item-tips{
-                display:inline-block;
-                width:20%;
-                text-align: right;
-                line-height: 2.3rem;
-                font-size: 1.5rem;
-                padding-right:10px;
-                white-space: nowrap;
-            }
-            margin-left:-3.75rem;
-             @include clearFloat;
-            margin-bottom:30px;
-            position: relative;
-            text-align: center;
-        }
-        .form-code{
-            input{
-                width: 40%;
-                padding-left: 0.5rem;
-            }
-           .img-code{
-               position: relative;
-               background-color: white;
-                display: inline-block;
-                padding-left: 1.25rem;
-                width: 30%;
-                height:2.5rem;
-                vertical-align: middle;
-                svg{
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    height:90%;
-                    cursor: pointer;
-                    width:100%;
-                }
-           } 
-        }    
-        //登陆按钮
-        .form-btn{
-            text-align: center;
-            height: 2.5rem;
-            line-height: 2.5rem;
-            button{
-                width: 9.5rem;
-            }
-        }
-        .ForgetPassword-Link{
-            height: 2rem;
-            line-height: 2rem;
-            font-size: 1rem;
-            color: rgb(109, 102, 102);
-            text-align:right;
-            padding-right: 0.3125rem;
-            a{
-                cursor: pointer;
-            }
-        }
+.login-container {
+  width: 100vw;
+  height: 100vh;
+  background: url(../../../public/images/bg.jpg) center no-repeat;
+  background-size: 100% 100%;
+  main {
+    min-width: 300px;
+    max-width: 42.25rem;
+    width: 50vw;
+    height: 30vh;
+    min-height: 200px;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    top: 50%;
+    left: 50%;
+    color: rgb(255, 255, 255);
+    background: rgba($color: white, $alpha: 0.7);
+    border-radius: 0.5rem;
+    height: 20rem;
+    .form-tips {
+      width: 100%;
+      height: 4rem;
+      line-height: 4rem;
+      text-align: center;
+      font-size: 1.6rem;
+      color: black;
     }
-    
+    .form-container {
+      height: 100%;
+      position: relative;
+      width: 80%;
+      margin: 0 auto;
+    }
+    //输入框
+    .form-item {
+      color: black;
+      .item-tips,
+      input {
+        float: left;
+        height: 2.3rem;
+      }
+      input {
+        padding-left: 0.5rem;
+        width: 80%;
+        color: black;
+        border-radius: 5px;
+        outline-color: rgba(26, 197, 240, 0.788);
+        border: 0;
+      }
+      .item-tips {
+        display: inline-block;
+        width: 20%;
+        text-align: right;
+        line-height: 2.3rem;
+        font-size: 1.5rem;
+        padding-right: 10px;
+        white-space: nowrap;
+      }
+      margin-left: -3.75rem;
+      @include clearFloat;
+      margin-bottom: 30px;
+      position: relative;
+      text-align: center;
+    }
+    .form-code {
+      input {
+        width: 40%;
+        padding-left: 0.5rem;
+      }
+      .img-code {
+        position: relative;
+        background-color: white;
+        display: inline-block;
+        padding-left: 1.25rem;
+        width: 30%;
+        height: 2.5rem;
+        vertical-align: middle;
+        svg {
+          position: absolute;
+          top: 0;
+          left: 0;
+          height: 90%;
+          cursor: pointer;
+          width: 100%;
+        }
+      }
+    }
+    //登陆按钮
+    .form-btn {
+      left: 50%;
+      transform: translate(-50%);
+      bottom: 0.75rem;
+      position: absolute;
+      text-align: center;
+      min-width: 11.75rem;
+      button {
+        width: 100%;
+      }
+    }
+    .ForgetPassword-Link {
+      position: absolute;
+      bottom: 0;
+      height: 2rem;
+      line-height: 2rem;
+      font-size: 1rem;
+      color: rgb(109, 102, 102);
+      text-align: right;
+      padding-right: 0.3125rem;
+      right: -3.7rem;
+      a {
+        cursor: pointer;
+      }
+    }
+  }
 }
 
+.form-horizontal {
+  margin-top: 70px;
+}
+.control-label {
+  font-size: 20px;
+  color: rgb(173, 166, 166);
+}
+.btn-lg {
+  height: 50px;
+  // width:12.5rem;
+  // border-radius: 70px !important;
+  border-style: none;
+}
 
-  .form-horizontal{
-      margin-top: 70px;
+@keyframes move {
+  from {
+    left: 0;
   }
-  .control-label{
-      font-size:20px;
-      color: rgb(173, 166, 166);
+  50% {
+    left: 99%;
   }
-  .btn-lg{
-    height:50px;
-    // width:12.5rem;
-    // border-radius: 70px !important;
-    border-style: none;
-  
+  to {
+    left: 0;
   }
- 
-  @keyframes move{
-      from{
-        left: 0;
-      }
-      50%{
-        left:99%;
-      }
-      to{
-        left:0;
-      }
-  }
-  .code{
-      width:500px;
-  }
-  
+}
+.code {
+  width: 500px;
+}

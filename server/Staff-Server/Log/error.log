@@ -1430,3 +1430,23 @@
 [2021-08-18T14:16:11.316] [ERROR] cheese - admin/adminTypeError: Cannot read property 'slice' of undefined
 [2021-08-18T14:16:56.298] [ERROR] cheese - admin/adminTypeError: Cannot read property 'slice' of null
 [2021-08-18T14:17:07.511] [ERROR] cheese - admin/adminTypeError: Cannot read property 'slice' of null
+[2021-10-02T19:44:39.957] [ERROR] cheese - admin/adminTypeError: Cannot read property 'originalFilename' of undefined
+[2021-10-02T19:44:45.477] [ERROR] cheese - admin/adminTypeError: Cannot read property 'originalFilename' of undefined
+[2021-10-02T19:44:58.583] [ERROR] cheese - admin/adminTypeError: Cannot read property 'originalFilename' of undefined
+[2021-10-02T19:45:57.657] [ERROR] cheese - admin/adminTypeError: Cannot read property 'originalFilename' of undefined
+[2021-10-02T19:46:03.691] [ERROR] cheese - admin/adminTypeError: Cannot read property 'originalFilename' of undefined
+[2021-10-02T19:46:33.101] [ERROR] cheese - admin/adminError: ENOENT: no such file or directory, open 'D:\个人文件\react\staff\server\Staff-Server\www\images\admin\2\p2TKyw7s6TCROdt3m9bJwKGg.js'
+[2021-10-02T20:07:49.307] [ERROR] cheese - admin/adminError: 请更新头像
+[2021-10-02T20:08:22.384] [ERROR] cheese - admin/adminError: 请更新头像
+[2021-10-02T20:08:58.302] [ERROR] cheese - admin/adminError: 请更新头像
+[2021-10-02T20:09:39.905] [ERROR] cheese - admin/adminError: 请更新头像
+[2021-10-02T20:09:44.355] [ERROR] cheese - admin/adminError: 请更新头像
+[2021-10-02T20:10:03.110] [ERROR] cheese - admin/adminError: 请更新头像
+[2021-10-02T20:12:10.502] [ERROR] cheese - admin/adminError: 请更新头像
+[2021-10-02T20:12:40.964] [ERROR] cheese - admin/adminError: 请更新头像
+[2021-10-02T20:13:21.668] [ERROR] cheese - admin/adminError: 请更新头像
+[2021-10-02T20:13:46.659] [ERROR] cheese - admin/adminError: 请更新头像
+[2021-10-02T20:14:08.627] [ERROR] cheese - admin/adminError: 请更新头像
+[2021-10-02T20:14:31.555] [ERROR] cheese - admin/adminError: 请更新头像
+[2021-10-02T20:22:05.190] [ERROR] cheese - admin/adminError: 请更新头像
+[2021-10-03T16:18:44.348] [ERROR] cheese - admin/adminError: 请更新头像
