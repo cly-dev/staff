@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import "./forgetPassword.scss";
-import { Form, Input, Button, Modal } from "antd";
+import { Form, Input, Button, Modal, Space } from "antd";
 import { UserOutlined, LockOutlined, MailOutlined } from "@ant-design/icons";
 import { Staff } from "../../../axios";
 import { message } from "../../../api";
@@ -78,7 +78,7 @@ export default function ForgetPassword() {
           <Form
             ref={FormRef}
             name="normal_login"
-            className="login-form"
+            className="form"
             initialValues={{ remember: true }}
             onFinish={onFinish}
           >
@@ -135,16 +135,18 @@ export default function ForgetPassword() {
               </Form.Item>
             </Form.Item>
             <Form.Item name="btn" style={{ textAlign: "center" }}>
-              <Button
-                name="btn"
-                style={{ borderRadius: 5, width: "20%", marginTop: 20 }}
-                size="large"
-                type="primary"
-                htmlType="submit"
-                className="login-form-button"
-              >
-                提交
-              </Button>
+              <Space>
+                <Button size="large">返回</Button>
+                <Button
+                  name="btn"
+                  size="large"
+                  type="primary"
+                  htmlType="submit"
+                  className="login-form-button"
+                >
+                  提交
+                </Button>
+              </Space>
             </Form.Item>
           </Form>
           {/* 

@@ -1,17 +1,38 @@
-import handleMsg,{ AdminLogOut,Audit,Login,LoginOut,Apply,AdminLogin,Notice,receptionNotice,receptionTurn, receptionApply} from "./socket";
+import handleMsg, {
+  applyPost,
+  postAudit,
+  finshTask,
+  finshTurn,
+  postTurn,
+  AdminLogOut,
+  Audit,
+  Login,
+  LoginOut,
+  Apply,
+  AdminLogin,
+  Notice,
+  receptionNotice,
+  receptionTurn,
+  receptionApply,
+  receivePost,
+} from "./socket";
 
 export {
-        handleMsg,
-        Login,
-        LoginOut,
-        Apply,
-        AdminLogin,
-        Notice,
-        Audit,
-        receptionApply,
-        receptionNotice,
-        receptionTurn,
-        AdminLogOut
-
-        
+  handleMsg,
+  Login,
+  LoginOut,
+  Apply,
+  AdminLogin,
+  Notice,
+  Audit,
+  receptionApply,
+  receptionNotice,
+  receptionTurn,
+  AdminLogOut,
+  applyPost,
+  postAudit,
+  finshTask,
+  finshTurn,
+  postTurn,
+  receivePost,
 };

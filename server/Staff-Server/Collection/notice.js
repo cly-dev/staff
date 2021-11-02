@@ -5,7 +5,6 @@ module.exports = {
     adminId: {
       type: String,
       required: true,
-      ref: "admin",
     },
     //标题
     title: {

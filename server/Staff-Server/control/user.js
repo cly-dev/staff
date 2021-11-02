@@ -1,7 +1,6 @@
 const msg = require("../api/message");
 const path = require("path");
 const SvgCode = require("../api/imgCode");
-const { TokenVerify } = require("../api/JWT/token");
 const {
   Logins,
   ModicPasswords,
@@ -43,13 +42,17 @@ const logger = require("../api/log");
 const upload = require("../api/upload");
 const Fs = require("../api/fs");
 const { SendEmail } = require("../api");
-let EmailCode = null;
-let code = "";
+//记录访问客户端的唯一标识,和对应生成的图片验证和邮箱验证码
 //登录验证码
+const coder = {};
+//邮箱验证码
+const emailCoder = {};
 const CheckCode = (req, res) => {
   try {
+    const { uId } = req.query;
     const { text, data } = SvgCode();
-    code = text;
+    uId && (coder[req.query.uId] = text);
+    console.log(coder);
     res.type("svg");
     res.status(200).send(data);
   } catch (error) {
@@ -61,12 +64,17 @@ const CheckCode = (req, res) => {
 //登陆
 const Login = async (req, res, nuxt) => {
   try {
+    const { uId } = req.query;
+    const uIdCode = coder[uId];
     const { userId, password, checkCode } = req.body;
     if (!(userId && password && checkCode)) {
       msg("PError", res);
     } else {
-      if (checkCode === code.toLocaleLowerCase() || checkCode === code) {
-        console.log(await Logins(userId, password));
+      if (
+        checkCode === uIdCode.toLocaleLowerCase() ||
+        checkCode === uIdCode ||
+        uId.toUpperCase === checkCode
+      ) {
         msg("DecideRes", res, await Logins(userId, password));
       } else {
         msg("FError", res, "验证码错误");
@@ -147,6 +155,22 @@ const ModicInfo = async (req, res) => {
     logger.error(error);
     msg("SError", res);
     throw error;
+  }
+};
+//退出登录
+const loginOut = (req, res) => {
+  try {
+    const { uId } = req.query;
+    if (coder[uId]) {
+      if (emailCoder[uId]) {
+        delete emailCoder[uId];
+      }
+      delete coder[uId];
+      msg("Success", res);
+    }
+    msg("FError", res, "退出失败");
+  } catch (err) {
+    throw err;
   }
 };
 //修改密码
@@ -471,21 +495,21 @@ const getNoticeByDate = async (req, res) => {
   }
 };
 //生成随机验证码
-function CreateCode() {
-  if (EmailCode === null) {
-    EmailCode = Math.floor(Math.random(1) * 10000);
+function CreateCode(uId) {
+  if (!emailCoder[uId]) {
+    emailCoder[uId] = Math.floor(Math.random(1) * 10000);
     setTimeout(() => {
-      EmailCode = null;
+      emailCoder[uId] = null;
     }, 1000 * 60 * 10);
   }
-  return EmailCode;
+  return emailCoder[uId];
 }
 //获取邮箱验证码
 const getEmailCode = async (req, res) => {
   try {
-    const { email } = req.query;
+    const { email, uId } = req.query;
     if (email) {
-      if (await SendEmail(email, CreateCode())) {
+      if (await SendEmail(email, CreateCode(uId))) {
         msg("Success", res, null);
       } else {
         new Error("邮箱验证码发送为null");
@@ -562,4 +586,5 @@ module.exports = {
   getStaffIdByEmail,
   getEmailCode,
   getMarkById,
+  loginOut,
 };

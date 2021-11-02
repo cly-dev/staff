@@ -11,4 +11,4 @@ const PRODUCT_ENV = {
 // export default `${DEVELOP_ENV.BaseUrl +DEVELOP_ENV.part}`;
 
 // eslint-disable-next-line import/no-anonymous-default-export
-export default `${DEVELOP_ENV.BaseUrl + DEVELOP_ENV.part}`;
+export default `${PRODUCT_ENV.BaseUrl + PRODUCT_ENV.part}`;

@@ -38,7 +38,7 @@ const ApplyList = lazy(() => import("../ApplyList/applyList.jsx"));
 const BackLog = lazy(() => import("../Backlog/backlog.jsx"));
 const { SubMenu } = Menu;
 const { TabPane } = Tabs;
-const { handleDelete } = Staff;
+const { handleDelete, loginOut } = Staff;
 const openNotificationWithIcon = (desc, duration = null) => {
   notification.warn({
     message: "温馨提示",
@@ -250,7 +250,7 @@ export default class index extends Component {
     }
   };
   //点击跳转事件
-  handleToUser = (link) => {
+  handleToUser = async (link) => {
     if (link) {
       let data = {
         nav: "个人信息",
@@ -258,11 +258,15 @@ export default class index extends Component {
       };
       this.handleClick(data);
     } else {
-      //退出登录
-      Store.dispatch(userClear());
-      localStorage.clear();
-      sessionStorage.clear();
-      LoginOut(this.userInfo.userId);
+      const { msg } = await loginOut();
+      if (msg === "200") {
+        //退出登录
+        Store.dispatch(userClear());
+        //删除当前主机唯一标识
+        localStorage.clear();
+        sessionStorage.clear();
+        LoginOut(this.userInfo.userId);
+      }
     }
     this.props.history.push(link);
   };

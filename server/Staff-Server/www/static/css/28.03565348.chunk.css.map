@@ -1,0 +1,1 @@
+{"version":3,"sources":["webpack://src/pages/Admin/ChangeInfo/changeInfo.scss"],"names":[],"mappings":"AAAA,2BACI,gBAAgB,CAChB,SAAS","file":"28.03565348.chunk.css","sourcesContent":[".adminChangeInfo-container{\r\n    margin:5rem auto;\r\n    width:40%;\r\n}"]}

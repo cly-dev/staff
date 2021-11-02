@@ -1,0 +1,1 @@
+{"version":3,"sources":["webpack://src/pages/Admin/ChangePassword/changePassword.scss"],"names":[],"mappings":"AAAA,+BACI,SAAU,CACV,mBAAoB","file":"29.3f552dac.chunk.css","sourcesContent":[".adminchangePassword-container{\r\n    width: 40%;\r\n    margin: 3.75rem auto;\r\n}"]}

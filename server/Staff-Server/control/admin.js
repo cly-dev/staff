@@ -550,44 +550,40 @@ const uploadFile = async (req, res) => {
     const { adminId } = req.headers;
     //判断参数
     const { file } = req.body;
-    if (file) {
-      //文件操作
-      const fl = new fs();
-      //设置路径
-      const src = path.resolve(
-        __dirname,
-        "../www",
-        "file",
-        "admin",
-        "notice",
-        `${adminId}`
-      );
-      //上传文件
-      const filePath = await upload(req, await fl.init(src), "file");
-      if (filePath) {
-        //生成新名称
-        const newName =
-          "/" +
-          filePath[0].originalFilename.split(".")[0] +
-          path.extname(filePath[0].originalFilename);
-        //重命名
-        if (await file.handleReName(filePath[0].path, src + newName)) {
-          //文件夹的路径
-          let fileDown = path.join(
-            "/",
-            "file",
-            "admin",
-            "notice",
-            adminId,
-            newName
-          );
-          msg("Success", res, fileDown);
-        } else {
-          throw new Error("文件上传失败");
-        }
+    //文件操作
+    const fl = new fs();
+    //设置路径
+    const src = path.resolve(
+      __dirname,
+      "../www",
+      "file",
+      "admin",
+      "notice",
+      `${adminId}`
+    );
+    //上传文件
+    const filePath = await upload(req, await fl.init(src), "file");
+    if (filePath) {
+      //生成新名称
+      const newName =
+        "/" +
+        filePath[0].originalFilename.split(".")[0] +
+        path.extname(filePath[0].originalFilename);
+      //重命名
+      if (await fl.handleReName(filePath[0].path, src + newName)) {
+        //文件夹的路径
+        let fileDown = path.join(
+          "/",
+          "file",
+          "admin",
+          "notice",
+          adminId,
+          newName
+        );
+        msg("Success", res, fileDown);
+      } else {
+        throw new Error("文件上传失败");
       }
-    } else {
-      msg("PError", res);
     }
   } catch (error) {
     logger.error("admin/admin" + error);

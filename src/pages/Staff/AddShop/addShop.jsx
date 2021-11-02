@@ -4,15 +4,22 @@ import "./addShop.scss";
 import Header from "../../../components/Header/header";
 import { Staff } from "../../../axios";
 import Category from "../../../components/Category/category";
-const { getType, getList } = Staff;
+import { message } from "../../../api";
+const { createShop } = Staff;
 const { TextArea } = Input;
 //添加商品
 export default class addShop extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {};
   }
-
+  handleFinsh = async (val) => {
+    const { code } = await createShop(val);
+    if (code === "200") {
+      message("添加成功", "success");
+      this.props.history.push("/index/shop");
+    }
+  };
   render() {
     return (
       <>
@@ -21,7 +28,7 @@ export default class addShop extends Component {
           <Header title="添加商品"></Header>
           <section className="addShop-main">
             <Form
-              onFinish={this.handleRefs}
+              onFinish={this.handleFinsh}
               ref={(changeInfo) => (this.changeInfo = changeInfo)}
               size="large"
               labelCol={{ span: 2 }}
@@ -29,7 +36,7 @@ export default class addShop extends Component {
             >
               <Form.Item
                 label="商品名"
-                name="name"
+                name="Sname"
                 rules={[
                   {
                     required: true,
@@ -64,7 +71,7 @@ export default class addShop extends Component {
               </Form.Item>
               <Form.Item
                 label="类别"
-                name="category"
+                name="type"
                 rules={[
                   {
                     required: true,
@@ -89,7 +96,7 @@ export default class addShop extends Component {
                   placeholder="请输入单价"
                 ></InputNumber>
               </Form.Item>
-              <Form.Item label="备注" name="mark">
+              <Form.Item label="备注" name="mask">
                 <TextArea rows={8} maxLength={80}></TextArea>
               </Form.Item>
               <Form.Item style={{ textAlign: "center" }}>

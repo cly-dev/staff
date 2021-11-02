@@ -28,6 +28,10 @@ const Strategies = {
   Success: function (res, data = null, obj = {}, msg) {
     res.status("200").send(message("200", (msg = "成功"), data, obj));
   },
+  //参数类型错误
+  TypeError: function (res, msg) {
+    res.status("200").send(message("500", msg));
+  },
   //判断结果
   DecideRes: function (res, result, obj = {}) {
     let data;

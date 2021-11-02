@@ -4,6 +4,9 @@ import "./shop.scss";
 import Header from "../../../components/Header/header.jsx";
 import Category from "../../../components/Category/category";
 import { Table, Button, Space, Modal, Form, Input, InputNumber } from "antd";
+import { Staff } from "../../../axios";
+import { message } from "../../../api";
+const { watchShop, changeShop } = Staff;
 const { TextArea } = Input;
 export default class Shop extends Component {
   constructor(props) {
@@ -11,13 +14,13 @@ export default class Shop extends Component {
     this.columns = [
       {
         title: "商品名",
-        dataIndex: "name",
-        key: "name",
+        dataIndex: "Sname",
+        key: "Sname",
       },
       {
         title: "类别",
-        dataIndex: "category",
-        key: "category",
+        dataIndex: "type",
+        key: "type",
       },
       {
         title: "单价",
@@ -34,8 +37,8 @@ export default class Shop extends Component {
       },
       {
         title: "备注",
-        key: "mark",
-        dataIndex: "mark",
+        key: "mask",
+        dataIndex: "mask",
       },
       {
         title: "操作",
@@ -46,9 +49,6 @@ export default class Shop extends Component {
               <Button onClick={() => this.handleModic(record, index)}>
                 修改
               </Button>
-              <Button type="danger" onClick={() => this.handleDelete(record)}>
-                删除
-              </Button>
             </Space>
           );
         },
@@ -57,6 +57,7 @@ export default class Shop extends Component {
     this.columns.forEach((val) => {
       val.align = "center";
     });
+
     this.state = {
       //商品数据列表
       listData: [
@@ -77,6 +78,8 @@ export default class Shop extends Component {
       data: {},
       //操作行索引
       index: 0,
+      //条数
+      total: 0,
     };
   }
   //点击修改事件
@@ -88,16 +91,47 @@ export default class Shop extends Component {
     });
   };
   //点击删除事件
-  handleDelete = (record) => {};
+  // handleDelete = (record) => {};
   //按照页面获取数据
   handleGetList = (pageNum) => {};
   //确认修改事件
   handleRef = () => {
     this.formRef.submit();
-    console.log("11");
+  };
+  //获取商品数据
+  handleGetList = async (num) => {
+    const { code, data, pageSize } = await watchShop(num);
+    console.log(data);
+    if (code === "200") {
+      data.forEach((item) => {
+        item.key = item._id;
+      });
+      this.setState({
+        listData: data,
+        total: pageSize,
+      });
+    }
+  };
+  //提交
+  handleChange = async (val) => {
+    const { code } = await changeShop(this.state.data._id, val);
+    if (code === "200") {
+      message("修改成功", "success");
+      const { listData } = this.state;
+      const obj = listData.find((item) => item._id === this.state.data._id);
+      for (let key in val) {
+        obj[key] = val[key];
+      }
+      this.setState({
+        listData,
+        visible: false,
+      });
+    }
   };
   //生命周期
-  componentDidMount() {}
+  componentDidMount() {
+    this.handleGetList(1);
+  }
   render() {
     return (
       <>
@@ -110,8 +144,7 @@ export default class Shop extends Component {
             {/* 表单 */}
             <Table
               pagination={{
-                defaultCurrent: 1,
-                defaultPageSize: 6,
+                defaultPageSize: 8,
                 hideOnSinglePage: true,
                 responsive: true,
                 total: this.state.total,
@@ -136,12 +169,14 @@ export default class Shop extends Component {
           >
             {/* 表单 */}
             <Form
+              style={{ width: "90%" }}
               initialValues={this.state.data}
+              onFinish={this.handleChange}
               ref={(formRef) => (this.formRef = formRef)}
             >
               <Form.Item
                 label="名字"
-                name="name"
+                name="Sname"
                 rules={[
                   {
                     required: true,
@@ -153,7 +188,7 @@ export default class Shop extends Component {
               </Form.Item>
               <Form.Item
                 label="类别"
-                name="category"
+                name="typ"
                 rules={[
                   {
                     required: true,
@@ -195,7 +230,7 @@ export default class Shop extends Component {
                   placeholder="请输入数量"
                 ></InputNumber>
               </Form.Item>
-              <Form.Item label="备注" name="mark">
+              <Form.Item label="备注" name="mask">
                 <TextArea rows={8} maxLength={150}></TextArea>
               </Form.Item>
             </Form>

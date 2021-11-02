@@ -1,0 +1,1 @@
+{"version":3,"sources":["webpack://src/pages/Admin/AddAdmin/addAdmin.scss"],"names":[],"mappings":"AAAA,oBACI,SAAU,CACV,mBAAmB","file":"27.9b7f5c42.chunk.css","sourcesContent":[".addAdmin-container{\r\n    width: 40%;\r\n    margin:3.75rem auto;\r\n}"]}

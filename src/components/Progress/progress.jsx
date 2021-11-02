@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import {
   CheckSquareOutlined,
   DeleteOutlined,
-  LoadingOutlined,
   UploadOutlined,
+  SyncOutlined,
+  CloseCircleOutlined,
 } from "@ant-design/icons";
 import { Admin } from "../../axios";
 import { Button } from "antd";
@@ -21,6 +22,7 @@ export default function Progress(props) {
   const [loading, setLoading] = useState(false);
   //上传成功
   const [succeed, setSucceed] = useState(false);
+  const [fail, setFail] = useState(false);
   //上传事件
   async function handleUpload(e) {
     //上传文件
@@ -47,6 +49,11 @@ export default function Progress(props) {
       message("上传成功", "success");
       setLoading(false);
       setSucceed(true);
+    } else {
+      setTimeout(() => {
+        setFail(true);
+        message("上传失败");
+      }, 2000);
     }
   }
   //点击删除
@@ -78,15 +85,19 @@ export default function Progress(props) {
       </section>
       {pathName && (
         <section className="progress-content">
+          {/* 等待 */}
           {loading && (
-            <LoadingOutlined className="progress-loading"></LoadingOutlined>
+            <SyncOutlined className="progress-loading" spin></SyncOutlined>
           )}
+          {/* 成功 */}
           {succeed && (
             <CheckSquareOutlined
               className="progress-succeed"
               style={{ color: "#67C23A" }}
             />
           )}
+          {/* 失败 */}
+          {fail && <CloseCircleOutlined />}
           <span className="path-name">{pathName}</span>
           {/* 进度条 */}
           {progress !== 0 && <progress max="100" value={progress}></progress>}

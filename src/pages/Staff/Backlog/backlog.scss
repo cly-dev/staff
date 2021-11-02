@@ -14,6 +14,7 @@
       min-width: 12.5rem;
       border-right: 0.0625rem solid rgb(235, 234, 234);
       overflow-y: auto;
+      height: 100%;
       //条目
       .aside-item {
         @include ellipsis;

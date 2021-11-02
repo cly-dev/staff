@@ -34,30 +34,11 @@ const {
   deleteFile,
   changeAvatar,
 } = require("../control/admin");
-const { TokenVerify } = require("../api/JWT/token");
-const message = require("../api/message.js");
+const interceptToken = require("../middleware/token");
 const Admin = express.Router();
 Admin.post("/login", Login);
 //识别token进行拦截
-Admin.use((req, res, next) => {
-  const { token } = req.headers;
-  if (token) {
-    const data = TokenVerify(token);
-    //放行
-    if (TokenVerify(token)) {
-      //将token解码放入头部
-      req.headers.adminId = data.adminId;
-      req.headers.username = data.username;
-      next();
-    } else {
-      //token过期
-      message("TError", res);
-    }
-  } else {
-    //无token提示
-    message("FError", res, "请检查是否携带token");
-  }
-});
+Admin.use(interceptToken);
 Admin.post("/addStaff", UserInsert);
 Admin.post("/addNotice", AddNotice);
 Admin.post("/addAdmin", AddAdmin);
